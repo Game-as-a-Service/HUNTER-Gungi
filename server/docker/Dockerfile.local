@@ -6,12 +6,6 @@ COPY package*.json ./
 
 RUN npm install
 
+# TODO: add docker ignore to ignore all files under source
+# but add the non-src folders and files here
 COPY . .
-
-# using this base to build for development image
-
-FROM base as development
-
-# ENV NODE_PATH=./dist
-
-CMD npm run build

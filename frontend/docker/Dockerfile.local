@@ -1,7 +1,7 @@
 FROM node:18-alpine as base
 
 # set up
-WORKDIR /webapp
+WORKDIR /frontend
 
 COPY package*.json ./
 
