@@ -31,12 +31,13 @@
 - 語言:
    + typescript
 - 後端框架:
-   + next.js (再討論)
+   + nest.js (https://nestjs.com/)
 - 前端框架: 
-   + TBD (maybe: react/vue)
+   + next.js (https://nextjs.org/)
+   + tailwind CSS
 - 開發流程:
    + github flow
 - 其他: 
    + docker
 - 資料庫:
-   + postgreSql/ mongodb /redis
+   + TBD
