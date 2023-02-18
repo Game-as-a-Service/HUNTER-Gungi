@@ -6,6 +6,8 @@ services:
       dockerfile: ./docker/Dockerfile.local
     ports:
       - 8000:8000
+    volumes:
+      - ./server/src:/home/server/app/src
     command: npm run start:dev
   frontend:
     build:
