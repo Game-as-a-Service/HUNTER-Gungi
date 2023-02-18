@@ -1,0 +1,17 @@
+FROM node:18-alpine as base
+
+WORKDIR /home/server/app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+# using this base to build for development image
+
+FROM base as development
+
+# ENV NODE_PATH=./dist
+
+CMD npm run build

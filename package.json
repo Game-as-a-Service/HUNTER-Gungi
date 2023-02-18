@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "docker compose up",
+    "build": "docker compose build",
+    "docker:clean": "docker rm -f $(docker ps -aq) ; docker rmi $(docker images)"
   },
   "repository": {
     "type": "git",

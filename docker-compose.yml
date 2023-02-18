@@ -1,0 +1,16 @@
+version: '3'
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: ./docker/Dockerfile.local
+    ports:
+      - 8000:8000
+    command: npm run start:dev
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ./docker/Dockerfile.local
+    ports:
+      - 3000:3000
+    command: npm run dev
