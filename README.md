@@ -92,11 +92,11 @@ At this stage it's recommended to use SSH on GitHub but it's not required.
 ### Cloning the repo
 * SSH
 ```bash
-$ git clone git@github.com:Game-as-a-Service/HUNTER-Gungi.git
+$ git clone git@github.com:Game-as-a-Service/HUNTER-GungiRepository.git
 ```
 * HTTP
 ```bash
-git clone https://github.com/Game-as-a-Service/HUNTER-Gungi.git
+git clone https://github.com/Game-as-a-Service/HUNTER-GungiRepository.git
 ```
 
 ### Local Dev Environment Setup
