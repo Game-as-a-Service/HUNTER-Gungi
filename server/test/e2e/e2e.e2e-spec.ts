@@ -1,0 +1,56 @@
+import {Test, TestingModule} from '@nestjs/testing';
+import {INestApplication} from '@nestjs/common';
+import * as request from 'supertest';
+import GungiHan from "../../src/domain/GungiHan";
+import COLOR from "../../src/domain/constant/COLOR";
+import LEVEL from "../../src/domain/constant/LEVEL";
+import player from "../../src/domain/Player";
+import GOMA from "../../src/domain/constant/GOMA";
+import GungiRepository from "../../src/repository/GungiRepository";
+import Coord from "../../src/domain/Coord";
+import Gungi from "../../src/domain/Gungi";
+import {AppModule} from "../../src/app.module";
+import GungiDataModel from "../../src/repository/dataModel/GungiDataModel";
+import GungiDao from "../../src/repository/DAO/GungiDao";
+import SurrenderUsecase from "../../src/usecase/SurrenderUsecase";
+import FurigomaUsecase from "../../src/usecase/FurigomaUsecase";
+
+describe('AppController (e2e)', () => {
+    let app: INestApplication;
+
+    beforeEach(async () => {
+        const moduleFixture: TestingModule = await Test.createTestingModule({
+            imports: [AppModule],
+            providers: []
+        }).compile();
+
+        app = moduleFixture.createNestApplication();
+        await app.init();
+    });
+
+    it('/(POST) gunki/:gunkiId/surrender', async () => {
+        const gungiDao = new GungiDao();
+        const gungiDataModel = new GungiDataModel();
+        const gungiRepository = new GungiRepository(gungiDao, gungiDataModel);
+        const gungiId = 1;
+        const players = [new player('A'), new player('B')];
+        const level = LEVEL.BEGINNER;
+        const gungiHan = new GungiHan();
+        const gungi = new Gungi(level, players, gungiHan,);
+        gungi.sente = players[0];
+        gungi.gote = players[1];
+        await gungiRepository.save(gungi);
+        //要想一下這部分 因為不知道要動哪一個棋
+        gungi.ugokiGoma(COLOR.BLACK, GOMA.HEI, new Coord(0, 1, 0), new Coord(0, 0, 0));
+
+
+        // post a  json
+        const body = {
+            player: 'A'
+        };
+        return request(app.getHttpServer())
+            .post(`/gungi/${gungiId}/surrender`)
+            .send(body)
+            .expect(200);
+    });
+});
