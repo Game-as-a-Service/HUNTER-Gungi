@@ -5,6 +5,7 @@ import GomaOki from "./GomaOki";
 import COLOR from "./constant/COLOR";
 import GOMA from "./constant/GOMA";
 import Coord from "./Coord";
+import {Event,} from "../events/event";
 
 class Gungi {
     private _senteGomaOki = new GomaOki(COLOR.BLACK,);
@@ -45,7 +46,11 @@ class Gungi {
     ugokiGoma(color: COLOR, gomaName: GOMA, from: Coord, to: Coord) {
     }
 
-    surrender(player: Player) {
+    surrender(player: Player): Event[] {
+    }
+
+    getPlayer(playerName: string): Player {
+
     }
 }
 
