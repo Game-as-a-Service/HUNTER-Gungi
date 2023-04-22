@@ -14,10 +14,6 @@ export default class GungiRepository implements Repository<Gungi> {
     }
 
 
-    async save(gungi:Gungi) {
+    async save(gungi: Gungi) {
     }
-
-    saveAndBroadcast() {
-    }
-
 }

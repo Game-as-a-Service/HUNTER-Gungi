@@ -3,5 +3,4 @@ export default interface Repository<T> {
 
     save(item: T): void;
 
-    saveAndBroadcast(item: T): void;
 }
