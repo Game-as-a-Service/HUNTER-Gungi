@@ -2,16 +2,19 @@ import Repository from "../usecase/Repository";
 import GungiDataModel from "./dataModel/GungiDataModel";
 import GungiDao from "./DAO/GungiDao";
 import {Injectable} from "@nestjs/common";
+import Gungi from "../domain/Gungi";
 
 @Injectable()
-export default class GungiRepository implements Repository {
+export default class GungiRepository implements Repository<Gungi> {
     constructor(private _dao: GungiDao, private _gungiDataModel: GungiDataModel) {
     }
 
-    findById() {
+    findById(id: string): Gungi | null {
+        return undefined;
     }
 
-    save() {
+
+    async save(gungi:Gungi) {
     }
 
     saveAndBroadcast() {
