@@ -1,14 +1,22 @@
-import COLOR from "./constant/COLOR";
-import Player from "./Player";
+import COLOR from './constant/COLOR';
+import Player from './Player';
 
 class GomaOki {
-    private _player:Player;
-    constructor(private _color: COLOR,) {
-    }
+  constructor(private _color: COLOR, private _gomas?: Goma[]) {}
 
-    set player(value: Player) {
-        this._player = value;
-    }
+  get gomas(): Goma[] {
+    return this._gomas;
+  }
+
+  set gomas(value: Goma[]) {
+    this._gomas = value;
+  }
+
+  private _player: Player;
+
+  set player(value: Player) {
+    this._player = value;
+  }
 }
 
 export default GomaOki;

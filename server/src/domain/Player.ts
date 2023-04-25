@@ -1,34 +1,33 @@
-import COLOR from "./constant/COLOR";
-import Gungi from "./Gungi";
+import COLOR from './constant/COLOR';
+import Gungi from './Gungi';
 
 class Player {
-    constructor(name: string) {
-        this._name = name;
+  constructor(name: string) {
+    this._name = name;
+  }
 
-    }
+  private _gungi: Gungi;
 
-    private _gungi: Gungi;
+  set gungi(gungi: Gungi) {
+    this._gungi = gungi;
+  }
 
-    set gungi(gungi: Gungi) {
-        this._gungi = gungi;
-    }
+  private _name: string;
 
-    private _name: string;
+  get name(): string {
+    return this._name;
+  }
 
-    get name(): string {
-        return this._name;
-    }
+  private _side: COLOR;
 
-    private _side: COLOR;
+  set side(value: COLOR) {
+    this._side = value;
+  }
 
-    set side(value: COLOR) {
-        this._side = value;
-    }
-
-    surrender() {
-        const player = this;
-        this._gungi.loser = player;
-    }
+  surrender() {
+    const player = this;
+    this._gungi.loser = player;
+  }
 }
 
 export default Player;

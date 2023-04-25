@@ -1,12 +1,9 @@
-import GungiRepository from "../repository/GungiRepository";
-import {Injectable} from "@nestjs/common";
+import GungiRepository from '../repository/GungiRepository';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export default class FurigomaUsecase {
-    constructor(private gunGiRepository: GungiRepository) {
-    }
+  constructor(private gunGiRepository: GungiRepository) {}
 
-    async execute() {
-
-    }
+  async execute() {}
 }

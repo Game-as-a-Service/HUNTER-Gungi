@@ -1,5 +1,2 @@
-class GungiHan {
-
-
-}
+class GungiHan {}
 export default GungiHan;
