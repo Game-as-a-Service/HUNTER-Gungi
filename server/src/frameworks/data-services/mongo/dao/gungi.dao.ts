@@ -1,15 +1,16 @@
-import { Collection, Db, MongoClient } from 'mongodb';
+import { Collection, Db } from 'mongodb';
 import { Injectable } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
-import {GungiData} from "../GungiData";
+import { Dao } from 'src/repositories/abstract/dao';
+import { MongoGungiData } from '../data/gungi.data';
 
 @Injectable()
-export default class GungiDao {
+export default class MongoGungiDao implements Dao<MongoGungiData> {
   private _dbCollection: Collection;
 
   constructor(@Inject('database') private readonly database: Db) {}
 
-  async findById(id: string) {
+  async findById(id: string): Promise<MongoGungiData> {
     if (!this._dbCollection) {
       this.lazyLoading();
     }
@@ -18,7 +19,7 @@ export default class GungiDao {
     return gungi;
   }
 
-  async save(gungi: GungiData) {
+  async save(gungi: MongoGungiData) {
     if (!this._dbCollection) {
       this.lazyLoading();
     }

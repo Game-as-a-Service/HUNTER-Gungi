@@ -6,12 +6,12 @@ import COLOR from '../../src/domain/constant/COLOR';
 import LEVEL from '../../src/domain/constant/LEVEL';
 import player from '../../src/domain/Player';
 import GOMA from '../../src/domain/constant/GOMA';
-import GungiRepository from '../../src/repository/GungiRepository';
+import GungiRepository from '../../src/repositories/GungiRepository';
 import Coord from '../../src/domain/Coord';
 import Gungi from '../../src/domain/Gungi';
 import { AppModule } from '../../src/app.module';
-import GungiDataModel from '../../src/repository/dataModel/GungiDataModel';
-import GungiDao from '../../src/repository/DAO/GungiDao';
+import GungiDataModel from '../../src/frameworks/data-services/mongo/data-model/gungi-data.model';
+import MongoGungiDao from '../../src/frameworks/data-services/mongo/dao/gungi.dao';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -27,7 +27,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/(POST) gungi/:gungiId/surrender', async () => {
-    const gungiDao = new GungiDao();
+    const gungiDao = new MongoGungiDao();
     const gungiDataModel = new GungiDataModel();
     const gungiRepository = new GungiRepository(gungiDao, gungiDataModel);
     const gungiId = 1;
