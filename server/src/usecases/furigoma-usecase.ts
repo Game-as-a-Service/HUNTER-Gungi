@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IDataServices } from 'src/repositories/abstract/data-services.abstract';
+import { IDataServices } from 'src/data-services/abstract/data-services.abstract';
 
 @Injectable()
 export default class FurigomaUsecase {

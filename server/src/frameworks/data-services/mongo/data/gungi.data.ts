@@ -1,4 +1,4 @@
-import { GungiData } from 'src/repositories/abstract/data';
+import { GungiData } from 'src/data-services/abstract/data';
 import COLOR from '../../../../domain/constant/COLOR';
 
 type GomaData = {

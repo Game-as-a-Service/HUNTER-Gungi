@@ -11,9 +11,9 @@ import Player from '../../../../domain/Player';
 import COLOR from '../../../../domain/constant/COLOR';
 import GungiHan from '../../../../domain/GungiHan';
 import GomaOki from '../../../../domain/GomaOki';
-import { DataModel } from 'src/repositories/abstract/data-model';
+import { DataModel } from 'src/data-services/abstract/data-model';
 
-export default class GungiDataModel
+export default class MongoGungiDataModel
   implements DataModel<Gungi, MongoGungiData>
 {
   toData(domain: Gungi): MongoGungiData {

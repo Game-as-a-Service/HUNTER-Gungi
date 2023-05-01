@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import EventBus from '../eventBus/eventBus';
 import { response } from 'express';
-import { IDataServices } from 'src/repositories/abstract/data-services.abstract';
+import { IDataServices } from 'src/data-services/abstract/data-services.abstract';
 
 interface SurrenderRequest {
   gungiId: string;

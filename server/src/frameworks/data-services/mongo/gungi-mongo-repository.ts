@@ -1,14 +1,16 @@
-import IRepository from 'src/repositories/abstract/repository.abstract';
+import IRepository from 'src/data-services/abstract/repository.abstract';
 import Gungi from 'src/domain/Gungi';
 import { MongoGungiData } from './data/gungi.data';
 import MongoGungiDao from './dao/gungi.dao';
-import GungiDataModel from './data-model/gungi-data.model';
+import MongoGungiDataModel from './data-model/gungi-data.model';
 
-export class GungiMongoRepository
+export class MongoGungiRepository
   implements IRepository<Gungi, MongoGungiData>
 {
-  readonly _dao: MongoGungiDao;
-  readonly _dataModel: GungiDataModel;
+  constructor(
+    readonly _dao: MongoGungiDao,
+    readonly _dataModel: MongoGungiDataModel,
+  ) {}
 
   async get(id: string): Promise<Gungi | null> {
     const data: MongoGungiData = await this._dao.findById(id);

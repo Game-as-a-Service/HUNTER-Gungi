@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { GungiMongoRepository } from './gungi-mongo-repository';
+import { MongoGungiRepository } from './gungi-mongo-repository';
 import Gungi from 'src/domain/Gungi';
-import { IDataServices } from 'src/repositories/abstract/data-services.abstract';
+import { IDataServices } from 'src/data-services/abstract/data-services.abstract';
 
 @Injectable()
 export class MongoDataServices implements IDataServices {
-  gungi: GungiMongoRepository;
+  constructor(readonly gungi: MongoGungiRepository) {}
 
   async findGungiById(id: string): Promise<Gungi | null> {
     return this.gungi.get(id);
