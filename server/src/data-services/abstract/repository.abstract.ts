@@ -1,5 +1,5 @@
-import { Dao } from './dao';
-import { DataModel } from './data-model';
+import { Dao } from './dao/dao';
+import { DataModel } from './data-model/data-model';
 
 export default interface IRepository<T, D> {
   readonly _dao: Dao<D>;

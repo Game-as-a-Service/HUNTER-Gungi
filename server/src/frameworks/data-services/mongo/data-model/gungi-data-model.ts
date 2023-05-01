@@ -1,26 +1,24 @@
 //負責把data 和 domain　物件轉換
 import Gungi from '../../../../domain/Gungi';
 import {
-  MongoGungiData,
+  GungiData,
   DeadAreaData,
   GomaData,
   GungiHanData,
   PlayerData,
-} from '../data/gungi.data';
+} from 'src/data-services/abstract/data/gungi-data';
 import Player from '../../../../domain/Player';
 import COLOR from '../../../../domain/constant/COLOR';
 import GungiHan from '../../../../domain/GungiHan';
 import GomaOki from '../../../../domain/GomaOki';
-import { DataModel } from 'src/data-services/abstract/data-model';
+import { DataModel } from 'src/data-services/abstract/data-model/data-model';
 
-export default class MongoGungiDataModel
-  implements DataModel<Gungi, MongoGungiData>
-{
-  toData(domain: Gungi): MongoGungiData {
-    return gungiData as MongoGungiData;
+export default class GungiDataModel implements DataModel<Gungi, GungiData> {
+  toData(domain: Gungi): GungiData {
+    return gungiData as GungiData;
   }
 
-  toDomain(rawGungi: MongoGungiData): Gungi {
+  toDomain(rawGungi: GungiData): Gungi {
     const blackPlayer = this.createPlayer(rawGungi.black.player, COLOR.BLACK);
     const whitePlayer = this.createPlayer(rawGungi.white.player, COLOR.WHITE);
     const gungiHan = this.createGungiHan(rawGungi.gungiHan);

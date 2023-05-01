@@ -1,5 +1,4 @@
-import { GungiData } from 'src/data-services/abstract/data';
-import COLOR from '../../../../domain/constant/COLOR';
+import COLOR from 'src/domain/constant/COLOR';
 
 type GomaData = {
   name: string;
@@ -19,7 +18,7 @@ type DeadAreaData = {
   gomas: GomaData[];
 };
 
-class MongoGungiData implements GungiData {
+class GungiData {
   _id: string;
   level: string;
   loser: string;
@@ -81,7 +80,7 @@ interface History {
 //  gdt._id, gdt.level, h._id, h.gungiGameId....
 
 export {
-  MongoGungiData,
+  GungiData,
   GomaData,
   GomaOkiData,
   PlayerData,

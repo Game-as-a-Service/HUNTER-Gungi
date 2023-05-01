@@ -10,8 +10,8 @@ import GungiRepository from '../../src/data-services/GungiRepository';
 import Coord from '../../src/domain/Coord';
 import Gungi from '../../src/domain/Gungi';
 import { AppModule } from '../../src/app.module';
-import MongoGungiDataModel from '../../src/frameworks/data-services/mongo/data-model/gungi-data.model';
-import MongoGungiDao from '../../src/frameworks/data-services/mongo/dao/gungi.dao';
+import GungiDataModel from '../../src/frameworks/data-services/mongo/data-model/gungi-data-model';
+import GungiDao from '../../src/frameworks/data-services/mongo/dao/gungi.dao';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -27,8 +27,8 @@ describe('AppController (e2e)', () => {
   });
 
   it('/(POST) gungi/:gungiId/surrender', async () => {
-    const gungiDao = new MongoGungiDao();
-    const gungiDataModel = new MongoGungiDataModel();
+    const gungiDao = new GungiDao();
+    const gungiDataModel = new GungiDataModel();
     const gungiRepository = new GungiRepository(gungiDao, gungiDataModel);
     const gungiId = 1;
     const players = [new player('A'), new player('B')];

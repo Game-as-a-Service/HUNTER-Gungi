@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { MongoClient, Db } from 'mongodb';
 import { IDataServices } from 'src/data-services/abstract/data-services.abstract';
-import MongoGungiDao from './dao/gungi.dao';
-import MongoGungiDataModel from './data-model/gungi-data.model';
+import GungiDao from './dao/gungi.dao';
+import GungiDataModel from './data-model/gungi-data-model';
 import { MongoDataServices } from './mongo-data-services.service';
-import { MongoGungiRepository } from './gungi-mongo-repository';
+import { GungiRepository } from './gungi-repository';
 
 @Module({
   providers: [
-    MongoGungiDao,
-    MongoGungiDataModel,
-    MongoGungiRepository,
+    GungiDao,
+    GungiDataModel,
+    GungiRepository,
     {
       provide: IDataServices,
       useClass: MongoDataServices,
