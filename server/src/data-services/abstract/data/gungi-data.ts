@@ -1,83 +1,75 @@
-import COLOR from 'src/domain/constant/COLOR';
+import SIDE from '../../../domain/constant/SIDE';
+import LEVEL from '../../../domain/constant/LEVEL';
+import GOMA from '../../../domain/constant/GOMA';
 
-type GomaData = {
-  name: string;
+type CoordinateData = {
+  x: number;
+  y: number;
+  z: number;
 };
+// 棋
+type GomaData = {
+  name: GOMA;
+  coordinate: CoordinateData;
+};
+// 備用區
 type GomaOkiData = {
   gomas: GomaData[];
 };
+// 玩家
 type PlayerData = {
+  id: string;
   name: string;
-  side: COLOR;
 };
+// 棋盤
 type GungiHanData = {
-  map: GomaData[][][];
+  han: GomaData[];
 };
-
+// 死區
 type DeadAreaData = {
   gomas: GomaData[];
 };
 
-class GungiData {
+enum Action {
+  // 新
+  ARATA,
+  // 移
+  UGOGIGOMA,
+  SURRENDER,
+}
+
+type RecordData = {
+  player: PlayerData;
+  side: SIDE;
+  action: Action;
+  from?: CoordinateData;
+  to?: CoordinateData;
+  deadGoma?: GomaData[];
+};
+
+interface GungiData {
+  //extend WithId<Document> {
   _id: string;
-  level: string;
-  loser: string;
-  winner: string;
-  black: {
+  level: LEVEL;
+  loser?: SIDE;
+  winner?: SIDE;
+  currentTurn: SIDE;
+  sides: {
+    side: SIDE;
     player: PlayerData;
     gomaOki: GomaOkiData;
     deadArea: DeadAreaData;
-  };
-  white: {
-    player: PlayerData;
-    gomaOki: GomaOkiData;
-    deadArea: DeadAreaData;
-  };
-  gomaHan: GungiHanData;
-  history: {
-    color: string;
-    piece: string; // name of piece
-    type: string; //NEW OR MOVE
-    from:
-      | {
-          x: string;
-          y: string;
-          z: string;
-        }
-      | undefined;
-    to: {
-      x: string;
-      y: string;
-      z: string;
-    };
   }[];
+  players: {
+    id: string; // uuid
+    name: string;
+    side: SIDE;
+    gomaOki: GomaOkiData;
+    deadArea: DeadAreaData;
+  }[];
+  gomaHan: GungiHanData;
+  history: RecordData[];
 }
-
-interface GungiDataTable {
-  _id: string;
-  level: string;
-}
-
-interface History {
-  _id: string;
-  gungiGameId: string; // GungiDataTable._id
-  moveNumber: number;
-  color: string;
-  piece: string;
-  from: {
-    x;
-    y;
-    z;
-  };
-  to: {
-    x;
-    y;
-    z;
-  };
-}
-
-// select * from GungiDataTable gdt where _id = 'gameID' inner join History h on h.gungiGameId = _id;
-//  gdt._id, gdt.level, h._id, h.gungiGameId....
 
 export {
   GungiData,

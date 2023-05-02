@@ -6,7 +6,7 @@ import { GungiData } from 'src/data-services/abstract/data/gungi-data';
 
 @Injectable()
 export default class GungiDao implements Dao<GungiData> {
-  private _dbCollection: Collection;
+  private _dbCollection: Collection<GungiData>;
 
   constructor(@Inject('DATABASE_CONNECTION') private readonly database: Db) {}
 
@@ -15,7 +15,7 @@ export default class GungiDao implements Dao<GungiData> {
       this.lazyLoading();
     }
     const gungiObjectId = new ObjectId(id);
-    const gungi = await this._dbCollection.findOne({ _id: gungiObjectId });
+    const gungi = await this._dbCollection.findOne({ id: gungiObjectId });
     return gungi;
   }
 
@@ -25,13 +25,13 @@ export default class GungiDao implements Dao<GungiData> {
     }
     const gungiObjectId = new ObjectId(gungi._id);
     await this._dbCollection.updateOne(
-      { _id: gungiObjectId },
+      { id: gungiObjectId },
       { $set: gungi },
       { upsert: true },
     );
   }
 
   private lazyLoading() {
-    this._dbCollection = this.database.collection('Gungi');
+    this._dbCollection = this.database.collection<GungiData>('Gungi');
   }
 }
