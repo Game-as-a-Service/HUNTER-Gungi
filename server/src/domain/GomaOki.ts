@@ -1,8 +1,8 @@
-import COLOR from './constant/COLOR';
+import SIDE from './constant/SIDE';
 import Player from './Player';
 
 class GomaOki {
-  constructor(private _color: COLOR, private _gomas?: Goma[]) {}
+  constructor(private _color: SIDE, private _gomas?: Goma[]) {}
 
   get gomas(): Goma[] {
     return this._gomas;

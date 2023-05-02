@@ -1,7 +1,7 @@
 import GungiRepository from '../repository/GungiRepository';
 import { Injectable } from '@nestjs/common';
 import EventBus from '../eventBus/eventBus';
-import {response} from "express";
+import { response } from 'express';
 
 interface SurrenderRequest {
   gungiId: string;
@@ -21,7 +21,6 @@ export default class SurrenderUsecase {
     const events = gungi.surrender(player);
     await this._gungiRepository.save(gungi);
     this._eventBus.broadcast(events);
-  //
-    return response
+    return response;
   }
 }

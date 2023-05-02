@@ -2,7 +2,7 @@ import LEVEL from './constant/LEVEL';
 import Player from './Player';
 import GungiHan from './GungiHan';
 import GomaOki from './GomaOki';
-import COLOR from './constant/COLOR';
+import SIDE from './constant/SIDE';
 import GOMA from './constant/GOMA';
 import Coord from './Coord';
 import { Event, SurrenderEvent } from '../events/event';
@@ -70,7 +70,7 @@ class Gungi {
 
   furiGoma() {}
 
-  ugokiGoma(color: COLOR, gomaName: GOMA, from: Coord, to: Coord) {}
+  ugokiGoma(color: SIDE, gomaName: GOMA, from: Coord, to: Coord) {}
 
   surrender(player: Player): Event[] {
     // TODO:　比對物件是否為同一個物件

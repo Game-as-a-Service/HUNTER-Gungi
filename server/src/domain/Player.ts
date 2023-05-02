@@ -1,4 +1,4 @@
-import COLOR from './constant/COLOR';
+import SIDE from './constant/SIDE';
 import Gungi from './Gungi';
 
 class Player {
@@ -18,9 +18,9 @@ class Player {
     return this._name;
   }
 
-  private _side: COLOR;
+  private _side: SIDE;
 
-  set side(value: COLOR) {
+  set side(value: SIDE) {
     this._side = value;
   }
 

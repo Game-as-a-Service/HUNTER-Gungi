@@ -1,5 +1,5 @@
-enum COLOR {
+enum SIDE {
   BLACK = 'BLACK',
   WHITE = 'WHITE',
 }
-export default COLOR;
+export default SIDE;

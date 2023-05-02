@@ -1,83 +1,63 @@
-import COLOR from '../domain/constant/COLOR';
+import SIDE from '../domain/constant/SIDE';
+import LEVEL from '../domain/constant/LEVEL';
+
+type CoordinateData = {
+  x: number;
+  y: number;
+  z: number;
+};
 
 type GomaData = {
   name: string;
+  coordinate: CoordinateData;
 };
+
 type GomaOkiData = {
   gomas: GomaData[];
 };
+
 type PlayerData = {
+  id: string;
   name: string;
-  side: COLOR;
 };
 type GungiHanData = {
-  map: GomaData[][][];
+  han: GomaData[][][];
 };
 
 type DeadAreaData = {
   gomas: GomaData[];
 };
 
+enum Action {
+  ARATA,
+  UGOGIGOMA,
+  REMOVE, //要確認一下domain是用啥名子
+  SURRENDER,
+}
+
+type RecordData = {
+  player: PlayerData;
+  side: SIDE;
+  action: Action;
+  from?: CoordinateData;
+  to?: CoordinateData;
+};
+
 interface GungiData {
-  _id: string;
-  level: string;
-  loser: string;
-  winner: string;
-  black: {
+  id: string;
+  level: LEVEL;
+  loser?: SIDE;
+  winner?: SIDE;
+  currentTurn: SIDE;
+  sides: {
+    side: SIDE;
     player: PlayerData;
     gomaOki: GomaOkiData;
     deadArea: DeadAreaData;
-  };
-  white: {
-    player: PlayerData;
-    gomaOki: GomaOkiData;
-    deadArea: DeadAreaData;
-  };
-  gomaHan: GungiHanData;
-  history: {
-    color: string;
-    piece: string; // name of piece
-    type: string; //NEW OR MOVE
-    from:
-      | {
-          x: string;
-          y: string;
-          z: string;
-        }
-      | undefined;
-    to: {
-      x: string;
-      y: string;
-      z: string;
-    };
   }[];
+  gomaHan: GungiHanData;
+  history: RecordData[];
 }
-
-interface GungiDataTable {
-  _id: string;
-  level: string;
-}
-
-interface History {
-  _id: string;
-  gungiGameId: string; // GungiDataTable._id
-  moveNumber: number;
-  color: string;
-  piece: string;
-  from: {
-    x;
-    y;
-    z;
-  };
-  to: {
-    x;
-    y;
-    z;
-  };
-}
-
-// select * from GungiDataTable gdt where _id = 'gameID' inner join History h on h.gungiGameId = _id;
-//  gdt._id, gdt.level, h._id, h.gungiGameId....
 
 export {
   GungiData,

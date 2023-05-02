@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import GungiHan from '../../src/domain/GungiHan';
-import COLOR from '../../src/domain/constant/COLOR';
+import SIDE from '../../src/domain/constant/SIDE';
 import LEVEL from '../../src/domain/constant/LEVEL';
 import player from '../../src/domain/Player';
 import GOMA from '../../src/domain/constant/GOMA';
@@ -40,7 +40,7 @@ describe('AppController (e2e)', () => {
     await gungiRepository.save(gungi);
     //要想一下這部分 因為不知道要動哪一個棋
     gungi.ugokiGoma(
-      COLOR.BLACK,
+      SIDE.BLACK,
       GOMA.HEI,
       new Coord(0, 1, 0),
       new Coord(0, 0, 0),
