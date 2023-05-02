@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import FurigomaUsecase from '../usecase/FurigomaUsecase';
-import SurrenderUsecase from '../usecase/SurrenderUsecase';
+import FurigomaUsecase from '../usecases/furigoma-usecase';
+import SurrenderUsecase from '../usecases/surrender-usecase';
 
 @Controller()
 export default class GungiController {

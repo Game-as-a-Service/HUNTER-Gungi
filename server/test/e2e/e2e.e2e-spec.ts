@@ -6,12 +6,12 @@ import SIDE from '../../src/domain/constant/SIDE';
 import LEVEL from '../../src/domain/constant/LEVEL';
 import player from '../../src/domain/Player';
 import GOMA from '../../src/domain/constant/GOMA';
-import GungiRepository from '../../src/repository/GungiRepository';
+import GungiRepository from '../../src/data-services/GungiRepository';
 import Coord from '../../src/domain/Coord';
 import Gungi from '../../src/domain/Gungi';
 import { AppModule } from '../../src/app.module';
-import GungiDataModel from '../../src/repository/dataModel/GungiDataModel';
-import GungiDao from '../../src/repository/DAO/GungiDao';
+import GungiDataModel from '../../src/frameworks/data-services/mongo/data-model/gungi-data-model';
+import GungiDao from '../../src/frameworks/data-services/mongo/dao/gungi.dao';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

@@ -1,38 +1,42 @@
 //負責把data 和 domain　物件轉換
-import Gungi from '../../domain/Gungi';
-import GungiData, {
+import Gungi from '../../../../domain/Gungi';
+import {
+  GungiData,
   DeadAreaData,
   GomaData,
   GungiHanData,
   PlayerData,
-} from '../GungiData';
-import Player from '../../domain/Player';
-import SIDE from '../../domain/constant/SIDE';
-import GungiHan from '../../domain/GungiHan';
-import GomaOki from '../../domain/GomaOki';
+} from 'src/data-services/abstract/data/gungi-data';
+import Player from '../../../../domain/Player';
+import COLOR from '../../../../domain/constant/COLOR';
+import GungiHan from '../../../../domain/GungiHan';
+import GomaOki from '../../../../domain/GomaOki';
+import { DataModel } from 'src/data-services/abstract/data-model/data-model';
 
-export default class GungiDataModel {
-  toData(gungi: Gungi) {}
+export default class GungiDataModel implements DataModel<Gungi, GungiData> {
+  toData(domain: Gungi): GungiData {
+    return gungiData as GungiData;
+  }
 
   toDomain(rawGungi: GungiData): Gungi {
-    const blackPlayer = this.createPlayer(rawGungi.black.player, SIDE.BLACK);
-    const whitePlayer = this.createPlayer(rawGungi.white.player, SIDE.WHITE);
+    const blackPlayer = this.createPlayer(rawGungi.black.player, COLOR.BLACK);
+    const whitePlayer = this.createPlayer(rawGungi.white.player, COLOR.WHITE);
     const gungiHan = this.createGungiHan(rawGungi.gungiHan);
     const blackGomaOki = this.createGomaOki(
       rawGungi.black.gomaOki,
-      SIDE.BLACK,
+      COLOR.BLACK,
     );
     const whiteGomaOki = this.createGomaOki(
       rawGungi.white.gomaOki,
-      SIDE.WHITE,
+      COLOR.WHITE,
     );
     const blackDeadArea = this.createDeadArea(
       rawGungi.black.deadArea,
-      SIDE.BLACK,
+      COLOR.BLACK,
     );
     const whiteDeadArea = this.createDeadArea(
       rawGungi.white.deadArea,
-      SIDE.WHITE,
+      COLOR.WHITE,
     );
     const level = rawGungi.level;
     const gungi = new Gungi(
@@ -47,7 +51,7 @@ export default class GungiDataModel {
     return gungi;
   }
 
-  private createPlayer(rawPlayer: PlayerData, side: SIDE) {
+  private createPlayer(rawPlayer: PlayerData, side: COLOR) {
     const player = new Player(rawPlayer.name);
     player.side = side;
     return player;
@@ -57,21 +61,21 @@ export default class GungiDataModel {
     return new GungiHan(rawGungiHan.map);
   }
 
-  private createGomaOki(rawGomaOki, BLACK: SIDE) {
+  private createGomaOki(rawGomaOki, BLACK: COLOR) {
     const gomas = rawGomaOki.gomas.map<Goma>((rawGoma) =>
       this.createGoma(rawGoma, BLACK),
     );
     return new GomaOki(BLACK, gomas);
   }
 
-  private createDeadArea(deadArea: DeadAreaData, BLACK: SIDE) {
+  private createDeadArea(deadArea: DeadAreaData, BLACK: COLOR) {
     const gomas = deadArea.gomas.map<Goma>((rawGoma) =>
       this.createGoma(rawGoma, BLACK),
     );
     return new GomaOki(BLACK, gomas);
   }
 
-  private createGoma(rawGoma: GomaData, BLACK: SIDE) {
+  private createGoma(rawGoma: GomaData, BLACK: COLOR) {
     return undefined;
   }
 }
