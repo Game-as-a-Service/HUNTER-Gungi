@@ -5,6 +5,13 @@ import GomaOki from './GomaOki';
 import DeadArea from './DeadArea';
 
 class Player {
+  get gomaOki(): GomaOki {
+    return this._gomaOki;
+  }
+
+  get deadArea(): DeadArea {
+    return this._deadArea;
+  }
   constructor(
     private _id: string,
     private _name: string,

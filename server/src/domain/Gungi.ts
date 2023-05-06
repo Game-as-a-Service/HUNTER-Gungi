@@ -14,13 +14,15 @@ class Gungi {
   private _goteGomaOki: GomaOki;
   private _senteDeadArea: DeadArea;
   private _goteDeadArea: DeadArea;
-  private _id: string;
 
   constructor(
+    private _id: string,
     private _level: LEVEL,
     private _players: Player[],
     private _gungiHan: GungiHan,
-  ) {}
+  ) {
+    this.setSenteGote(_players);
+  }
 
   private _loser: Player;
 
@@ -109,6 +111,26 @@ class Gungi {
 
   getPlayer(playerName: string): Player {
     return this._players.find((player) => player.name === playerName);
+  }
+
+  private setSenteGote(players: Player[]) {
+    players.forEach((player) => {
+      switch (player.side) {
+        case SIDE.BLACK: {
+          this._sente = player;
+          this._senteDeadArea = player.deadArea;
+          this._senteGomaOki = player.gomaOki;
+        }
+        case SIDE.WHITE: {
+          this._gote = player;
+          this._goteDeadArea = player.deadArea;
+          this._goteGomaOki = player.gomaOki;
+        }
+        default: {
+          throw new Error('沒有這個玩家');
+        }
+      }
+    });
   }
 }
 
