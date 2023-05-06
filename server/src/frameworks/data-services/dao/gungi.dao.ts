@@ -15,7 +15,7 @@ export default class GungiDao implements Dao<GungiData> {
       this.lazyLoading();
     }
     const gungiObjectId = new ObjectId(id);
-    const gungi = await this._dbCollection.findOne({ id: gungiObjectId });
+    const gungi = await this._dbCollection.findOne({ id });
     return gungi;
   }
 
@@ -23,9 +23,8 @@ export default class GungiDao implements Dao<GungiData> {
     if (!this._dbCollection) {
       this.lazyLoading();
     }
-    const gungiObjectId = new ObjectId(gungi._id);
     await this._dbCollection.updateOne(
-      { id: gungiObjectId },
+      { id: gungi.id },
       { $set: gungi },
       { upsert: true },
     );
