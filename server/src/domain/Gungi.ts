@@ -4,24 +4,22 @@ import GungiHan from './GungiHan';
 import GomaOki from './GomaOki';
 import SIDE from './constant/SIDE';
 import GOMA from './constant/GOMA';
-import Coord from './Coord';
+import Coordinate from './Coordinate';
 import { Event, SurrenderEvent } from './events/event';
 import DeadArea from './DeadArea';
+import { GungiData } from '../frameworks/data-services/gungi-data';
 
 class Gungi {
   private _senteGomaOki: GomaOki;
   private _goteGomaOki: GomaOki;
   private _senteDeadArea: DeadArea;
   private _goteDeadArea: DeadArea;
+  private _id: string;
 
   constructor(
     private _level: LEVEL,
     private _players: Player[],
     private _gungiHan: GungiHan,
-    private _senteGomaOki: GomaOki,
-    private _goteGomaOki: GomaOki,
-    private _senteDeadArea: DeadArea,
-    private _goteDeadArea: DeadArea,
   ) {}
 
   private _loser: Player;
@@ -66,11 +64,29 @@ class Gungi {
     this._gungiHan = value;
   }
 
+  toData(): GungiData {
+    const senteData = this._sente.toData();
+    const goteData = this._gote.toData();
+
+    const gungiHanData = this._gungiHan.toData();
+    const players = [senteData, goteData];
+    const guniData: GungiData = {
+      id: this._id,
+      level: this._level,
+      players: players,
+      gungiHan: gungiHanData,
+      currentTurn: this._currentTurn.side,
+      winner: this._winner?.side,
+      history: [],
+    };
+    return guniData;
+  }
+
   setConfiguration() {}
 
   furiGoma() {}
 
-  ugokiGoma(color: SIDE, gomaName: GOMA, from: Coord, to: Coord) {}
+  ugokiGoma(color: SIDE, gomaName: GOMA, from: Coordinate, to: Coordinate) {}
 
   surrender(player: Player): Event[] {
     // TODO:　比對物件是否為同一個物件
