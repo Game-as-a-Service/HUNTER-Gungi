@@ -5,7 +5,6 @@ import GungiDataModel from './data-model/gungi-data-model';
 
 import { GungiRepository } from './gungi-repository';
 import { MongoConnectionModule } from './mongodb.module';
-import Gungi from '../../domain/Gungi';
 
 @Module({
   imports: [MongoConnectionModule],
