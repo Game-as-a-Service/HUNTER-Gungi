@@ -1,8 +1,8 @@
 import { Collection, Db, ObjectId } from 'mongodb';
 import { Injectable } from '@nestjs/common';
 import { Inject } from '@nestjs/common';
-import { Dao } from 'src/data-services/abstract/dao/dao';
-import { GungiData } from 'src/data-services/abstract/data/gungi-data';
+import { Dao } from 'src/frameworks/data-services/dao/dao';
+import { GungiData } from 'src/frameworks/data-services/gungi-data';
 
 @Injectable()
 export default class GungiDao implements Dao<GungiData> {

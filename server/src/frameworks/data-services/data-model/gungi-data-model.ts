@@ -1,17 +1,17 @@
 //負責把data 和 domain　物件轉換
-import Gungi from '../../../../domain/Gungi';
+import Gungi from '../../../domain/Gungi';
 import {
   GungiData,
   DeadAreaData,
   GomaData,
   GungiHanData,
   PlayerData,
-} from 'src/data-services/abstract/data/gungi-data';
-import Player from '../../../../domain/Player';
+} from 'src/frameworks/data-services/gungi-data';
+import Player from '../../../domain/Player';
 import COLOR from '../../../../domain/constant/COLOR';
-import GungiHan from '../../../../domain/GungiHan';
-import GomaOki from '../../../../domain/GomaOki';
-import { DataModel } from 'src/data-services/abstract/data-model/data-model';
+import GungiHan from '../../../domain/GungiHan';
+import GomaOki from '../../../domain/GomaOki';
+import { DataModel } from 'src/frameworks/data-services/data-model/data-model';
 
 export default class GungiDataModel implements DataModel<Gungi, GungiData> {
   toData(domain: Gungi): GungiData {

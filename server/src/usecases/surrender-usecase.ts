@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import EventBus from '../eventBus/eventBus';
+import { Inject, Injectable } from '@nestjs/common';
+import EventBus from './eventBus';
 import { response } from 'express';
-import { IDataServices } from 'src/data-services/abstract/data-services.abstract';
+import IRepository from './repository.abstract';
+import Gungi from '../domain/Gungi';
 
 interface SurrenderRequest {
   gungiId: string;
@@ -11,15 +12,16 @@ interface SurrenderRequest {
 @Injectable()
 export default class SurrenderUsecase {
   constructor(
-    private dataServices: IDataServices,
+    @Inject('GungiRepository')
+    private gungiRepository: IRepository<Gungi>,
     private _eventBus: EventBus,
   ) {}
 
   async execute(request: SurrenderRequest) {
-    const gungi = await this.dataServices.gungi.get(request.gungiId);
+    const gungi = await this.gungiRepository.get(request.gungiId);
     const player = gungi.getPlayer(request.player);
     const events = gungi.surrender(player);
-    await this.dataServices.gungi.save(gungi);
+    await this.gungiRepository.save(gungi);
     this._eventBus.broadcast(events);
     return response;
   }

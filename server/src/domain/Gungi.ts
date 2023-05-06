@@ -5,7 +5,7 @@ import GomaOki from './GomaOki';
 import SIDE from './constant/SIDE';
 import GOMA from './constant/GOMA';
 import Coord from './Coord';
-import { Event, SurrenderEvent } from '../events/event';
+import { Event, SurrenderEvent } from './events/event';
 import DeadArea from './DeadArea';
 
 class Gungi {

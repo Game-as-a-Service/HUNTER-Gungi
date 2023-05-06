@@ -10,8 +10,8 @@ import GungiRepository from '../../src/data-services/GungiRepository';
 import Coord from '../../src/domain/Coord';
 import Gungi from '../../src/domain/Gungi';
 import { AppModule } from '../../src/app.module';
-import GungiDataModel from '../../src/frameworks/data-services/mongo/data-model/gungi-data-model';
-import GungiDao from '../../src/frameworks/data-services/mongo/dao/gungi.dao';
+import GungiDataModel from '../../src/frameworks/data-services/data-model/gungi-data-model';
+import GungiDao from '../../src/frameworks/data-services/dao/gungi.dao';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

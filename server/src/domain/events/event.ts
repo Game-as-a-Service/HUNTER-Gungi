@@ -1,4 +1,4 @@
-import Player from '../domain/Player';
+import Player from '../Player';
 
 interface Event {
   name: string;

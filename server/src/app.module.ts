@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import GungiController from './controllers/gungi.controller';
-import { DataServicesModule } from './data-services/data-services.module';
 import GungiUsecaseModule from './usecases/gungi-usecase.module';
+import { DataServicesModule } from './frameworks/data-services/data-service-module';
 
 @Module({
   // EventBusModule

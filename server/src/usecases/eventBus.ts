@@ -1,4 +1,4 @@
-import { Event } from '../events/event';
+import { Event } from '../domain/events/event';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

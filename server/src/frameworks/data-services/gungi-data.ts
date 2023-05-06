@@ -1,6 +1,6 @@
-import SIDE from '../../../domain/constant/SIDE';
-import LEVEL from '../../../domain/constant/LEVEL';
-import GOMA from '../../../domain/constant/GOMA';
+import SIDE from '../../domain/constant/SIDE';
+import LEVEL from '../../domain/constant/LEVEL';
+import GOMA from '../../domain/constant/GOMA';
 
 type CoordinateData = {
   x: number;
