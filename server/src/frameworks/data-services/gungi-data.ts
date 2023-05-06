@@ -7,24 +7,33 @@ type CoordinateData = {
   y: number;
   z: number;
 };
+
 // 棋
 type GomaData = {
+  side: SIDE;
   name: GOMA;
   coordinate: CoordinateData;
 };
+
 // 備用區
 type GomaOkiData = {
   gomas: GomaData[];
 };
+
 // 玩家
 type PlayerData = {
   id: string;
   name: string;
+  deadArea: DeadAreaData;
+  gomaOki: GomaOkiData;
+  side: SIDE;
 };
+
 // 棋盤
 type GungiHanData = {
   han: GomaData[];
 };
+
 // 死區
 type DeadAreaData = {
   gomas: GomaData[];
@@ -33,8 +42,9 @@ type DeadAreaData = {
 enum Action {
   // 新
   ARATA,
-  // 移
+  // 移駒
   UGOGIGOMA,
+  // 投降
   SURRENDER,
 }
 
@@ -49,25 +59,12 @@ type RecordData = {
 
 interface GungiData {
   //extend WithId<Document> {
-  _id: string;
+  id: string;
   level: LEVEL;
-  loser?: SIDE;
   winner?: SIDE;
   currentTurn: SIDE;
-  sides: {
-    side: SIDE;
-    player: PlayerData;
-    gomaOki: GomaOkiData;
-    deadArea: DeadAreaData;
-  }[];
-  players: {
-    id: string; // uuid
-    name: string;
-    side: SIDE;
-    gomaOki: GomaOkiData;
-    deadArea: DeadAreaData;
-  }[];
-  gomaHan: GungiHanData;
+  players: PlayerData[];
+  gungiHan: GungiHanData;
   history: RecordData[];
 }
 
@@ -78,4 +75,5 @@ export {
   PlayerData,
   GungiHanData,
   DeadAreaData,
+  CoordinateData,
 };
