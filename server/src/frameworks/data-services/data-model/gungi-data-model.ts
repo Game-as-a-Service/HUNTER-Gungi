@@ -1,81 +1,81 @@
-//負責把data 和 domain　物件轉換
 import Gungi from '../../../domain/Gungi';
 import {
-  GungiData,
   DeadAreaData,
   GomaData,
-  GungiHanData,
+  GomaOkiData,
+  GungiData,
   PlayerData,
 } from 'src/frameworks/data-services/gungi-data';
 import Player from '../../../domain/Player';
-import COLOR from '../../../../domain/constant/COLOR';
 import GungiHan from '../../../domain/GungiHan';
 import GomaOki from '../../../domain/GomaOki';
-import { DataModel } from 'src/frameworks/data-services/data-model/data-model';
+import LEVEL from '../../../domain/constant/LEVEL';
+import Goma from '../../../domain/goma/Goma';
+import SIDE from '../../../domain/constant/SIDE';
+import Coordinate from '../../../domain/Coordinate';
+import DeadArea from '../../../domain/DeadArea';
+import DataModel from './data-model';
+import GomaFactory from '../../../domain/GomaFactory';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export default class GungiDataModel implements DataModel<Gungi, GungiData> {
   toData(domain: Gungi): GungiData {
-    return gungiData as GungiData;
+    return domain.toData();
   }
 
   toDomain(rawGungi: GungiData): Gungi {
-    const blackPlayer = this.createPlayer(rawGungi.black.player, COLOR.BLACK);
-    const whitePlayer = this.createPlayer(rawGungi.white.player, COLOR.WHITE);
-    const gungiHan = this.createGungiHan(rawGungi.gungiHan);
-    const blackGomaOki = this.createGomaOki(
-      rawGungi.black.gomaOki,
-      COLOR.BLACK,
-    );
-    const whiteGomaOki = this.createGomaOki(
-      rawGungi.white.gomaOki,
-      COLOR.WHITE,
-    );
-    const blackDeadArea = this.createDeadArea(
-      rawGungi.black.deadArea,
-      COLOR.BLACK,
-    );
-    const whiteDeadArea = this.createDeadArea(
-      rawGungi.white.deadArea,
-      COLOR.WHITE,
-    );
+    const id = rawGungi._id;
     const level = rawGungi.level;
-    const gungi = new Gungi(
-      level,
-      [blackPlayer, whitePlayer],
-      gungiHan,
-      blackGomaOki,
-      whiteGomaOki,
-      blackDeadArea,
-      whiteDeadArea,
+    const players = rawGungi.players.map((player) =>
+      this.createPlayer(level, player),
     );
+    const gungiHan = this.createGungiHan(rawGungi);
+
+    const gungi = new Gungi(id, level, players, gungiHan);
+    gungi.setCurrentTurn(rawGungi.currentTurn);
     return gungi;
   }
 
-  private createPlayer(rawPlayer: PlayerData, side: COLOR) {
-    const player = new Player(rawPlayer.name);
-    player.side = side;
-    return player;
+  private createGungiHan(rawGungi: GungiData): GungiHan {
+    const level = rawGungi.level;
+
+    const gomas = rawGungi.gungiHan.han.map((goma) => {
+      return this.createGoma(level, goma);
+    });
+    return new GungiHan(gomas);
   }
 
-  private createGungiHan(rawGungiHan: GungiHanData) {
-    return new GungiHan(rawGungiHan.map);
-  }
+  private createGoma(level: LEVEL, gomaData: GomaData): Goma {
+    const { name, coordinate, side } = gomaData;
 
-  private createGomaOki(rawGomaOki, BLACK: COLOR) {
-    const gomas = rawGomaOki.gomas.map<Goma>((rawGoma) =>
-      this.createGoma(rawGoma, BLACK),
+    return GomaFactory.create(
+      level,
+      side,
+      name,
+      new Coordinate(coordinate.x, coordinate.y, coordinate.z),
     );
-    return new GomaOki(BLACK, gomas);
   }
 
-  private createDeadArea(deadArea: DeadAreaData, BLACK: COLOR) {
-    const gomas = deadArea.gomas.map<Goma>((rawGoma) =>
-      this.createGoma(rawGoma, BLACK),
-    );
-    return new GomaOki(BLACK, gomas);
+  private createPlayer(level: LEVEL, player: PlayerData) {
+    const { id, side, gomaOki, deadArea, name } = player;
+    const gomaOkiData = this.createGomaOki(level, side, gomaOki);
+    const deadAreaData = this.createDeadArea(level, deadArea);
+    return new Player(id, name, side, gomaOkiData, deadAreaData);
   }
 
-  private createGoma(rawGoma: GomaData, BLACK: COLOR) {
-    return undefined;
+  private createGomaOki(
+    level: LEVEL,
+    side: SIDE,
+    gomaOki: GomaOkiData,
+  ): GomaOki {
+    const gomas = gomaOki.gomas.map((goma) => this.createGoma(level, goma));
+
+    return new GomaOki(level, side, gomas);
+  }
+
+  private createDeadArea(level: LEVEL, deadArea: DeadAreaData) {
+    const gomas = deadArea.gomas.map((goma) => this.createGoma(level, goma));
+    return new DeadArea(gomas);
   }
 }
