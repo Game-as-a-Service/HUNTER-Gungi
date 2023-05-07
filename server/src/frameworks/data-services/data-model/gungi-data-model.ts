@@ -60,7 +60,7 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
   private createPlayer(level: LEVEL, player: PlayerData) {
     const { id, side, gomaOki, deadArea, name } = player;
     const gomaOkiData = this.createGomaOki(level, side, gomaOki);
-    const deadAreaData = this.createDeadArea(level, deadArea);
+    const deadAreaData = this.createDeadArea(level, side, deadArea);
     return new Player(id, name, side, gomaOkiData, deadAreaData);
   }
 
@@ -74,8 +74,8 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
     return new GomaOki(level, side, gomas);
   }
 
-  private createDeadArea(level: LEVEL, deadArea: DeadAreaData) {
+  private createDeadArea(level: LEVEL, side: SIDE, deadArea: DeadAreaData) {
     const gomas = deadArea.gomas.map((goma) => this.createGoma(level, goma));
-    return new DeadArea(gomas);
+    return new DeadArea(side, gomas);
   }
 }

@@ -5,7 +5,11 @@ import { GomaOkiData } from '../frameworks/data-services/gungi-data';
 import LEVEL from './constant/LEVEL';
 
 class GomaOki {
-  constructor(private _level: LEVEL, _side: SIDE, private _gomas?: Goma[]) {}
+  constructor(
+    private _level: LEVEL,
+    _side: SIDE,
+    private _gomas: Goma[] = [],
+  ) {}
 
   get gomas(): Goma[] {
     return this._gomas;

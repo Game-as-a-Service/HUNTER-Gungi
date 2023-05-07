@@ -1,12 +1,13 @@
 import Goma from './goma/Goma';
 import { DeadAreaData } from '../frameworks/data-services/gungi-data';
+import SIDE from './constant/SIDE';
 
 class DeadArea {
-  constructor(private gomas: Goma[]) {}
+  constructor(private _side: SIDE, private _gomas: Goma[] = []) {}
 
   toData(): DeadAreaData {
     return {
-      gomas: this.gomas.map((goma) => goma.toData()),
+      gomas: this._gomas.map((goma) => goma.toData()),
     };
   }
 }
