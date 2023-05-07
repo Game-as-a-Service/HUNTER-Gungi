@@ -6,11 +6,9 @@ interface Event {
 }
 
 interface SurrenderEvent extends Event {
-  name: 'surrender';
+  name: 'Surrender';
   data: {
     winner: Player;
-    loser: Player;
-    surrenderedPlayer: Player;
   };
 }
 
