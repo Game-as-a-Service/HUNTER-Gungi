@@ -14,6 +14,7 @@ class Gungi {
   private _goteGomaOki: GomaOki;
   private _senteDeadArea: DeadArea;
   private _goteDeadArea: DeadArea;
+  private _currentTurn: Player;
 
   constructor(
     private _id: string,
@@ -44,12 +45,6 @@ class Gungi {
     this._winner = value;
   }
 
-  private _currentTurn: Player;
-
-  set currentTurn(value: Player) {
-    this._currentTurn = value;
-  }
-
   private _sente: Player;
 
   set sente(value: Player) {
@@ -66,6 +61,10 @@ class Gungi {
     this._gungiHan = value;
   }
 
+  setCurrentTurn(side: SIDE) {
+    this._currentTurn = this._players.find((player) => player.side === side);
+  }
+
   toData(): GungiData {
     const senteData = this._sente.toData();
     const goteData = this._gote.toData();
@@ -73,7 +72,7 @@ class Gungi {
     const gungiHanData = this._gungiHan.toData();
     const players = [senteData, goteData];
     const guniData: GungiData = {
-      id: this._id,
+      _id: this._id,
       level: this._level,
       players: players,
       gungiHan: gungiHanData,
@@ -91,7 +90,6 @@ class Gungi {
   ugokiGoma(color: SIDE, gomaName: GOMA, from: Coordinate, to: Coordinate) {}
 
   surrender(player: Player): Event[] {
-    // TODO:　比對物件是否為同一個物件
     if (this._currentTurn !== player) {
       throw new Error('不是該回合的使用者');
     }
@@ -120,11 +118,13 @@ class Gungi {
           this._sente = player;
           this._senteDeadArea = player.deadArea;
           this._senteGomaOki = player.gomaOki;
+          break;
         }
         case SIDE.WHITE: {
           this._gote = player;
           this._goteDeadArea = player.deadArea;
           this._goteGomaOki = player.gomaOki;
+          break;
         }
         default: {
           throw new Error('沒有這個玩家');
