@@ -9,8 +9,10 @@ import GungiDataModel from '../../src/frameworks/data-services/data-model/gungi-
 import { GungiData } from '../../src/frameworks/data-services/gungi-data';
 import { randomUUID } from 'crypto';
 import SIDE from '../../src/domain/constant/SIDE';
-import { MongoConnectionModule } from '../../src/frameworks/data-services/mongodb.module';
 import { Db } from 'mongodb';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -20,7 +22,7 @@ describe('AppController (e2e)', () => {
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule, DataServicesModule, MongoConnectionModule],
+      imports: [AppModule, DataServicesModule],
       providers: [GungiDataModel],
     }).compile();
 
@@ -28,10 +30,11 @@ describe('AppController (e2e)', () => {
     gungiDataModel = moduleFixture.get<GungiDataModel>(GungiDataModel);
     gungiRepository = moduleFixture.get('GungiRepository');
     db = moduleFixture.get('MongoConnection');
+
     await app.init();
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await db.collection('Gungi').deleteMany({});
   });
 
@@ -73,6 +76,7 @@ describe('AppController (e2e)', () => {
     return request(app.getHttpServer())
       .post(`/gungi/${gungiId}/surrender`)
       .send(body)
-      .expect(200);
+      .expect(200)
+      .expect({ winner: 'B' });
   });
 });
