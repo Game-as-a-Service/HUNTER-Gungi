@@ -1,6 +1,17 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import FurigomaUsecase from '../usecases/furigoma-usecase';
-import SurrenderUsecase from '../usecases/surrender-usecase';
+import SurrenderUsecase, {
+  SurrenderRequest,
+} from '../usecases/surrender-usecase';
+import SurrenderPresenter from '../frameworks/presenter/SurrenderPresenter';
 
 @Controller()
 export default class GungiController {
@@ -16,13 +27,19 @@ export default class GungiController {
   }
 
   @Post('/gungi/:id/surrender')
-  async surrender(@Param('id') id: string, @Body() body: { player: string }) {
-    const request = {
+  async surrender(
+    @Param('id') id: string,
+    @Body() body: { playerId: string },
+    @Res() res,
+  ) {
+    const request: SurrenderRequest = {
       gungiId: id,
-      player: body.player,
+      playerId: body.playerId,
     };
-    const response = await this._surrenderUsecase.execute(request);
 
-    return response;
+    const presenter = new SurrenderPresenter();
+    const response = await this._surrenderUsecase.execute(request, presenter);
+
+    return res.status(HttpStatus.OK).send(response);
   }
 }
