@@ -1,10 +1,7 @@
 import { Event } from '../domain/events/event';
-import { Injectable } from '@nestjs/common';
 
-@Injectable()
-export default class EventBus {
-  private eventMap: Map<string, Event[]> = new Map();
-
+export default abstract class EventBus {
+  protected eventMap: Map<string, Event[]> = new Map();
   // public on(eventName: string, callback: Function) {
   //   //   const callbacks = this.eventMap.get(eventName) || [];
   //   //   callbacks.push(callback);
@@ -17,9 +14,5 @@ export default class EventBus {
   //   //     callbacks.forEach((callback) => callback(data));
   //   //   }
   //   // }
-  broadcast(events: Event[]) {
-    events.forEach((event) => {
-      console.log('Event: ', event);
-    });
-  }
+  abstract broadcast(events: Event[]);
 }
