@@ -86,11 +86,20 @@ class Gungi {
     return guniData;
   }
 
-  setConfiguration() {}
+  setConfiguration() {
+    // TODO
+    throw new Error('Method not implemented.');
+  }
 
-  furiGoma() {}
+  furiGoma() {
+    // TODO
+    throw new Error('Method not implemented.');
+  }
 
-  ugokiGoma(color: SIDE, gomaName: GOMA, from: Coordinate, to: Coordinate) {}
+  ugokiGoma(color: SIDE, gomaName: GOMA, from: Coordinate, to: Coordinate) {
+    // TODO
+    throw new Error('Method not implemented.');
+  }
 
   surrender(player: Player): Event[] {
     if (this._currentTurn !== player) {

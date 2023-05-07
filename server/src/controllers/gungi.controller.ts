@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpStatus,
-  Param,
-  Post,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, HttpStatus, Param, Post, Res } from '@nestjs/common';
 import FurigomaUsecase from '../usecases/furigoma-usecase';
 import SurrenderUsecase, {
   SurrenderRequest,
@@ -22,6 +14,12 @@ export default class GungiController {
 
   @Post('/gungi/:id/furigoma')
   async furigoma(@Param('id') id: string, @Body() body: any) {
+    // set temp
+    const request = {
+      gungiId: id,
+      body,
+    };
+
     const response = await this._furigomaUsecase.execute();
     return response;
   }
