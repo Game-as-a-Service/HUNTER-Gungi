@@ -15,7 +15,7 @@ import SIDE from '../../../domain/constant/SIDE';
 import Coordinate from '../../../domain/Coordinate';
 import DeadArea from '../../../domain/DeadArea';
 import DataModel from './data-model';
-import GomaFactory from '../../../domain/GomaFactory';
+import GomaFactory from '../../../domain/goma/GomaFactory';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
