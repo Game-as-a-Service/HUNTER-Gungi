@@ -1,6 +1,5 @@
-import { Collection, Db, ObjectId } from 'mongodb';
-import { Injectable } from '@nestjs/common';
-import { Inject } from '@nestjs/common';
+import { Collection, Db } from 'mongodb';
+import { Inject, Injectable } from '@nestjs/common';
 import { Dao } from 'src/frameworks/data-services/dao/dao';
 import { GungiData } from 'src/frameworks/data-services/gungi-data';
 
@@ -8,14 +7,13 @@ import { GungiData } from 'src/frameworks/data-services/gungi-data';
 export default class GungiDao implements Dao<GungiData> {
   private _dbCollection: Collection<GungiData>;
 
-  constructor(@Inject('DATABASE_CONNECTION') private readonly database: Db) {}
+  constructor(@Inject('MongoConnection') private readonly database: Db) {}
 
   async findById(id: string): Promise<GungiData> {
     if (!this._dbCollection) {
       this.lazyLoading();
     }
-    const gungiObjectId = new ObjectId(id);
-    const gungi = await this._dbCollection.findOne({ id });
+    const gungi = await this._dbCollection.findOne({ _id: id });
     return gungi;
   }
 
@@ -24,7 +22,7 @@ export default class GungiDao implements Dao<GungiData> {
       this.lazyLoading();
     }
     await this._dbCollection.updateOne(
-      { id: gungi.id },
+      { _id: gungi._id },
       { $set: gungi },
       { upsert: true },
     );
