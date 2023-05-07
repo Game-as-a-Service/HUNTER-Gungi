@@ -5,6 +5,14 @@ import GomaOki from './GomaOki';
 import DeadArea from './DeadArea';
 
 class Player {
+  constructor(
+    private _id: string,
+    private _name: string,
+    private _side: SIDE,
+    private _gomaOki: GomaOki,
+    private _deadArea: DeadArea,
+  ) {}
+
   get gomaOki(): GomaOki {
     return this._gomaOki;
   }
@@ -12,12 +20,6 @@ class Player {
   get deadArea(): DeadArea {
     return this._deadArea;
   }
-  constructor(
-    private _id: string,
-    private _name: string,
-    private _gomaOki: GomaOki,
-    private _deadArea: DeadArea,
-  ) {}
 
   private _gungi: Gungi;
 
@@ -29,7 +31,9 @@ class Player {
     return this._name;
   }
 
-  private _side: SIDE;
+  get side(): SIDE {
+    return this._side;
+  }
 
   set side(value: SIDE) {
     this._side = value;
@@ -46,8 +50,7 @@ class Player {
   }
 
   surrender() {
-    const player = this;
-    this._gungi.loser = player;
+    this._gungi.loser = this;
   }
 }
 
