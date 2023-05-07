@@ -4,7 +4,7 @@ import { GomaData, GungiHanData } from '../frameworks/data-services/gungi-data';
 class GungiHan {
   private _han: Map<number, Map<number, Goma[]>>;
 
-  constructor(gomas: Goma[]) {
+  constructor(gomas: Goma[] = []) {
     this.setHan(gomas);
   }
 

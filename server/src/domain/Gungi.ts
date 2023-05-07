@@ -22,6 +22,9 @@ class Gungi {
     private _players: Player[],
     private _gungiHan: GungiHan,
   ) {
+    this._players.forEach((player) => {
+      player.gungi = this;
+    });
     this.setSenteGote(_players);
   }
 
@@ -107,8 +110,12 @@ class Gungi {
     return [event];
   }
 
-  getPlayer(playerName: string): Player {
-    return this._players.find((player) => player.name === playerName);
+  getPlayer(playerId: string): Player {
+    return this._players.find((player) => player.id === playerId);
+  }
+
+  getOpponent(player: Player): Player {
+    return this._players.find((p) => p !== player);
   }
 
   private setSenteGote(players: Player[]) {

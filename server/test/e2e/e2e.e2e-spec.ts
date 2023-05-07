@@ -9,22 +9,30 @@ import GungiDataModel from '../../src/frameworks/data-services/data-model/gungi-
 import { GungiData } from '../../src/frameworks/data-services/gungi-data';
 import { randomUUID } from 'crypto';
 import SIDE from '../../src/domain/constant/SIDE';
+import { MongoConnectionModule } from '../../src/frameworks/data-services/mongodb.module';
+import { Db } from 'mongodb';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let gungiRepository: GungiRepository;
   let gungiDataModel: GungiDataModel;
+  let db: Db;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [AppModule, DataServicesModule],
+      imports: [AppModule, DataServicesModule, MongoConnectionModule],
       providers: [GungiDataModel],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     gungiDataModel = moduleFixture.get<GungiDataModel>(GungiDataModel);
     gungiRepository = moduleFixture.get('GungiRepository');
+    db = moduleFixture.get('MongoConnection');
     await app.init();
+  });
+
+  afterEach(async () => {
+    await db.collection('Gungi').deleteMany({});
   });
 
   it('/(POST) gungi/:gungiId/surrender', async () => {

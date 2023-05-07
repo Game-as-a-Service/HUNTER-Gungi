@@ -13,6 +13,10 @@ class Player {
     private _deadArea: DeadArea,
   ) {}
 
+  get id(): string {
+    return this._id;
+  }
+
   get gomaOki(): GomaOki {
     return this._gomaOki;
   }
@@ -50,7 +54,7 @@ class Player {
   }
 
   surrender() {
-    this._gungi.loser = this;
+    this._gungi.winner = this._gungi.getOpponent(this);
   }
 }
 
