@@ -58,8 +58,7 @@ type RecordData = {
 };
 
 interface GungiData {
-  //extend WithId<Document> {
-  id: string;
+  _id: string;
   level: LEVEL;
   winner?: SIDE;
   currentTurn: SIDE;

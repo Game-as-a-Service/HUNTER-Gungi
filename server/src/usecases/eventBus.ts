@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export default class EventBus {
-  private eventMap: Map<string, Function[]> = new Map();
+  private eventMap: Map<string, Event[]> = new Map();
 
   // public on(eventName: string, callback: Function) {
   //   //   const callbacks = this.eventMap.get(eventName) || [];
@@ -18,6 +18,8 @@ export default class EventBus {
   //   //   }
   //   // }
   broadcast(events: Event[]) {
-    events.forEach((event) => {});
+    events.forEach((event) => {
+      console.log('Event: ', event);
+    });
   }
 }

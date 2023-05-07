@@ -3,6 +3,6 @@ import { GungiRepositoryModule } from './gungiRepository.module';
 
 @Module({
   imports: [GungiRepositoryModule],
-  exports: [GungiRepositoryModule], // 將 'MongoDataServices' 加入 exports
+  exports: [GungiRepositoryModule],
 })
 export class DataServicesModule {}

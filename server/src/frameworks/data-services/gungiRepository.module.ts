@@ -8,8 +8,15 @@ import { MongoConnectionModule } from './mongodb.module';
 
 @Module({
   imports: [MongoConnectionModule],
-  providers: [GungiDao, GungiDataModel, GungiRepository],
+  providers: [
+    GungiDao,
+    GungiDataModel,
+    {
+      provide: 'GungiRepository',
+      useClass: GungiRepository,
+    },
+  ],
   /* exports: [IRepository], */
-  exports: [GungiRepository],
+  exports: ['GungiRepository'],
 })
 export class GungiRepositoryModule {}

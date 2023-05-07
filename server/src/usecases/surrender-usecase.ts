@@ -14,11 +14,12 @@ export default class SurrenderUsecase {
   constructor(
     @Inject('GungiRepository')
     private gungiRepository: IRepository<Gungi>,
+    @Inject(EventBus)
     private _eventBus: EventBus,
   ) {}
 
   async execute(request: SurrenderRequest) {
-    const gungi = await this.gungiRepository.get(request.gungiId);
+    const gungi = await this.gungiRepository.findById(request.gungiId);
     const player = gungi.getPlayer(request.player);
     const events = gungi.surrender(player);
     await this.gungiRepository.save(gungi);
