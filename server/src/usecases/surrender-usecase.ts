@@ -1,29 +1,30 @@
 import { Inject, Injectable } from '@nestjs/common';
 import EventBus from './eventBus';
-import { response } from 'express';
 import IRepository from './repository.abstract';
 import Gungi from '../domain/Gungi';
+import Presenter from './Presenter';
 
-interface SurrenderRequest {
+export interface SurrenderRequest {
   gungiId: string;
-  player: string;
+  playerId: string;
 }
 
 @Injectable()
 export default class SurrenderUsecase {
   constructor(
     @Inject('GungiRepository')
-    private gungiRepository: IRepository<Gungi>,
-    @Inject(EventBus)
+    private _gungiRepository: IRepository<Gungi>,
+    @Inject('EventBus')
     private _eventBus: EventBus,
   ) {}
 
-  async execute(request: SurrenderRequest) {
-    const gungi = await this.gungiRepository.findById(request.gungiId);
-    const player = gungi.getPlayer(request.player);
+  async execute(request: SurrenderRequest, presenter: Presenter) {
+    const gungi = await this._gungiRepository.findById(request.gungiId);
+    const player = gungi.getPlayer(request.playerId);
     const events = gungi.surrender(player);
-    await this.gungiRepository.save(gungi);
+    await this._gungiRepository.save(gungi);
     this._eventBus.broadcast(events);
-    return response;
+
+    return presenter.present(events);
   }
 }

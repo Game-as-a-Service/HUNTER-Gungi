@@ -8,7 +8,7 @@ export default class FurigomaUsecase {
   constructor(
     @Inject('GungiRepository')
     private gungiRepository: IRepository<Gungi>,
-    @Inject(EventBus)
+    @Inject('EventBus')
     private _eventBus: EventBus,
   ) {}
 
