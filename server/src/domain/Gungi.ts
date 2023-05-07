@@ -100,11 +100,9 @@ class Gungi {
     player.surrender();
 
     const event: SurrenderEvent = {
-      name: 'surrender',
+      name: 'Surrender',
       data: {
-        loser: undefined,
-        surrenderedPlayer: undefined,
-        winner: undefined,
+        winner: this.getOpponent(player),
       },
     };
     return [event];
