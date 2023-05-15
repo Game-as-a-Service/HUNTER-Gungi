@@ -131,3 +131,6 @@ dist
 
 .DS_Store
 .idea
+
+# docker db artifacts
+db/
