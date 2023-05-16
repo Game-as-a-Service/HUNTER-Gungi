@@ -4,6 +4,9 @@ services:
     build:
       context: ./server
       dockerfile: ./docker/Dockerfile.local
+    environment:
+      DB_CONN_STRING: mongodb
+      DB_CONN_PORT: 27017
     ports:
       - 8000:8000
     volumes:
@@ -18,3 +21,9 @@ services:
     ports:
       - 3000:3000
     command: npm run dev
+  mongodb:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - ./db:/data/db:rw

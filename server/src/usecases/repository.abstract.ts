@@ -1,5 +1,5 @@
-export default abstract class IRepository<T> {
-  abstract findById(id: string): Promise<T | null>;
+export default interface IRepository<T> {
+  findById(id: string): Promise<T | null>;
 
-  abstract save(item: T): Promise<void>;
+  save(item: T): Promise<void>;
 }
