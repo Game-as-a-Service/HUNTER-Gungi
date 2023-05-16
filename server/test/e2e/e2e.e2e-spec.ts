@@ -9,7 +9,7 @@ import GungiDataModel from '../../src/frameworks/data-services/data-model/gungi-
 import { GungiData } from '../../src/frameworks/data-services/gungi-data';
 import { randomUUID } from 'crypto';
 import SIDE from '../../src/domain/constant/SIDE';
-import { Db } from 'mongodb';
+import { Db, MongoClient } from 'mongodb';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -19,6 +19,7 @@ describe('AppController (e2e)', () => {
   let gungiRepository: GungiRepository;
   let gungiDataModel: GungiDataModel;
   let db: Db;
+  let client: MongoClient;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -29,13 +30,16 @@ describe('AppController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     gungiDataModel = moduleFixture.get<GungiDataModel>(GungiDataModel);
     gungiRepository = moduleFixture.get('GungiRepository');
-    db = moduleFixture.get('MongoConnection');
+    client = moduleFixture.get('MongoConnection');
+    db = client.db();
 
     await app.init();
   });
 
   afterAll(async () => {
     await db.collection('Gungi').deleteMany({});
+    await client.close(true);
+    await app.close();
   });
 
   it('/(POST) gungi/:gungiId/surrender', async () => {
@@ -73,7 +77,7 @@ describe('AppController (e2e)', () => {
       playerId: 'A',
     };
 
-    return request(app.getHttpServer())
+    request(app.getHttpServer())
       .post(`/gungi/${gungiId}/surrender`)
       .send(body)
       .expect(200)

@@ -1,4 +1,4 @@
-import { Collection, Db } from 'mongodb';
+import { Collection, Db, MongoClient } from 'mongodb';
 import { Inject, Injectable } from '@nestjs/common';
 import { Dao } from 'src/frameworks/data-services/dao/dao';
 import { GungiData } from 'src/frameworks/data-services/gungi-data';
@@ -7,7 +7,11 @@ import { GungiData } from 'src/frameworks/data-services/gungi-data';
 export default class GungiDao implements Dao<GungiData> {
   private _dbCollection: Collection<GungiData>;
 
-  constructor(@Inject('MongoConnection') private readonly database: Db) {}
+  private readonly database: Db;
+
+  constructor(@Inject('MongoConnection') client: MongoClient) {
+    this.database = client.db();
+  }
 
   async findById(id: string): Promise<GungiData> {
     if (!this._dbCollection) {

@@ -2,16 +2,17 @@ import { Module } from '@nestjs/common';
 import { MongoClient, Db } from 'mongodb';
 
 import * as dotenv from 'dotenv';
+
 dotenv.config();
 
 @Module({
   providers: [
     {
       provide: 'MongoConnection',
-      useFactory: async (): Promise<Db> => {
+      useFactory: async (): Promise<MongoClient> => {
         try {
           const client = await MongoClient.connect(process.env.DB_CONN_STRING);
-          return client.db();
+          return client;
         } catch (err) {
           throw err;
         }
