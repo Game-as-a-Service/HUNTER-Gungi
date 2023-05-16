@@ -5,7 +5,6 @@ import GungiUsecaseModule from './usecases/gungi-usecase.module';
 import { DataServicesModule } from './frameworks/data-services/data-service-module';
 
 @Module({
-  // EventBusModule
   imports: [
     ConfigModule.forRoot({
       envFilePath: './server/.env',
