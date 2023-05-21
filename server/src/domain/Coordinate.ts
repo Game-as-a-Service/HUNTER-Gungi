@@ -1,4 +1,4 @@
-import { CoordinateData } from '../frameworks/data-services/gungi-data';
+import { CoordinateData } from '../frameworks/data-services/GungiData';
 
 class Coordinate {
   constructor(private _x: number, private _y: number, private _z: number) {}

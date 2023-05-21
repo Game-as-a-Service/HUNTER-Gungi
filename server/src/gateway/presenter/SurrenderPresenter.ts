@@ -1,5 +1,5 @@
 import Presenter from '../../usecases/Presenter';
-import { Event } from '../../domain/events/event';
+import { Event } from '../../domain/events/Event';
 import gungiViewModel from '../../frameworks/view-model/GungiViewModel';
 
 export default class SurrenderPresenter implements Presenter {

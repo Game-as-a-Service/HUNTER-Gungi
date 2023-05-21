@@ -1,8 +1,8 @@
-import IRepository from 'src/usecases/repository.abstract';
+import IRepository from 'src/usecases/Repository';
 import Gungi from 'src/domain/Gungi';
-import { GungiData } from 'src/frameworks/data-services/gungi-data';
-import GungiDao from './dao/gungi.dao';
-import GungiDataModel from './data-model/gungi-data-model';
+import { GungiData } from 'src/frameworks/data-services/GungiData';
+import GungiDao from './dao/GungiDao';
+import GungiDataModel from './data-model/GungiDataModel';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

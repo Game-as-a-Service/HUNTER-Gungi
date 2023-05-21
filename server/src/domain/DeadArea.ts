@@ -1,5 +1,5 @@
 import Goma from './goma/Goma';
-import { DeadAreaData } from '../frameworks/data-services/gungi-data';
+import { DeadAreaData } from '../frameworks/data-services/GungiData';
 import SIDE from './constant/SIDE';
 
 class DeadArea {

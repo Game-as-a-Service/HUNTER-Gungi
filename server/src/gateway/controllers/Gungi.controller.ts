@@ -1,8 +1,8 @@
 import { Body, Controller, HttpStatus, Param, Post, Res } from '@nestjs/common';
-import FurigomaUsecase from '../../usecases/service-class/furigoma-usecase';
+import FurigomaUsecase from '../../usecases/service-class/FurigomaUsecase';
 import SurrenderUsecase, {
   SurrenderRequest,
-} from '../../usecases/service-class/surrender-usecase';
+} from '../../usecases/service-class/SurrenderUsecase';
 import SurrenderPresenter from '../presenter/SurrenderPresenter';
 
 @Controller()

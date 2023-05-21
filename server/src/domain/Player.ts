@@ -1,6 +1,6 @@
 import SIDE from './constant/SIDE';
 import Gungi from './Gungi';
-import { PlayerData } from '../frameworks/data-services/gungi-data';
+import { PlayerData } from '../frameworks/data-services/GungiData';
 import GomaOki from './GomaOki';
 import DeadArea from './DeadArea';
 

@@ -1,4 +1,4 @@
-import EventBus from '../../usecases/eventBus';
+import EventBus from '../../usecases/EventBus';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()

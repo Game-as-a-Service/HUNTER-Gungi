@@ -1,5 +1,5 @@
 import Goma from './goma/Goma';
-import { GomaData, GungiHanData } from '../frameworks/data-services/gungi-data';
+import { GomaData, GungiHanData } from '../frameworks/data-services/GungiData';
 
 class GungiHan {
   private _han: Map<number, Map<number, Goma[]>>;

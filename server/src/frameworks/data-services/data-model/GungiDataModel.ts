@@ -5,7 +5,7 @@ import {
   GomaOkiData,
   GungiData,
   PlayerData,
-} from 'src/frameworks/data-services/gungi-data';
+} from 'src/frameworks/data-services/GungiData';
 import Player from '../../../domain/Player';
 import GungiHan from '../../../domain/GungiHan';
 import GomaOki from '../../../domain/GomaOki';
@@ -14,7 +14,7 @@ import Goma from '../../../domain/goma/Goma';
 import SIDE from '../../../domain/constant/SIDE';
 import Coordinate from '../../../domain/Coordinate';
 import DeadArea from '../../../domain/DeadArea';
-import DataModel from './data-model';
+import DataModel from './DataModel';
 import GomaFactory from '../../../domain/goma/GomaFactory';
 import { Injectable } from '@nestjs/common';
 

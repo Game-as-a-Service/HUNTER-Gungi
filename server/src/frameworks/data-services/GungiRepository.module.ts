@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 
-import GungiDao from './dao/gungi.dao';
-import GungiDataModel from './data-model/gungi-data-model';
+import GungiDao from './dao/GungiDao';
+import GungiDataModel from './data-model/GungiDataModel';
 
-import { GungiRepository } from './gungi-repository';
-import { MongoConnectionModule } from './mongodb.module';
+import { GungiRepository } from './GungiRepository';
+import { MongoConnectionModule } from './Mongodb.module';
 
 @Module({
   imports: [MongoConnectionModule],

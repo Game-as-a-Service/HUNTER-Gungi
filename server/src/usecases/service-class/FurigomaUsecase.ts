@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import EventBus from '../eventBus';
-import IRepository from '../repository.abstract';
+import EventBus from '../EventBus';
+import IRepository from '../Repository';
 import Gungi from '../../domain/Gungi';
 
 @Injectable()

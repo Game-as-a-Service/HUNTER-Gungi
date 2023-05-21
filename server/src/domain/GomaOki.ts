@@ -1,7 +1,7 @@
 import SIDE from './constant/SIDE';
 import Player from './Player';
 import Goma from './goma/Goma';
-import { GomaOkiData } from '../frameworks/data-services/gungi-data';
+import { GomaOkiData } from '../frameworks/data-services/GungiData';
 import LEVEL from './constant/LEVEL';
 
 class GomaOki {

@@ -1,6 +1,6 @@
 import Coordinate from '../Coordinate';
 import SIDE from '../constant/SIDE';
-import { GomaData } from '../../frameworks/data-services/gungi-data';
+import { GomaData } from '../../frameworks/data-services/GungiData';
 import GOMA from '../constant/GOMA';
 import LEVEL from '../constant/LEVEL';
 

@@ -1,4 +1,4 @@
-import { Event } from '../domain/events/event';
+import { Event } from '../domain/events/Event';
 
 export default abstract class EventBus {
   protected eventMap: Map<string, Event[]> = new Map();
