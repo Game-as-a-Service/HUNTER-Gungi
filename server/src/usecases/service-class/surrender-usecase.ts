@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
-import EventBus from './eventBus';
-import IRepository from './repository.abstract';
-import Gungi from '../domain/Gungi';
-import Presenter from './Presenter';
+import EventBus from '../eventBus';
+import IRepository from '../repository.abstract';
+import Gungi from '../../domain/Gungi';
+import Presenter from '../Presenter';
 
 export interface SurrenderRequest {
   gungiId: string;

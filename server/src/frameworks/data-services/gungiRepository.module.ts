@@ -16,7 +16,6 @@ import { MongoConnectionModule } from './mongodb.module';
       useClass: GungiRepository,
     },
   ],
-  /* exports: [IRepository], */
   exports: ['GungiRepository'],
 })
 export class GungiRepositoryModule {}

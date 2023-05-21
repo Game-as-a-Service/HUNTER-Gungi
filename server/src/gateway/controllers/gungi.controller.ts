@@ -1,9 +1,9 @@
 import { Body, Controller, HttpStatus, Param, Post, Res } from '@nestjs/common';
-import FurigomaUsecase from '../usecases/furigoma-usecase';
+import FurigomaUsecase from '../../usecases/service-class/furigoma-usecase';
 import SurrenderUsecase, {
   SurrenderRequest,
-} from '../usecases/surrender-usecase';
-import SurrenderPresenter from '../frameworks/presenter/SurrenderPresenter';
+} from '../../usecases/service-class/surrender-usecase';
+import SurrenderPresenter from '../presenter/SurrenderPresenter';
 
 @Controller()
 export default class GungiController {

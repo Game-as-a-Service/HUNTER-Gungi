@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import SurrenderUsecase from './surrender-usecase';
+import SurrenderUsecase from './service-class/surrender-usecase';
 import { GungiRepositoryModule } from '../frameworks/data-services/gungiRepository.module';
 import EventBus from './eventBus';
-import FurigomaUsecase from './furigoma-usecase';
-import ImplEventBus from '../frameworks/eventBus/ImplEventBus';
+import FurigomaUsecase from './service-class/furigoma-usecase';
+import ImplEventBus from '../gateway/eventBus/ImplEventBus';
 
 @Module({
   imports: [GungiRepositoryModule],

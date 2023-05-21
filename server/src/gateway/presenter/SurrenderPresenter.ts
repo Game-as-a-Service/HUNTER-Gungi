@@ -1,6 +1,6 @@
 import Presenter from '../../usecases/Presenter';
 import { Event } from '../../domain/events/event';
-import gungiViewModel from '../view-model/GungiViewModel';
+import gungiViewModel from '../../frameworks/view-model/GungiViewModel';
 
 export default class SurrenderPresenter implements Presenter {
   present(events: Event[]) {
