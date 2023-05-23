@@ -43,16 +43,6 @@ class Player {
     this._side = value;
   }
 
-  toData(): PlayerData {
-    return {
-      id: this._id,
-      side: this._side,
-      name: this.name,
-      deadArea: this._deadArea.toData(),
-      gomaOki: this._gomaOki.toData(),
-    };
-  }
-
   surrender() {
     this._gungi.winner = this._gungi.getOpponent(this);
   }
