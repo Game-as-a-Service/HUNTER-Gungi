@@ -11,7 +11,11 @@ dotenv.config();
       provide: 'MongoConnection',
       useFactory: async (): Promise<MongoClient> => {
         try {
-          const client = await MongoClient.connect(process.env.DB_CONN_STRING);
+          const MONGODB_URL = process.env.DB_CONN_STRING || 'localhost';
+          const MONGODB_PORT = process.env.DB_CONN_PORT || 27017;
+          const client = await MongoClient.connect(
+            `mongodb://${MONGODB_URL}:${MONGODB_PORT}`,
+          );
           return client;
         } catch (err) {
           throw err;
