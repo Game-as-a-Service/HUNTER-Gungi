@@ -4,7 +4,7 @@ import Coordinate from '../Coordinate';
 import LEVEL from '../constant/LEVEL';
 import GOMA from '../constant/GOMA';
 
-export default class Hei extends Goma {
+export default class Yari extends Goma {
   constructor(
     _level: LEVEL,
     _side: SIDE,

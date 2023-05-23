@@ -35,4 +35,8 @@ export default abstract class Goma {
   getCoordinateZ(): number {
     return this._coordinate.z;
   }
+
+  abstract arata(to: Coordinate): void;
+
+  abstract ugokiGoma(to: Coordinate): void;
 }
