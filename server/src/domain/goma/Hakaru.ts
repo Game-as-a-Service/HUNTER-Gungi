@@ -14,7 +14,11 @@ export default class Hakaru extends Goma {
     super(_level, _side, _name, _coordinate);
   }
 
-  arata(to: Coordinate): void {}
+  arata(to: Coordinate): void {
+    throw new Error('Method not implemented.');
+  }
 
-  ugokiGoma(to: Coordinate): void {}
+  ugokiGoma(to: Coordinate): void {
+    throw new Error('Method not implemented.');
+  }
 }

@@ -9,7 +9,11 @@ export default class Dai extends Goma {
     super(level, side, name, coordinate);
   }
 
-  arata(to: Coordinate): void {}
+  arata(to: Coordinate): void {
+    throw new Error('Method not implemented.');
+  }
 
-  ugokiGoma(to: Coordinate): void {}
+  ugokiGoma(to: Coordinate): void {
+    throw new Error('Method not implemented.');
+  }
 }
