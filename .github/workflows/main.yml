@@ -27,6 +27,7 @@ jobs:
       fail-fast: false
       matrix:
         subdir: [server]
+        mongodb-version: latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
