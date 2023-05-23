@@ -24,12 +24,6 @@ class GomaOki {
   set player(value: Player) {
     this._player = value;
   }
-
-  toData(): GomaOkiData {
-    return {
-      gomas: this._gomas.map((goma) => goma.toData()),
-    };
-  }
 }
 
 export default GomaOki;

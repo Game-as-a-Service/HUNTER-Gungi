@@ -12,12 +12,16 @@ export default abstract class Goma {
     private _coordinate: Coordinate,
   ) {}
 
-  toData(): GomaData {
-    return {
-      side: this._side,
-      name: this._name,
-      coordinate: this._coordinate.toData(),
-    };
+  get name(): GOMA {
+    return this._name;
+  }
+
+  get side(): SIDE {
+    return this._side;
+  }
+
+  get coordinate(): Coordinate {
+    return this._coordinate;
   }
 
   getCoordinateX(): number {

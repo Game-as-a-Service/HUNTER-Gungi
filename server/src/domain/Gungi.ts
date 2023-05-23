@@ -10,12 +10,6 @@ import DeadArea from './DeadArea';
 import { GungiData } from '../frameworks/data-services/GungiData';
 
 class Gungi {
-  private _senteGomaOki: GomaOki;
-  private _goteGomaOki: GomaOki;
-  private _senteDeadArea: DeadArea;
-  private _goteDeadArea: DeadArea;
-  private _currentTurn: Player;
-
   constructor(
     private _id: string,
     private _level: LEVEL,
@@ -26,6 +20,52 @@ class Gungi {
       player.gungi = this;
     });
     this.setSenteGote(_players);
+  }
+
+  get id(): string {
+    return this._id;
+  }
+
+  get level(): LEVEL {
+    return this._level;
+  }
+
+  get gungiHan(): GungiHan {
+    return this._gungiHan;
+  }
+
+  set gungiHan(value: GungiHan) {
+    this._gungiHan = value;
+  }
+
+  private _currentTurn: Player;
+
+  get currentTurn(): Player {
+    return this._currentTurn;
+  }
+
+  private _senteGomaOki: GomaOki;
+
+  get senteGomaOki(): GomaOki {
+    return this._senteGomaOki;
+  }
+
+  private _goteGomaOki: GomaOki;
+
+  get goteGomaOki(): GomaOki {
+    return this._goteGomaOki;
+  }
+
+  private _senteDeadArea: DeadArea;
+
+  get senteDeadArea(): DeadArea {
+    return this._senteDeadArea;
+  }
+
+  private _goteDeadArea: DeadArea;
+
+  get goteDeadArea(): DeadArea {
+    return this._goteDeadArea;
   }
 
   private _loser: Player;
@@ -50,40 +90,26 @@ class Gungi {
 
   private _sente: Player;
 
+  get sente(): Player {
+    return this._sente;
+  }
+
   set sente(value: Player) {
     this._sente = value;
   }
 
   private _gote: Player;
 
+  get gote(): Player {
+    return this._gote;
+  }
+
   set gote(value: Player) {
     this._gote = value;
   }
 
-  set gungiHan(value: GungiHan) {
-    this._gungiHan = value;
-  }
-
   setCurrentTurn(side: SIDE) {
     this._currentTurn = this._players.find((player) => player.side === side);
-  }
-
-  toData(): GungiData {
-    const senteData = this._sente.toData();
-    const goteData = this._gote.toData();
-
-    const gungiHanData = this._gungiHan.toData();
-    const players = [senteData, goteData];
-    const guniData: GungiData = {
-      _id: this._id,
-      level: this._level,
-      players: players,
-      gungiHan: gungiHanData,
-      currentTurn: this._currentTurn.side,
-      winner: this._winner?.side,
-      history: [],
-    };
-    return guniData;
   }
 
   setConfiguration() {

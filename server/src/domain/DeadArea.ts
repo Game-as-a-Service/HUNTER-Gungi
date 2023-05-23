@@ -5,10 +5,8 @@ import SIDE from './constant/SIDE';
 class DeadArea {
   constructor(private _side: SIDE, private _gomas: Goma[] = []) {}
 
-  toData(): DeadAreaData {
-    return {
-      gomas: this._gomas.map((goma) => goma.toData()),
-    };
+  get gomas(): Goma[] {
+    return this._gomas;
   }
 }
 

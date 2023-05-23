@@ -2,26 +2,14 @@ import Goma from './goma/Goma';
 import { GomaData, GungiHanData } from '../frameworks/data-services/GungiData';
 
 class GungiHan {
-  private _han: Map<number, Map<number, Goma[]>>;
-
   constructor(gomas: Goma[] = []) {
     this.setHan(gomas);
   }
 
-  toData(): GungiHanData {
-    const gomasData: GomaData[] = [];
+  private _han: Map<number, Map<number, Goma[]>>;
 
-    this._han.forEach((yMap, x) => {
-      yMap.forEach((gomas, y) => {
-        gomas.forEach((goma) => {
-          gomasData.push(goma.toData());
-        });
-      });
-    });
-
-    return {
-      han: gomasData,
-    };
+  get han(): Map<number, Map<number, Goma[]>> {
+    return this._han;
   }
 
   private setHan(gomas: Goma[]) {

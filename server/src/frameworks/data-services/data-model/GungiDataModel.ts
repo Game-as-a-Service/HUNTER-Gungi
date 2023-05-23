@@ -20,8 +20,38 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export default class GungiDataModel implements DataModel<Gungi, GungiData> {
-  toData(domain: Gungi): GungiData {
-    return domain.toData();
+  toData(gungi: Gungi): GungiData {
+    const gungiData = this.gungiHanToData(gungi.gungiHan);
+    const senteData = this.playerToData(gungi.sente);
+    const goteData = this.playerToData(gungi.gote);
+    const senteDeadArea = this.deadAreaToData(gungi.senteDeadArea);
+    const goteDeadArea = this.deadAreaToData(gungi.goteDeadArea);
+    const senteGomaOkiData = this.gomaOkiToData(gungi.senteGomaOki);
+    const goteGomaOkiData = this.gomaOkiToData(gungi.goteGomaOki);
+    const level = gungi.level;
+    const currentTurn = gungi.currentTurn.side;
+    const winner = gungi.winner?.side;
+
+    return {
+      _id: gungi.id,
+      currentTurn,
+      gungiHan: gungiData,
+      history: [],
+      level,
+      winner,
+      players: [
+        {
+          ...senteData,
+          deadArea: senteDeadArea,
+          gomaOki: senteGomaOkiData,
+        },
+        {
+          ...goteData,
+          deadArea: goteDeadArea,
+          gomaOki: goteGomaOkiData,
+        },
+      ],
+    };
   }
 
   toDomain(rawGungi: GungiData): Gungi {
@@ -77,5 +107,50 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
   private createDeadArea(level: LEVEL, side: SIDE, deadArea: DeadAreaData) {
     const gomas = deadArea.gomas.map((goma) => this.createGoma(level, goma));
     return new DeadArea(side, gomas);
+  }
+
+  private gungiHanToData(gungiHan: GungiHan) {
+    const gomasData: GomaData[] = [];
+
+    gungiHan.han.forEach((yMap, x) => {
+      yMap.forEach((gomas, y) => {
+        gomas.forEach((goma) => {
+          gomasData.push(this.gomaToData(goma));
+        });
+      });
+    });
+
+    return {
+      han: gomasData,
+    };
+  }
+
+  private gomaToData(goma: Goma) {
+    return {
+      side: goma.side,
+      name: goma.name,
+      coordinate: goma.coordinate.toData(),
+    };
+  }
+
+  private playerToData(player: Player) {
+    const { id, side, name } = player;
+    return {
+      id,
+      side,
+      name,
+    };
+  }
+
+  private deadAreaToData(deadArea: DeadArea) {
+    return {
+      gomas: deadArea.gomas.map((goma) => this.gomaToData(goma)),
+    };
+  }
+
+  private gomaOkiToData(gomaOki: GomaOki) {
+    return {
+      gomas: gomaOki.gomas.map((goma) => this.gomaToData(goma)),
+    };
   }
 }
