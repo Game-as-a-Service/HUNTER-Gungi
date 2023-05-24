@@ -1,10 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule } from '@nestjs/config';
+import GungiController from './gateway/controllers/Gungi.controller';
+import GungiUsecaseModule from './usecases/GungiUsecase.module';
+import { DataServicesModule } from './frameworks/data-services/DataService.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: './server/.env',
+    }),
+    DataServicesModule,
+    GungiUsecaseModule,
+  ],
+  controllers: [GungiController],
+  providers: [],
 })
 export class AppModule {}

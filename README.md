@@ -42,6 +42,37 @@
 - 資料庫:
    + TBD
 
+# Ubiquitous Language
+| chinese         | english        |
+|-------------|-------------|
+| 軍儀盤     | gungiHan    |
+| 軍儀       | gungi       |
+| 放置區     | gungiOki    |
+| 死亡區     | deadArea    |
+| 擲駒       | furiGoma    |
+| 棋         | goma        |
+| 移駒       | ugokiGoma   |
+| 新         | arata       |
+| 推疊       | tsukeru     |
+| 投降       | surrender   |
+## category of goma
+| chinese  | english |
+|-------|-------------|
+| 帥     | osho       |
+| 兵     | hei         |
+| 小     | sho         |
+| 中     | chu         |
+| 大     | dai         |
+| 馬     | uma         |
+| 侍     | shi         |
+| 槍     | yari        |
+| 砲     | ho          |
+| 弓     | yumi        |
+| 筒     | tsutsu      |
+| 砦     | toride      |
+| 謀     | hakaru      |
+| 忍     | shinobi     |
+
 # Development Environment Setup
 
 The development environment is streamlined across operating systems using Docker container and image.
