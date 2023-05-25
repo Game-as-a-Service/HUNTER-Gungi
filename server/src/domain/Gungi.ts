@@ -8,6 +8,8 @@ import Coordinate from './Coordinate';
 import { Event, SurrenderEvent } from './events/Event';
 import DeadArea from './DeadArea';
 import { GungiData } from '../frameworks/data-services/GungiData';
+import Goma from './goma/Goma';
+import GomaFactory from './goma/GomaFactory';
 
 class Gungi {
   constructor(
@@ -112,9 +114,29 @@ class Gungi {
     this._currentTurn = this._players.find((player) => player.side === side);
   }
 
-  setConfiguration() {
-    // TODO
+  setConfiguration(): Event[] {
     throw new Error('Method not implemented.');
+
+    // TODO: 棋盤
+    const gomas: { goma: Goma, to: Coordinate }[] = [];
+
+    const goma: Goma = GomaFactory.create(
+      LEVEL.BEGINNER,
+      SIDE.BLACK,
+      GOMA.OSHO,
+      new Coordinate(-1, -1, -1),
+    );
+    const to = new Coordinate(5, 1, 1);
+    gomas.push({ goma, to });
+
+    gomas.forEach(({ goma, to }) => {
+      this.gungiHan.updateHan(goma, to);
+      goma.coordinate = to;
+    });
+
+    // TODO: 備用區
+    // this._senteGomaOki.gomas.push(xxx);
+    // this._goteGomaOki.gomas.push(xxx);
   }
 
   furiGoma() {

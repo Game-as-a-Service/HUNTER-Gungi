@@ -4,6 +4,7 @@ import Goma from './goma/Goma';
 import { GomaOkiData } from '../frameworks/data-services/GungiData';
 import LEVEL from './constant/LEVEL';
 
+/** 備用區 */
 class GomaOki {
   constructor(
     private _level: LEVEL,

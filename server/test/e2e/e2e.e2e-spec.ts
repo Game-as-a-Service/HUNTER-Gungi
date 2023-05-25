@@ -11,6 +11,15 @@ import { randomUUID } from 'crypto';
 import SIDE from '../../src/domain/constant/SIDE';
 import { Db, MongoClient } from 'mongodb';
 import * as dotenv from 'dotenv';
+import Gungi from 'src/domain/Gungi';
+import Player from 'src/domain/Player';
+import GungiHan from 'src/domain/GungiHan';
+import GomaOki from 'src/domain/GomaOki';
+import DeadArea from 'src/domain/DeadArea';
+import Goma from 'src/domain/goma/Goma';
+import GOMA from 'src/domain/constant/GOMA';
+import Coordinate from 'src/domain/Coordinate';
+import GomaFactory from 'src/domain/goma/GomaFactory';
 
 dotenv.config();
 
@@ -82,5 +91,67 @@ describe('AppController (e2e)', () => {
       .send(body)
       .expect(200)
       .expect({ winner: 'B' });
+  });
+
+  it('/(POST) gungi/:gungiId/configuration', async () => {
+    // Init
+    const gungiId = randomUUID();
+    const player: Player[] = [];
+    // TODO: CHECK GomaOki 需要 LEVEL 嗎？
+    player.push(
+      new Player(
+        'A',
+        'A',
+        SIDE.BLACK,
+        new GomaOki(LEVEL.BEGINNER, SIDE.BLACK, []),
+        new DeadArea(SIDE.BLACK, []),
+      ),
+    );
+    player.push(
+      new Player(
+        'B',
+        'B',
+        SIDE.WHITE,
+        new GomaOki(LEVEL.BEGINNER, SIDE.WHITE, []),
+        new DeadArea(SIDE.WHITE, []),
+      ),
+    );
+    const gungiHan: GungiHan = new GungiHan([]);
+    const gungi = new Gungi(gungiId, LEVEL.BEGINNER, player, gungiHan);
+    await gungiRepository.save(gungi);
+
+    // Given
+    // None
+
+    // When
+    const body = {
+      playerId: 'A',
+    };
+
+    //   gomas: {
+    //     name: string, // 棋子的名稱
+    //     side: string, // 黑 or 白
+    //     coordinate: { x: int, y: int, z: int }
+    //  }[]
+
+    // TODO: 這裡的順序如果不一致，應該也要正確，還不知道怎麼改
+    request(app.getHttpServer())
+      .post(`/gungi/${gungiId}/configuration`)
+      .send(body)
+      .expect(200)
+      .expect({
+        gomas: [
+          {
+            side: 'BLACK',
+            name: 'OSHO',
+            coordianate: { x: 5, y: 1, z: 1 },
+          },
+          {
+            side: 'BLACK',
+            name: 'DAI',
+            coordianate: { x: 4, y: 1, z: 1 },
+          },
+        ],
+      });
   });
 });

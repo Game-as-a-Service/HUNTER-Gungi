@@ -24,6 +24,10 @@ export default abstract class Goma {
     return this._coordinate;
   }
 
+  set coordinate(to: Coordinate) {
+    this._coordinate = to;
+  }
+
   getCoordinateX(): number {
     return this._coordinate.x;
   }
