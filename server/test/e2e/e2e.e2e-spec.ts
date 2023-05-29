@@ -83,4 +83,12 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect({ winner: 'B' });
   });
+  it('/(POST) gungi', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/gungi')
+      .expect(200);
+
+    const body = response.body;
+    expect(typeof body.gungiId).toBe('string');
+  });
 });
