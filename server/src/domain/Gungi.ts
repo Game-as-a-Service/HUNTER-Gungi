@@ -5,11 +5,12 @@ import GomaOki from './GomaOki';
 import SIDE from './constant/SIDE';
 import GOMA from './constant/GOMA';
 import Coordinate from './Coordinate';
-import { Event, SurrenderEvent } from './events/Event';
+import { Event, SurrenderEvent, FurigomaEvent } from './events/Event';
 import DeadArea from './DeadArea';
 import { GungiData } from '../frameworks/data-services/GungiData';
 import Goma from './goma/Goma';
 import GomaFactory from './goma/GomaFactory';
+import TURN from './constant/TURN';
 
 class Gungi {
   constructor(
@@ -118,7 +119,7 @@ class Gungi {
     throw new Error('Method not implemented.');
 
     // TODO: 棋盤
-    const gomas: { goma: Goma, to: Coordinate }[] = [];
+    const gomas: { goma: Goma; to: Coordinate }[] = [];
 
     const goma: Goma = GomaFactory.create(
       LEVEL.BEGINNER,
@@ -139,9 +140,48 @@ class Gungi {
     // this._goteGomaOki.gomas.push(xxx);
   }
 
-  furiGoma() {
-    // TODO
-    throw new Error('Method not implemented.');
+  private determineTurn(sum: number): TURN {
+    if (sum >= 3) {
+      // first
+      return TURN.FIRST;
+    } else {
+      return TURN.SECOND;
+    }
+  }
+
+  private genFiveRandomsNum(): (1 | 0)[] {
+    return [
+      Math.random(),
+      Math.random(),
+      Math.random(),
+      Math.random(),
+      Math.random(),
+    ].map((num) => {
+      if (num < 0.5) {
+        return 0;
+      }
+      return 1;
+    });
+  }
+
+  furiGoma(): Event[] {
+    try {
+      // five random number range 0 - 1
+      const fiveRandomsNum = this.genFiveRandomsNum();
+      const sum = fiveRandomsNum.reduce((acc, num) => (acc += num), 0);
+      const turn: TURN = this.determineTurn(sum);
+      const event: FurigomaEvent = {
+        name: 'Furigoma',
+        data: {
+          turn,
+          result: fiveRandomsNum,
+        },
+      };
+      return [event];
+    } catch (err) {
+      console.log(`furiGoma error: ${err.message}`);
+      throw err;
+    }
   }
 
   ugokiGoma(color: SIDE, gomaName: GOMA, from: Coordinate, to: Coordinate) {

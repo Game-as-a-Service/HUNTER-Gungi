@@ -11,11 +11,11 @@ import { randomUUID } from 'crypto';
 import SIDE from '../../src/domain/constant/SIDE';
 import { Db, MongoClient } from 'mongodb';
 import * as dotenv from 'dotenv';
-import Gungi from 'src/domain/Gungi';
-import Player from 'src/domain/Player';
-import GungiHan from 'src/domain/GungiHan';
-import GomaOki from 'src/domain/GomaOki';
-import DeadArea from 'src/domain/DeadArea';
+import Gungi from '../../src/domain/Gungi';
+import Player from '../../src/domain/Player';
+import GungiHan from '../../src/domain/GungiHan';
+import GomaOki from '../../src/domain/GomaOki';
+import DeadArea from '../../src/domain/DeadArea';
 import Goma from 'src/domain/goma/Goma';
 import GOMA from 'src/domain/constant/GOMA';
 import Coordinate from 'src/domain/Coordinate';
@@ -152,6 +152,46 @@ describe('AppController (e2e)', () => {
             coordianate: { x: 4, y: 1, z: 1 },
           },
         ],
+      });
+  });
+
+  it('/(POST) gungi/:gungiId/furigoma', async () => {
+    // Arrange
+    const gungiId = randomUUID();
+    const player: Player[] = [];
+    player.push(
+      new Player(
+        'A',
+        'A',
+        SIDE.BLACK,
+        new GomaOki(LEVEL.BEGINNER, SIDE.BLACK, []),
+        new DeadArea(SIDE.BLACK, []),
+      ),
+    );
+    player.push(
+      new Player(
+        'B',
+        'B',
+        SIDE.WHITE,
+        new GomaOki(LEVEL.BEGINNER, SIDE.WHITE, []),
+        new DeadArea(SIDE.WHITE, []),
+      ),
+    );
+    const body = {
+      playerId: 'A',
+    };
+
+    // expect 200, and response has field name and data
+    request(app.getHttpServer())
+      .post(`/gungi/${gungiId}/furigoma`)
+      .send(body)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toHaveProperty('name');
+        expect(res.body).toHaveProperty('data');
+        // data has turn and result
+        expect(res.body.data).toHaveProperty('turn');
+        expect(res.body.data).toHaveProperty('result');
       });
   });
 });
