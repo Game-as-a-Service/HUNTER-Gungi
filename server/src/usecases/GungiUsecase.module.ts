@@ -4,17 +4,19 @@ import { GungiRepositoryModule } from '../frameworks/data-services/GungiReposito
 import EventBus from './EventBus';
 import FurigomaUsecase from './service-class/FurigomaUsecase';
 import ImplEventBus from '../gateway/eventBus/ImplEventBus';
+import CreateGungiUsecase from './service-class/CreateGungiUsecase';
 
 @Module({
   imports: [GungiRepositoryModule],
   providers: [
     SurrenderUsecase,
     FurigomaUsecase,
+    CreateGungiUsecase,
     {
       provide: 'EventBus',
       useClass: ImplEventBus,
     },
   ],
-  exports: [SurrenderUsecase, FurigomaUsecase],
+  exports: [SurrenderUsecase, FurigomaUsecase, CreateGungiUsecase],
 })
 export default class GungiUsecaseModule {}
