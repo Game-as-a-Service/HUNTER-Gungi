@@ -36,7 +36,7 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await db.collection('Gungi').deleteMany({});
     await client.close(true);
     await app.close();
@@ -86,6 +86,17 @@ describe('AppController (e2e)', () => {
   it('/(POST) gungi', async () => {
     const response = await request(app.getHttpServer())
       .post('/gungi')
+      .send({
+        level: LEVEL.BEGINNER,
+        playerA: {
+          id: 'A',
+          name: 'A',
+        },
+        playerB: {
+          id: 'B',
+          name: 'B',
+        },
+      })
       .expect(200);
 
     const body = response.body;
