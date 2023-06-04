@@ -7,7 +7,6 @@ import GOMA from './constant/GOMA';
 import Coordinate from './Coordinate';
 import { Event, SurrenderEvent } from './events/Event';
 import DeadArea from './DeadArea';
-import { GungiData } from '../frameworks/data-services/GungiData';
 
 class Gungi {
   constructor(
