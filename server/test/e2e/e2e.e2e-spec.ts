@@ -11,6 +11,7 @@ import { randomUUID } from 'crypto';
 import SIDE from '../../src/domain/constant/SIDE';
 import { Db, MongoClient } from 'mongodb';
 import * as dotenv from 'dotenv';
+import GOMA from '../../src/domain/constant/GOMA';
 
 dotenv.config();
 
@@ -77,10 +78,67 @@ describe('AppController (e2e)', () => {
       playerId: 'A',
     };
 
-    request(app.getHttpServer())
+    await request(app.getHttpServer())
       .post(`/gungi/${gungiId}/surrender`)
       .send(body)
       .expect(200)
       .expect({ winner: 'B' });
+  });
+
+  it('/POST/gungi/:gungiId/arata', async () => {
+    const gungiId = randomUUID();
+    const gungiData: GungiData = {
+      currentTurn: SIDE.WHITE,
+      gungiHan: { han: [] },
+      history: [],
+      _id: gungiId,
+      level: LEVEL.BEGINNER,
+      players: [
+        {
+          id: 'A',
+          name: 'A',
+          side: SIDE.WHITE,
+          gomaOki: { gomas: [] },
+          deadArea: { gomas: [] },
+        },
+        {
+          id: 'B',
+          name: 'B',
+          side: SIDE.BLACK,
+          gomaOki: { gomas: [] },
+          deadArea: { gomas: [] },
+        },
+      ],
+    };
+
+    const gungi = gungiDataModel.toDomain(gungiData);
+
+    await gungiRepository.save(gungi);
+
+    // post
+    const body = {
+      goma: {
+        name: GOMA.HEI,
+        side: SIDE.WHITE,
+      },
+      to: {
+        x: 1,
+        y: 1,
+        z: 1,
+      },
+    };
+
+    // request
+    await request(app.getHttpServer())
+      .post(`/gungi/${gungiId}/arata`)
+      .send(body)
+      .expect(200)
+      .expect({
+        to: {
+          x: 1,
+          y: 1,
+          z: 1,
+        },
+      });
   });
 });

@@ -4,12 +4,17 @@ import SurrenderUsecase, {
   SurrenderRequest,
 } from '../../usecases/service-class/SurrenderUsecase';
 import SurrenderPresenter from '../presenter/SurrenderPresenter';
+import SIDE from '../../domain/constant/SIDE';
+import GOMA from '../../domain/constant/GOMA';
+import ArataPresenter from '../presenter/ArataPresenter';
+import ArataUsecase, { ArataRequest } from '../../usecases/service-class/ArataUsecase';
 
 @Controller()
 export default class GungiController {
   constructor(
     private _furigomaUsecase: FurigomaUsecase,
     private _surrenderUsecase: SurrenderUsecase,
+    private _arataUsecase: ArataUsecase,
   ) {}
 
   @Post('/gungi/:id/furigoma')
@@ -37,6 +42,36 @@ export default class GungiController {
 
     const presenter = new SurrenderPresenter();
     const response = await this._surrenderUsecase.execute(request, presenter);
+
+    return res.status(HttpStatus.OK).send(response);
+  }
+
+  @Post('/gungi/:id/arata')
+  async arata(
+    @Param('id') id: string,
+    @Body()
+    body: {
+      goma: {
+        name: GOMA;
+        side: SIDE;
+      };
+      to: {
+        x: number;
+        y: number;
+        z: number;
+      };
+    },
+    @Res() res,
+  ) {
+    // Transform the body to request here
+    const request: ArataRequest = {
+      gungiId: id,
+      ...body,
+    };
+
+    const presenter = new ArataPresenter();
+
+    const response = await this._arataUsecase.execute(request, presenter);
 
     return res.status(HttpStatus.OK).send(response);
   }
