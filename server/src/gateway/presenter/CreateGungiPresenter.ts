@@ -6,7 +6,9 @@ type CreateGungiView = {
   gungiId: string;
 };
 
-export default class CreateGungiPresenter implements Presenter {
+export default class CreateGungiPresenter
+  implements Presenter<CreateGungiView>
+{
   present(events: Event[]) {
     const createGungiEvent = findEventByName(events, 'CreateGungi');
 

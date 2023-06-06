@@ -29,7 +29,7 @@ export default class CreateGungiUsecase {
     private _eventBus: EventBus,
   ) {}
 
-  async execute(request: CreateGungiRequest, presenter: Presenter) {
+  async execute<R>(request: CreateGungiRequest, presenter: Presenter<R>) {
     const initialData = {
       level: request.level,
       playerA: request.playerA,
