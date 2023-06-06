@@ -51,6 +51,7 @@ export default class GungiController {
     @Param('id') id: string,
     @Body()
     body: {
+      playerId: string;
       goma: {
         name: GOMA;
         side: SIDE;
@@ -66,7 +67,9 @@ export default class GungiController {
     // Transform the body to request here
     const request: ArataRequest = {
       gungiId: id,
-      ...body,
+      playerId: body.playerId,
+      goma: body.goma,
+      to: body.to,
     };
 
     const presenter = new ArataPresenter();

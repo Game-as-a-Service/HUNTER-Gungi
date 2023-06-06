@@ -18,7 +18,7 @@ export default class SurrenderUsecase {
     private _eventBus: EventBus,
   ) {}
 
-  async execute(request: SurrenderRequest, presenter: Presenter) {
+  async execute<R>(request: SurrenderRequest, presenter: Presenter<R>) {
     const gungi = await this._gungiRepository.findById(request.gungiId);
     const player = gungi.getPlayer(request.playerId);
     const events = gungi.surrender(player);

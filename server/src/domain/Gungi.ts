@@ -7,9 +7,12 @@ import GOMA from './constant/GOMA';
 import Coordinate from './Coordinate';
 import { Event, SurrenderEvent } from './events/Event';
 import DeadArea from './DeadArea';
-import { GungiData } from '../frameworks/data-services/GungiData';
 
-class Gungi {
+export default class Gungi {
+  export;
+  default;
+  Gungi;
+
   constructor(
     private _id: string,
     private _level: LEVEL,
@@ -143,6 +146,10 @@ class Gungi {
     return [event];
   }
 
+  arata(player: Player, goma: { name: string; side: string }, to: Coordinate) {
+    return [event];
+  }
+
   getPlayer(playerId: string): Player {
     return this._players.find((player) => player.id === playerId);
   }
@@ -173,5 +180,3 @@ class Gungi {
     });
   }
 }
-
-export default Gungi;

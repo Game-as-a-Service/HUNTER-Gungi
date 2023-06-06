@@ -117,6 +117,7 @@ describe('AppController (e2e)', () => {
 
     // post
     const body = {
+      playerId: 'A',
       goma: {
         name: GOMA.HEI,
         side: SIDE.WHITE,
