@@ -7,7 +7,9 @@ import SurrenderPresenter from '../presenter/SurrenderPresenter';
 import SIDE from '../../domain/constant/SIDE';
 import GOMA from '../../domain/constant/GOMA';
 import ArataPresenter from '../presenter/ArataPresenter';
-import ArataUsecase, { ArataRequest } from '../../usecases/service-class/ArataUsecase';
+import ArataUsecase, {
+  ArataRequest,
+} from '../../usecases/service-class/ArataUsecase';
 
 @Controller()
 export default class GungiController {

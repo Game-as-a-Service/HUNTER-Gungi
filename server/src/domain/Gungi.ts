@@ -9,10 +9,6 @@ import { Event, SurrenderEvent } from './events/Event';
 import DeadArea from './DeadArea';
 
 export default class Gungi {
-  export;
-  default;
-  Gungi;
-
   constructor(
     private _id: string,
     private _level: LEVEL,
@@ -23,22 +19,6 @@ export default class Gungi {
       player.gungi = this;
     });
     this.setSenteGote(_players);
-  }
-
-  get id(): string {
-    return this._id;
-  }
-
-  get level(): LEVEL {
-    return this._level;
-  }
-
-  get gungiHan(): GungiHan {
-    return this._gungiHan;
-  }
-
-  set gungiHan(value: GungiHan) {
-    this._gungiHan = value;
   }
 
   private _currentTurn: Player;
@@ -109,6 +89,22 @@ export default class Gungi {
 
   set gote(value: Player) {
     this._gote = value;
+  }
+
+  get id(): string {
+    return this._id;
+  }
+
+  get level(): LEVEL {
+    return this._level;
+  }
+
+  get gungiHan(): GungiHan {
+    return this._gungiHan;
+  }
+
+  set gungiHan(value: GungiHan) {
+    this._gungiHan = value;
   }
 
   setCurrentTurn(side: SIDE) {

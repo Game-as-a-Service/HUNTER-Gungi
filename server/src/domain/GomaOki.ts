@@ -24,6 +24,10 @@ class GomaOki {
   set player(value: Player) {
     this._player = value;
   }
+
+  isEmpty() {
+    return this._gomas.length === 0;
+  }
 }
 
 export default GomaOki;

@@ -1,32 +1,40 @@
 import Goma from './goma/Goma';
-import { GomaData, GungiHanData } from '../frameworks/data-services/GungiData';
+import Coordinate from './Coordinate';
+
+type GungiHanGoma = {
+  goma: Goma;
+  coordinate: Coordinate;
+};
 
 class GungiHan {
-  constructor(gomas: Goma[] = []) {
+  private _han: Goma[][][];
+
+  constructor(gomas: GungiHanGoma[] = []) {
     this.setHan(gomas);
   }
 
-  private _han: Map<number, Map<number, Goma[]>>;
-
-  get han(): Map<number, Map<number, Goma[]>> {
-    return this._han;
+  findGoma(targetCoordinate: Coordinate): Goma {
+    const { x, y, z } = targetCoordinate;
+    return this._han[x][y][z];
   }
 
-  private setHan(gomas: Goma[]) {
-    const map = new Map<number, Map<number, Goma[]>>();
+  addGoma(goma: Goma, to: Coordinate) {
+    const { x, y, z } = to;
+    this._han[x][y][z] = goma;
+  }
+
+  private setHan(gomas: GungiHanGoma[]) {
+    this.createInitialHan();
 
     gomas.forEach((goma) => {
-      const x = goma.getCoordinateX();
-      const y = goma.getCoordinateY();
-
-      const yMap = map.get(x) || new Map<number, Goma[]>();
-      const gomaArray = yMap.get(y) || [];
-      gomaArray.push(goma);
-      yMap.set(y, gomaArray);
-
-      map.set(x, yMap);
+      const { x, y, z } = goma.coordinate;
+      this._han[x][y][z] = goma.goma;
     });
-    this._han = map;
+  }
+
+  // create 9x9x3 array
+  private createInitialHan() {
+    this._han = new Array(9).fill(new Array(9).fill(new Array(3)));
   }
 }
 
