@@ -77,7 +77,7 @@ describe('AppController (e2e)', () => {
       playerId: 'A',
     };
 
-    request(app.getHttpServer())
+    await request(app.getHttpServer())
       .post(`/gungi/${gungiId}/surrender`)
       .send(body)
       .expect(200)
