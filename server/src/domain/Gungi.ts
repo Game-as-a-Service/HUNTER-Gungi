@@ -37,7 +37,7 @@ class Gungi {
     this._gungiHan = value;
   }
 
-  private _currentTurn: Player;
+  private _currentTurn?: Player;
 
   get currentTurn(): Player {
     return this._currentTurn;

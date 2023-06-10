@@ -63,7 +63,11 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
     const gungiHan = this.createGungiHan(rawGungi);
 
     const gungi = new Gungi(id, level, players, gungiHan);
-    gungi.setCurrentTurn(rawGungi.currentTurn);
+
+    if (rawGungi.currentTurn) {
+      gungi.setCurrentTurn(rawGungi.currentTurn);
+    }
+
     return gungi;
   }
 
