@@ -1,49 +1,50 @@
-import Coordinate from './Coordinate';
 import Goma from './goma/Goma';
-import { GomaData, GungiHanData } from '../frameworks/data-services/GungiData';
+import Coordinate from './Coordinate';
 
-/** 軍儀棋盤 */
-class GungiHan {
-  constructor(gomas: Goma[] = []) {
+export type GungiHanGoma = {
+  goma: Goma;
+  coordinate: Coordinate;
+};
+
+export const EMPTY_GOMA = null;
+export const HAN_X_MAX = 9;
+export const HAN_Y_MAX = 9;
+export const HAN_Z_MAX = 3;
+
+export default class GungiHan {
+  private _han: Goma[][][];
+
+  constructor(gomas: GungiHanGoma[] = []) {
     this.setHan(gomas);
   }
 
-  private _han: Map<number, Map<number, Goma[]>>;
+  findGoma(targetCoordinate: Coordinate): Goma {
+    // console.log(JSON.stringify(this._han));
 
-  get han(): Map<number, Map<number, Goma[]>> {
-    return this._han;
+    const { x, y, z } = targetCoordinate;
+    return this._han[x][y][z];
   }
 
-  // [
-  //   {1, 2, 2},
-  //   {1, 2, 1},
-  // ]
+  addGoma(goma: Goma, to: Coordinate) {
+    const { x, y, z } = to;
+    this._han[x][y][z] = goma;
+  }
 
-  private setHan(gomas: Goma[]) {
-    const map = new Map<number, Map<number, Goma[]>>();
+  private setHan(gomas: GungiHanGoma[]) {
+    this.createInitialHan();
 
-    // TODO: 這裡沒有處理 z
     gomas.forEach((goma) => {
-      const x = goma.getCoordinateX();
-      const y = goma.getCoordinateY();
-
-      const yMap = map.get(x) || new Map<number, Goma[]>();
-      const gomaArray = yMap.get(y) || [];
-      gomaArray.push(goma);
-      yMap.set(y, gomaArray);
-
-      map.set(x, yMap);
+      const { x, y, z } = goma.coordinate;
+      this._han[x][y][z] = goma.goma;
     });
-    this._han = map;
   }
 
-  updateHan(goma: Goma, to: Coordinate) {
-    const old = this._han
-      .get(goma.getCoordinateX())
-      .get(goma.getCoordinateY())
-      .pop();
-    this._han.get(to.x).get(to.y).push(goma);
+  // create 9x9x3 array
+  private createInitialHan() {
+    this._han = [...new Array(HAN_X_MAX + 1)].map(() =>
+      [...new Array(HAN_Y_MAX + 1)].map(() =>
+        new Array(HAN_Z_MAX + 1).fill(EMPTY_GOMA),
+      ),
+    );
   }
 }
-
-export default GungiHan;

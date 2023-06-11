@@ -10,6 +10,7 @@ import DeadArea from './DeadArea';
 import { GungiData } from '../frameworks/data-services/GungiData';
 import Goma from './goma/Goma';
 import GomaFactory from './goma/GomaFactory';
+import { ConfigurationEvent } from './events/ConfigurationEvent';
 
 class Gungi {
   constructor(
@@ -32,6 +33,7 @@ class Gungi {
     return this._level;
   }
 
+  /** 軍儀棋盤 */
   get gungiHan(): GungiHan {
     return this._gungiHan;
   }
@@ -115,24 +117,44 @@ class Gungi {
   }
 
   setConfiguration(): Event[] {
-    throw new Error('Method not implemented.');
-
-    // TODO: 棋盤
-    const gomas: { goma: Goma; to: Coordinate }[] = [];
-
+    const coordinate = new Coordinate(5, 1, 1);
     const goma: Goma = GomaFactory.create(
       LEVEL.BEGINNER,
-      SIDE.BLACK,
+      SIDE.WHITE,
       GOMA.OSHO,
-      new Coordinate(-1, -1, -1),
     );
-    const to = new Coordinate(5, 1, 1);
-    gomas.push({ goma, to });
 
-    gomas.forEach(({ goma, to }) => {
-      this.gungiHan.updateHan(goma, to);
-      goma.coordinate = to;
-    });
+    // this.gungiHan.updateHan(goma, coordinate);
+    //
+    this.gungiHan.addGoma(goma, coordinate);
+
+    const event: ConfigurationEvent = {
+      name: 'Configuration',
+      data: {
+        gungiHan: this.gungiHan,
+      },
+    };
+
+    return [event];
+
+    // throw new Error('Method not implemented.');
+
+    // TODO: 棋盤
+    // const gomas: { goma: Goma; to: Coordinate }[] = [];
+
+    // const goma: Goma = GomaFactory.create(
+    //   LEVEL.BEGINNER,
+    //   SIDE.BLACK,
+    //   GOMA.OSHO,
+    //   new Coordinate(-1, -1, -1),
+    // );
+    // const to = new Coordinate(5, 1, 1);
+    // gomas.push({ goma, to });
+
+    // gomas.forEach(({ goma, to }) => {
+    //   this.gungiHan.updateHan(goma, to);
+    //   goma.coordinate = to;
+    // });
 
     // TODO: 備用區
     // this._senteGomaOki.gomas.push(xxx);
