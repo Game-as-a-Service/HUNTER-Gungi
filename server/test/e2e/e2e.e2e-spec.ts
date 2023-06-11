@@ -183,14 +183,19 @@ describe('AppController (e2e)', () => {
     expectGomaCountInOki(view, side, GOMA.UMA, 2);
     expectGomaInHan(view, side, GOMA.SHINOBI, 2, 2, 1);
     expectGomaInHan(view, side, GOMA.SHINOBI, 8, 2, 1);
+    expectGomaCountInOki(view, side, GOMA.SHINOBI, 0);
     expectGomaInHan(view, side, GOMA.YARI, 5, 2, 1);
     expectGomaCountInOki(view, side, GOMA.YARI, 2);
     expectGomaInHan(view, side, GOMA.CHU, 6, 1, 1);
+    expectGomaCountInOki(view, side, GOMA.CHU, 0);
     expectGomaInHan(view, side, GOMA.DAI, 4, 1, 1);
+    expectGomaCountInOki(view, side, GOMA.DAI, 0);
     expectGomaInHan(view, side, GOMA.SHI, 4, 3, 1);
     expectGomaInHan(view, side, GOMA.SHI, 6, 3, 1);
+    expectGomaCountInOki(view, side, GOMA.SHI, 0);
     expectGomaInHan(view, side, GOMA.TORIDE, 3, 3, 1);
     expectGomaInHan(view, side, GOMA.TORIDE, 7, 3, 1);
+    expectGomaCountInOki(view, side, GOMA.TORIDE, 0);
 
     side = SIDE.BLACK;
     expectGomaInHan(view, side, GOMA.OSHO, 5, 9, 1);
@@ -203,13 +208,18 @@ describe('AppController (e2e)', () => {
     expectGomaCountInOki(view, side, GOMA.UMA, 2);
     expectGomaInHan(view, side, GOMA.SHINOBI, 2, 8, 1);
     expectGomaInHan(view, side, GOMA.SHINOBI, 8, 8, 1);
+    expectGomaCountInOki(view, side, GOMA.SHINOBI, 0);
     expectGomaInHan(view, side, GOMA.YARI, 5, 8, 1);
     expectGomaCountInOki(view, side, GOMA.YARI, 2);
     expectGomaInHan(view, side, GOMA.CHU, 4, 9, 1);
+    expectGomaCountInOki(view, side, GOMA.CHU, 0);
     expectGomaInHan(view, side, GOMA.DAI, 6, 9, 1);
+    expectGomaCountInOki(view, side, GOMA.DAI, 0);
     expectGomaInHan(view, side, GOMA.SHI, 4, 7, 1);
     expectGomaInHan(view, side, GOMA.SHI, 6, 7, 1);
+    expectGomaCountInOki(view, side, GOMA.SHI, 0);
     expectGomaInHan(view, side, GOMA.TORIDE, 3, 7, 1);
     expectGomaInHan(view, side, GOMA.TORIDE, 7, 7, 1);
+    expectGomaCountInOki(view, side, GOMA.TORIDE, 0);
   });
 });
