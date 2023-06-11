@@ -185,6 +185,8 @@ class Gungi {
       name: 'Configuration',
       data: {
         gungiHan: this.gungiHan,
+        blackOki: this.sente.gomaOki,
+        whiteOki: this.gote.gomaOki,
       },
     };
 

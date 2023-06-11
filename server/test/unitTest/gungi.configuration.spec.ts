@@ -19,6 +19,7 @@ function given() {
     new GomaOki(level, SIDE.WHITE),
     new DeadArea(SIDE.WHITE),
   );
+
   const playerB = new Player(
     'B',
     'B',

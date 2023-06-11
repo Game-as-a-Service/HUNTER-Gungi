@@ -20,8 +20,8 @@ export default class ConfigurationUsecase {
 
   async execute<R>(request: ConfigurationRequest, presenter: Presenter<R>) {
     const gungi = await this._gungiRepository.findById(request.gungiId);
-    const player = gungi.getPlayer(request.playerId);
-    const events = gungi.surrender(player);
+    // const player = gungi.getPlayer(request.playerId);
+    const events = gungi.setConfiguration();
     await this._gungiRepository.save(gungi);
     this._eventBus.broadcast(events);
 
