@@ -22,12 +22,12 @@ export default class GungiHan {
     // console.log(JSON.stringify(this._han));
 
     const { x, y, z } = targetCoordinate;
-    return this._han[x][y][z];
+    return this._han[x - 1][y - 1][z - 1];
   }
 
   addGoma(goma: Goma, to: Coordinate) {
     const { x, y, z } = to;
-    this._han[x][y][z] = goma;
+    this._han[x - 1][y - 1][z - 1] = goma;
   }
 
   private setHan(gomas: GungiHanGoma[]) {
@@ -35,15 +35,15 @@ export default class GungiHan {
 
     gomas.forEach((goma) => {
       const { x, y, z } = goma.coordinate;
-      this._han[x][y][z] = goma.goma;
+      this._han[x - 1][y - 1][z - 1] = goma.goma;
     });
   }
 
   // create 9x9x3 array
   private createInitialHan() {
-    this._han = [...new Array(HAN_X_MAX + 1)].map(() =>
-      [...new Array(HAN_Y_MAX + 1)].map(() =>
-        new Array(HAN_Z_MAX + 1).fill(EMPTY_GOMA),
+    this._han = [...new Array(HAN_X_MAX)].map(() =>
+      [...new Array(HAN_Y_MAX)].map(() =>
+        new Array(HAN_Z_MAX).fill(EMPTY_GOMA),
       ),
     );
   }

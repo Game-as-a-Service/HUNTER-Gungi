@@ -190,8 +190,6 @@ class Gungi {
 
     return [event];
 
-
-
     // throw new Error('Method not implemented.');
 
     // TODO: 棋盤

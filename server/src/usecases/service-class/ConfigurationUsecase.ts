@@ -4,13 +4,13 @@ import IRepository from '../Repository';
 import Gungi from '../../domain/Gungi';
 import Presenter from '../Presenter';
 
-export interface SurrenderRequest {
+export interface ConfigurationRequest {
   gungiId: string;
   playerId: string;
 }
 
 @Injectable()
-export default class SurrenderUsecase {
+export default class ConfigurationUsecase {
   constructor(
     @Inject('GungiRepository')
     private _gungiRepository: IRepository<Gungi>,
@@ -18,7 +18,7 @@ export default class SurrenderUsecase {
     private _eventBus: EventBus,
   ) {}
 
-  async execute<R>(request: SurrenderRequest, presenter: Presenter<R>) {
+  async execute<R>(request: ConfigurationRequest, presenter: Presenter<R>) {
     const gungi = await this._gungiRepository.findById(request.gungiId);
     const player = gungi.getPlayer(request.playerId);
     const events = gungi.surrender(player);
