@@ -132,14 +132,54 @@ class Gungi {
 
     const addGomaToOki = (side: SIDE, name: GOMA): void => {
       const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
-      this.sente.gomaOki.gomas.push(goma);
+      const gomaOki =
+        this.sente.side === side ? this.sente.gomaOki : this.gote.gomaOki;
+      gomaOki.gomas.push(goma);
     };
 
-    addGomaToHan(SIDE.WHITE, GOMA.OSHO, 5, 1, 1);
-    addGomaToHan(SIDE.WHITE, GOMA.HEI, 1, 3, 1);
-    addGomaToHan(SIDE.WHITE, GOMA.HEI, 5, 3, 1);
-    addGomaToHan(SIDE.WHITE, GOMA.HEI, 9, 3, 1);
-    addGomaToOki(SIDE.WHITE, GOMA.HEI);
+    let side = SIDE.WHITE;
+    addGomaToHan(side, GOMA.OSHO, 5, 1, 1);
+    addGomaToHan(side, GOMA.HEI, 1, 3, 1);
+    addGomaToHan(side, GOMA.HEI, 5, 3, 1);
+    addGomaToHan(side, GOMA.HEI, 9, 3, 1);
+    addGomaToOki(side, GOMA.HEI);
+    addGomaToOki(side, GOMA.SHO);
+    addGomaToOki(side, GOMA.SHO);
+    addGomaToOki(side, GOMA.UMA);
+    addGomaToOki(side, GOMA.UMA);
+    addGomaToHan(side, GOMA.SHINOBI, 2, 2, 1);
+    addGomaToHan(side, GOMA.SHINOBI, 8, 2, 1);
+    addGomaToHan(side, GOMA.YARI, 5, 2, 1);
+    addGomaToOki(side, GOMA.YARI);
+    addGomaToOki(side, GOMA.YARI);
+    addGomaToHan(side, GOMA.CHU, 6, 1, 1);
+    addGomaToHan(side, GOMA.DAI, 4, 1, 1);
+    addGomaToHan(side, GOMA.SHI, 4, 3, 1);
+    addGomaToHan(side, GOMA.SHI, 6, 3, 1);
+    addGomaToHan(side, GOMA.TORIDE, 3, 3, 1);
+    addGomaToHan(side, GOMA.TORIDE, 7, 3, 1);
+
+    side = SIDE.BLACK;
+    addGomaToHan(side, GOMA.OSHO, 5, 9, 1);
+    addGomaToHan(side, GOMA.HEI, 1, 7, 1);
+    addGomaToHan(side, GOMA.HEI, 5, 7, 1);
+    addGomaToHan(side, GOMA.HEI, 9, 7, 1);
+    addGomaToOki(side, GOMA.HEI);
+    addGomaToOki(side, GOMA.SHO);
+    addGomaToOki(side, GOMA.SHO);
+    addGomaToOki(side, GOMA.UMA);
+    addGomaToOki(side, GOMA.UMA);
+    addGomaToHan(side, GOMA.SHINOBI, 2, 8, 1);
+    addGomaToHan(side, GOMA.SHINOBI, 8, 8, 1);
+    addGomaToHan(side, GOMA.YARI, 5, 8, 1);
+    addGomaToOki(side, GOMA.YARI);
+    addGomaToOki(side, GOMA.YARI);
+    addGomaToHan(side, GOMA.CHU, 4, 9, 1);
+    addGomaToHan(side, GOMA.DAI, 6, 9, 1);
+    addGomaToHan(side, GOMA.SHI, 4, 7, 1);
+    addGomaToHan(side, GOMA.SHI, 6, 7, 1);
+    addGomaToHan(side, GOMA.TORIDE, 3, 7, 1);
+    addGomaToHan(side, GOMA.TORIDE, 7, 7, 1);
 
     const event: ConfigurationEvent = {
       name: 'Configuration',
