@@ -7,7 +7,6 @@ import GOMA from './constant/GOMA';
 import Coordinate from './Coordinate';
 import { Event, SurrenderEvent, FurigomaEvent } from './events/Event';
 import DeadArea from './DeadArea';
-import { GungiData } from '../frameworks/data-services/GungiData';
 import Goma from './goma/Goma';
 import GomaFactory from './goma/GomaFactory';
 import TURN from './constant/TURN';
@@ -164,12 +163,15 @@ class Gungi {
     });
   }
 
-  furiGoma(): Event[] {
+  async furigoma(player: Player, opponent: Player): Promise<Event[]> {
     try {
       // five random number range 0 - 1
-      const fiveRandomsNum = this.genFiveRandomsNum();
+      const fiveRandomsNum = await this.genFiveRandomsNum();
       const sum = fiveRandomsNum.reduce((acc, num) => (acc += num), 0);
       const turn: TURN = this.determineTurn(sum);
+      player.side = turn === TURN.FIRST ? SIDE.BLACK : SIDE.WHITE;
+      opponent.side = turn === TURN.FIRST ? SIDE.WHITE : SIDE.BLACK;
+      this.setCurrentTurn(SIDE.BLACK);
       const event: FurigomaEvent = {
         name: 'Furigoma',
         data: {
