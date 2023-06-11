@@ -117,16 +117,29 @@ class Gungi {
   }
 
   setConfiguration(): Event[] {
-    const coordinate = new Coordinate(5, 1, 1);
-    const goma: Goma = GomaFactory.create(
-      LEVEL.BEGINNER,
-      SIDE.WHITE,
-      GOMA.OSHO,
-    );
+    const addGomaToHan = (
+      side: SIDE,
+      name: GOMA,
+      x: number,
+      y: number,
+      z: number,
+    ): void => {
+      const coordinate = new Coordinate(x, y, z);
+      const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
 
-    // this.gungiHan.updateHan(goma, coordinate);
-    //
-    this.gungiHan.addGoma(goma, coordinate);
+      this.gungiHan.addGoma(goma, coordinate);
+    };
+
+    const addGomaToOki = (side: SIDE, name: GOMA): void => {
+      const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
+      this.sente.gomaOki.gomas.push(goma);
+    };
+
+    addGomaToHan(SIDE.WHITE, GOMA.OSHO, 5, 1, 1);
+    addGomaToHan(SIDE.WHITE, GOMA.HEI, 1, 3, 1);
+    addGomaToHan(SIDE.WHITE, GOMA.HEI, 5, 3, 1);
+    addGomaToHan(SIDE.WHITE, GOMA.HEI, 9, 3, 1);
+    addGomaToOki(SIDE.WHITE, GOMA.HEI);
 
     const event: ConfigurationEvent = {
       name: 'Configuration',
@@ -136,6 +149,8 @@ class Gungi {
     };
 
     return [event];
+
+
 
     // throw new Error('Method not implemented.');
 

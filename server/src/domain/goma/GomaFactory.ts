@@ -1,5 +1,4 @@
 import SIDE from '../constant/SIDE';
-import Coordinate from '../Coordinate';
 import LEVEL from '../constant/LEVEL';
 import GOMA from '../constant/GOMA';
 import Hei from './Hei';

@@ -41,57 +41,136 @@ function given() {
   return { gungi };
 }
 
+/** 預期盤棋上的棋子 */
+function expectGomaInHan(
+  gungi: Gungi,
+  side: SIDE,
+  name: GOMA,
+  x: number,
+  y: number,
+  z: number,
+) {
+  const coordinate = new Coordinate(x, y, z);
+  const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
+
+  expect(gungi.gungiHan.findGoma(coordinate)).toEqual(goma);
+}
+
+/** 預期備用區棋子的數量 */
+function expectGomaCountInOki(
+  gungi: Gungi,
+  side: SIDE,
+  name: GOMA,
+  count: number,
+) {
+  expect(
+    gungi.sente.gomaOki.gomas.filter(
+      (goma) => goma.side === side && goma.name === name,
+    ).length,
+  ).toBe(count);
+}
+
 describe('Gungi', () => {
   describe('配置盤面', () => {
-    describe('入門級別 棋子要在指定位置', () => {
-      it.only('白色「帥」已配置！', () => {
+    describe('基本測試', () => {
+      it('棋子放到一個位置後，其它的位置還是空的', () => {
+        // Define
+        // 目標位置
+        const targetCoordinate = new Coordinate(2, 1, 1);
+        // 其它位置
+        const otherCoordinate = new Coordinate(1, 1, 1);
+
         // Given
         const { gungi } = given();
-        expect(gungi.gungiHan.findGoma(new Coordinate(5, 1, 1))).toEqual(
-          EMPTY_GOMA,
-        );
+
+        // 目標位置本來是空的
+        expect(gungi.gungiHan.findGoma(targetCoordinate)).toEqual(EMPTY_GOMA);
 
         // When
-        gungi.setConfiguration();
-
-        // Then
-        const coordinate = new Coordinate(5, 1, 1);
         const goma: Goma = GomaFactory.create(
           LEVEL.BEGINNER,
           SIDE.WHITE,
           GOMA.OSHO,
         );
 
-        expect(gungi.gungiHan.findGoma(coordinate)).toEqual(goma);
-        expect(gungi.gungiHan.findGoma(new Coordinate(1, 1, 1))).toEqual(
-          EMPTY_GOMA,
-        );
+        // 在目標位置加上棋子
+        gungi.gungiHan.addGoma(goma, targetCoordinate);
+
+        // Then
+        // 目標位置有這個棋子
+        expect(gungi.gungiHan.findGoma(targetCoordinate)).toEqual(goma);
+
+        // 其它位置沒有棋子
+        expect(gungi.gungiHan.findGoma(otherCoordinate)).toEqual(EMPTY_GOMA);
       });
+    });
 
-      it.skip('「兵」已配置！', () => {
+    describe('入門級別 棋子要在指定位置', () => {
+      it('白色「帥」已配置！', () => {
+        // Define
+        const side = SIDE.WHITE;
+        const name = GOMA.OSHO;
+
+        // 預期備用區數量
+        const count = 0;
+
+        // Given
         const { gungi } = given();
-        const coordinate = new Coordinate(1, 3, 1);
-        // const coordinate = new Coordinate(5, 3, 1);
-        // const coordinate = new Coordinate(9, 3, 1);
-        const goma: Goma = GomaFactory.create(
-          LEVEL.BEGINNER,
-          SIDE.WHITE,
-          GOMA.HEI,
-        );
 
+        // When
         gungi.setConfiguration();
 
-        expect(gungi.gungiHan.findGoma(coordinate)).toEqual(goma);
+        // Then
+        // 棋盤上有 1 個
+        expectGomaInHan(gungi, side, name, 5, 1, 1);
+
+        // 備用區有 0 個
+        expectGomaCountInOki(gungi, side, name, count);
       });
 
-      // 「小」已配置！
-      // 「馬」已配置！
-      // 「忍」已配置！
-      // 「槍」已配置！
-      // 「中」已配置！
-      // 「大」已配置！
-      // 「侍」已配置！
-      // 「砦」已配置！（ㄓㄞˋ）
+      it('白色「兵」已配置！', () => {
+        // Define
+        const side = SIDE.WHITE;
+        const name = GOMA.HEI;
+
+        // 預期備用區數量
+        const count = 1;
+
+        // Given
+        const { gungi } = given();
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        // 棋盤上有 3 個
+        expectGomaInHan(gungi, side, name, 1, 3, 1);
+        expectGomaInHan(gungi, side, name, 5, 3, 1);
+        expectGomaInHan(gungi, side, name, 9, 3, 1);
+
+        // 備用區有 1 個
+        expectGomaCountInOki(gungi, side, name, count);
+      });
+
+      // 白色「小」已配置！
+      // 白色「馬」已配置！
+      // 白色「忍」已配置！
+      // 白色「槍」已配置！
+      // 白色「中」已配置！
+      // 白色「大」已配置！
+      // 白色「侍」已配置！
+      // 白色「砦」已配置！（ㄓㄞˋ）
+
+      // 黑色「帥」已配置！
+      // 黑色「兵」已配置！
+      // 黑色「小」已配置！
+      // 黑色「馬」已配置！
+      // 黑色「忍」已配置！
+      // 黑色「槍」已配置！
+      // 黑色「中」已配置！
+      // 黑色「大」已配置！
+      // 黑色「侍」已配置！
+      // 黑色「砦」已配置！（ㄓㄞˋ）
     });
   });
 });
