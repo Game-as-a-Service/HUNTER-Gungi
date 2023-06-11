@@ -309,64 +309,18 @@ describe('Gungi', () => {
         gungi.setConfiguration();
 
         // Then
-        // 棋盤上有 1 個
+        // 棋盤上
         setData.han.forEach((data) => {
           expectGomaInHan(gungi, data.side, data.name, data.x, data.y, data.z);
         });
 
-        // 備用區有 0 個
+        // 備用區
         expectGomaCountInOki(
           gungi,
           setData.oki.side,
           setData.oki.name,
           setData.oki.count,
         );
-      });
-
-      it.skip('白色「帥」已配置！', () => {
-        // Define
-        const side = SIDE.WHITE;
-        const name = GOMA.OSHO;
-
-        // 預期備用區數量
-        const count = 0;
-
-        // Given
-        const { gungi } = given();
-
-        // When
-        gungi.setConfiguration();
-
-        // Then
-        // 棋盤上有 1 個
-        expectGomaInHan(gungi, side, name, 5, 1, 1);
-
-        // 備用區有 0 個
-        expectGomaCountInOki(gungi, side, name, count);
-      });
-
-      it.skip('白色「兵」已配置！', () => {
-        // Define
-        const side = SIDE.WHITE;
-        const name = GOMA.HEI;
-
-        // 預期備用區數量
-        const count = 1;
-
-        // Given
-        const { gungi } = given();
-
-        // When
-        gungi.setConfiguration();
-
-        // Then
-        // 棋盤上有 3 個
-        expectGomaInHan(gungi, side, name, 1, 3, 1);
-        expectGomaInHan(gungi, side, name, 5, 3, 1);
-        expectGomaInHan(gungi, side, name, 9, 3, 1);
-
-        // 備用區有 1 個
-        expectGomaCountInOki(gungi, side, name, count);
       });
     });
   });

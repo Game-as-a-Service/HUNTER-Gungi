@@ -191,29 +191,6 @@ class Gungi {
     };
 
     return [event];
-
-    // throw new Error('Method not implemented.');
-
-    // TODO: 棋盤
-    // const gomas: { goma: Goma; to: Coordinate }[] = [];
-
-    // const goma: Goma = GomaFactory.create(
-    //   LEVEL.BEGINNER,
-    //   SIDE.BLACK,
-    //   GOMA.OSHO,
-    //   new Coordinate(-1, -1, -1),
-    // );
-    // const to = new Coordinate(5, 1, 1);
-    // gomas.push({ goma, to });
-
-    // gomas.forEach(({ goma, to }) => {
-    //   this.gungiHan.updateHan(goma, to);
-    //   goma.coordinate = to;
-    // });
-
-    // TODO: 備用區
-    // this._senteGomaOki.gomas.push(xxx);
-    // this._goteGomaOki.gomas.push(xxx);
   }
 
   furiGoma() {

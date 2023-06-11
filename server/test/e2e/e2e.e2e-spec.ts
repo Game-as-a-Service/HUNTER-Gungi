@@ -91,50 +91,6 @@ describe('AppController (e2e)', () => {
       .expect({ winner: 'B' });
   });
 
-  // TODO DELETE 範例，參考用
-  it.skip('/(POST) gungi/:gungiId/surrender', async () => {
-    const gungiId = randomUUID();
-    const gungiData: GungiData = {
-      currentTurn: SIDE.WHITE,
-      gungiHan: { han: [] },
-      history: [],
-      _id: gungiId,
-      level: LEVEL.BEGINNER,
-      players: [
-        {
-          id: 'A',
-          name: 'A',
-          side: SIDE.WHITE,
-          gomaOki: { gomas: [] },
-          deadArea: { gomas: [] },
-        },
-        {
-          id: 'B',
-          name: 'B',
-          side: SIDE.BLACK,
-          gomaOki: { gomas: [] },
-          deadArea: { gomas: [] },
-        },
-      ],
-    };
-
-    const gungi = gungiDataModel.toDomain(gungiData);
-
-    await gungiRepository.save(gungi);
-
-    // post a  json
-    const body = {
-      playerId: 'A',
-    };
-
-    const response = await request(app.getHttpServer())
-      .post(`/gungi/${gungiId}/surrender`)
-      .send(body);
-
-    expect(response.status).toEqual(200);
-    expect(response.body).toEqual({ winner: 'B' });
-  });
-
   it('/(POST) gungi/:gungiId/configuration', async () => {
     // Init
     const gungiId = randomUUID();
