@@ -118,7 +118,7 @@ class Gungi {
     throw new Error('Method not implemented.');
 
     // TODO: 棋盤
-    const gomas: { goma: Goma, to: Coordinate }[] = [];
+    const gomas: { goma: Goma; to: Coordinate }[] = [];
 
     const goma: Goma = GomaFactory.create(
       LEVEL.BEGINNER,

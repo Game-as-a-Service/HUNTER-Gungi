@@ -38,7 +38,10 @@ class GungiHan {
   }
 
   updateHan(goma: Goma, to: Coordinate) {
-    const old = this._han.get(goma.getCoordinateX()).get(goma.getCoordinateY()).pop();
+    const old = this._han
+      .get(goma.getCoordinateX())
+      .get(goma.getCoordinateY())
+      .pop();
     this._han.get(to.x).get(to.y).push(goma);
   }
 }
