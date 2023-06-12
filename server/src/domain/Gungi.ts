@@ -119,67 +119,71 @@ class Gungi {
   setConfiguration(): Event[] {
     const addGomaToHan = (
       side: SIDE,
-      name: GOMA,
-      x: number,
-      y: number,
-      z: number,
+      gomaConfig: { name: GOMA; x: number; y: number; z: number }[],
     ): void => {
-      const coordinate = new Coordinate(x, y, z);
-      const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
+      gomaConfig.forEach(({ name, x, y, z }) => {
+        const coordinate = new Coordinate(x, y, z);
+        const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
 
-      this.gungiHan.addGoma(goma, coordinate);
+        this.gungiHan.addGoma(goma, coordinate);
+      });
     };
 
-    const addGomaToOki = (side: SIDE, name: GOMA): void => {
-      const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
-      const gomaOki =
-        this.sente.side === side ? this.sente.gomaOki : this.gote.gomaOki;
-      gomaOki.gomas.push(goma);
+    const addGomaToOki = (side: SIDE, gomaConfig: { name: GOMA }[]): void => {
+      gomaConfig.forEach(({ name }) => {
+        const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
+        const gomaOki =
+          this.sente.side === side ? this.sente.gomaOki : this.gote.gomaOki;
+        gomaOki.gomas.push(goma);
+      });
     };
 
-    let side = SIDE.WHITE;
-    addGomaToHan(side, GOMA.OSHO, 5, 1, 1);
-    addGomaToHan(side, GOMA.HEI, 1, 3, 1);
-    addGomaToHan(side, GOMA.HEI, 5, 3, 1);
-    addGomaToHan(side, GOMA.HEI, 9, 3, 1);
-    addGomaToOki(side, GOMA.HEI);
-    addGomaToOki(side, GOMA.SHO);
-    addGomaToOki(side, GOMA.SHO);
-    addGomaToOki(side, GOMA.UMA);
-    addGomaToOki(side, GOMA.UMA);
-    addGomaToHan(side, GOMA.SHINOBI, 2, 2, 1);
-    addGomaToHan(side, GOMA.SHINOBI, 8, 2, 1);
-    addGomaToHan(side, GOMA.YARI, 5, 2, 1);
-    addGomaToOki(side, GOMA.YARI);
-    addGomaToOki(side, GOMA.YARI);
-    addGomaToHan(side, GOMA.CHU, 6, 1, 1);
-    addGomaToHan(side, GOMA.DAI, 4, 1, 1);
-    addGomaToHan(side, GOMA.SHI, 4, 3, 1);
-    addGomaToHan(side, GOMA.SHI, 6, 3, 1);
-    addGomaToHan(side, GOMA.TORIDE, 3, 3, 1);
-    addGomaToHan(side, GOMA.TORIDE, 7, 3, 1);
+    const WHITE_HAN_CONFIG = [
+      { name: GOMA.OSHO, x: 5, y: 1, z: 1 },
+      { name: GOMA.HEI, x: 1, y: 3, z: 1 },
+      { name: GOMA.HEI, x: 5, y: 3, z: 1 },
+      { name: GOMA.HEI, x: 9, y: 3, z: 1 },
+      { name: GOMA.SHINOBI, x: 2, y: 2, z: 1 },
+      { name: GOMA.SHINOBI, x: 8, y: 2, z: 1 },
+      { name: GOMA.YARI, x: 5, y: 2, z: 1 },
+      { name: GOMA.CHU, x: 6, y: 1, z: 1 },
+      { name: GOMA.DAI, x: 4, y: 1, z: 1 },
+      { name: GOMA.SHI, x: 4, y: 3, z: 1 },
+      { name: GOMA.SHI, x: 6, y: 3, z: 1 },
+      { name: GOMA.TORIDE, x: 3, y: 3, z: 1 },
+      { name: GOMA.TORIDE, x: 7, y: 3, z: 1 },
+    ];
 
-    side = SIDE.BLACK;
-    addGomaToHan(side, GOMA.OSHO, 5, 9, 1);
-    addGomaToHan(side, GOMA.HEI, 1, 7, 1);
-    addGomaToHan(side, GOMA.HEI, 5, 7, 1);
-    addGomaToHan(side, GOMA.HEI, 9, 7, 1);
-    addGomaToOki(side, GOMA.HEI);
-    addGomaToOki(side, GOMA.SHO);
-    addGomaToOki(side, GOMA.SHO);
-    addGomaToOki(side, GOMA.UMA);
-    addGomaToOki(side, GOMA.UMA);
-    addGomaToHan(side, GOMA.SHINOBI, 2, 8, 1);
-    addGomaToHan(side, GOMA.SHINOBI, 8, 8, 1);
-    addGomaToHan(side, GOMA.YARI, 5, 8, 1);
-    addGomaToOki(side, GOMA.YARI);
-    addGomaToOki(side, GOMA.YARI);
-    addGomaToHan(side, GOMA.CHU, 4, 9, 1);
-    addGomaToHan(side, GOMA.DAI, 6, 9, 1);
-    addGomaToHan(side, GOMA.SHI, 4, 7, 1);
-    addGomaToHan(side, GOMA.SHI, 6, 7, 1);
-    addGomaToHan(side, GOMA.TORIDE, 3, 7, 1);
-    addGomaToHan(side, GOMA.TORIDE, 7, 7, 1);
+    const BLACK_HAN_CONFIG = [
+      { name: GOMA.OSHO, x: 5, y: 9, z: 1 },
+      { name: GOMA.HEI, x: 1, y: 7, z: 1 },
+      { name: GOMA.HEI, x: 5, y: 7, z: 1 },
+      { name: GOMA.HEI, x: 9, y: 7, z: 1 },
+      { name: GOMA.SHINOBI, x: 2, y: 8, z: 1 },
+      { name: GOMA.SHINOBI, x: 8, y: 8, z: 1 },
+      { name: GOMA.YARI, x: 5, y: 8, z: 1 },
+      { name: GOMA.CHU, x: 4, y: 9, z: 1 },
+      { name: GOMA.DAI, x: 6, y: 9, z: 1 },
+      { name: GOMA.SHI, x: 4, y: 7, z: 1 },
+      { name: GOMA.SHI, x: 6, y: 7, z: 1 },
+      { name: GOMA.TORIDE, x: 3, y: 7, z: 1 },
+      { name: GOMA.TORIDE, x: 7, y: 7, z: 1 },
+    ];
+
+    const OKI_CONFIG = [
+      { name: GOMA.HEI },
+      { name: GOMA.SHO },
+      { name: GOMA.SHO },
+      { name: GOMA.UMA },
+      { name: GOMA.UMA },
+      { name: GOMA.YARI },
+      { name: GOMA.YARI },
+    ];
+
+    addGomaToHan(SIDE.WHITE, WHITE_HAN_CONFIG);
+    addGomaToOki(SIDE.WHITE, OKI_CONFIG);
+    addGomaToHan(SIDE.BLACK, BLACK_HAN_CONFIG);
+    addGomaToOki(SIDE.BLACK, OKI_CONFIG);
 
     const event: ConfigurationEvent = {
       name: 'Configuration',
