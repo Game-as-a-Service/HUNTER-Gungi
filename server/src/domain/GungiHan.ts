@@ -19,8 +19,6 @@ export default class GungiHan {
   }
 
   findGoma(targetCoordinate: Coordinate): Goma {
-    // console.log(JSON.stringify(this._han));
-
     const { x, y, z } = targetCoordinate;
     return this._han[x - 1][y - 1][z - 1];
   }
