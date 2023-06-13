@@ -1,15 +1,16 @@
 import Goma from './goma/Goma';
 import Coordinate from './Coordinate';
+import {
+  HAN_X_MAX,
+  HAN_Y_MAX,
+  HAN_Z_MAX,
+  EMPTY_GOMA,
+} from './constant/constants';
 
 export type GungiHanGoma = {
   goma: Goma;
   coordinate: Coordinate;
 };
-
-export const EMPTY_GOMA = null;
-export const HAN_X_MAX = 9;
-export const HAN_Y_MAX = 9;
-export const HAN_Z_MAX = 3;
 
 export default class GungiHan {
   private _han: Goma[][][];

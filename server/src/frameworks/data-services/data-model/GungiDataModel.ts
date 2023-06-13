@@ -7,13 +7,13 @@ import {
   PlayerData,
 } from 'src/frameworks/data-services/GungiData';
 import Player from '../../../domain/Player';
-import GungiHan, {
+import GungiHan, { GungiHanGoma } from '../../../domain/GungiHan';
+import {
   EMPTY_GOMA,
-  GungiHanGoma,
   HAN_X_MAX,
   HAN_Y_MAX,
   HAN_Z_MAX,
-} from '../../../domain/GungiHan';
+} from '../../../domain/constant/constants';
 import GomaOki from '../../../domain/GomaOki';
 import LEVEL from '../../../domain/constant/LEVEL';
 import Goma from '../../../domain/goma/Goma';

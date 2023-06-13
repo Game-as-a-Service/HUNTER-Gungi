@@ -1,7 +1,8 @@
 import Player from '../../src/domain/Player';
 import LEVEL from '../../src/domain/constant/LEVEL';
 import Gungi from '../../src/domain/Gungi';
-import GungiHan, { EMPTY_GOMA } from '../../src/domain/GungiHan';
+import GungiHan from '../../src/domain/GungiHan';
+import { EMPTY_GOMA } from '../../src/domain/constant/constants';
 import SIDE from '../../src/domain/constant/SIDE';
 import GomaOki from '../../src/domain/GomaOki';
 import DeadArea from '../../src/domain/DeadArea';

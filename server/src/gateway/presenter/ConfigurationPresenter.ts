@@ -6,7 +6,7 @@ import {
   HAN_X_MAX,
   HAN_Y_MAX,
   HAN_Z_MAX,
-} from '../../domain/GungiHan';
+} from '../../domain/constant/constants';
 import Coordinate from '../../domain/Coordinate';
 
 export interface Goma {
