@@ -122,7 +122,7 @@ describe.only('棋盤配置 (e2e)', () => {
       name: GOMA,
       count: number,
     ) {
-      const oki = side === SIDE.WHITE ? view.whileOki : view.blackOki;
+      const oki = side === SIDE.WHITE ? view.goteGomaOki : view.senteGomOki;
 
       expect(
         oki.filter((goma) => goma.side === side && goma.name === name).length,

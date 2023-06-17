@@ -21,8 +21,8 @@ export interface GungiHanGoma {
 
 export interface ConfigurationView {
   han: GungiHanGoma[];
-  blackOki: Goma[];
-  whileOki: Goma[];
+  senteGomOki: Goma[];
+  goteGomaOki: Goma[];
 }
 
 export default class ConfigurationPresenter
@@ -35,8 +35,8 @@ export default class ConfigurationPresenter
 
     const view: ConfigurationView = {
       han: [],
-      blackOki: [],
-      whileOki: [],
+      senteGomOki: [],
+      goteGomaOki: [],
     };
 
     for (let x = 0; x < HAN_X_MAX; x++) {
@@ -61,14 +61,14 @@ export default class ConfigurationPresenter
       }
     }
 
-    view.blackOki = event.data.senteGomaOki.gomas.map((goma) => {
+    view.senteGomOki = event.data.senteGomaOki.gomas.map((goma) => {
       return {
         side: goma.side,
         name: goma.name,
       };
     });
 
-    view.whileOki = event.data.goteGomaOki.gomas.map((goma) => {
+    view.goteGomaOki = event.data.goteGomaOki.gomas.map((goma) => {
       return {
         side: goma.side,
         name: goma.name,
