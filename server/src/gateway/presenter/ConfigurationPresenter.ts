@@ -29,7 +29,9 @@ export default class ConfigurationPresenter
   implements Presenter<ConfigurationView>
 {
   present(events: Event[]): ConfigurationView {
-    const event = events[0] as ConfigurationEvent;
+    const event = events.filter(
+      (e) => e.name === 'Configuration',
+    )[0] as ConfigurationEvent;
 
     const view: ConfigurationView = {
       han: [],
