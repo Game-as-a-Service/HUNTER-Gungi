@@ -34,20 +34,20 @@ export default class GungiHan {
   getAllGoma(): GungiHanGoma[] {
     const han: GungiHanGoma[] = [];
 
-    for (let x = 0; x < HAN_X_MAX; x++) {
-      for (let y = 0; y < HAN_Y_MAX; y++) {
-        for (let z = 0; z < HAN_Z_MAX; z++) {
+    this._han.forEach((xArray, x) => {
+      xArray.forEach((yArray, y) => {
+        yArray.forEach((zArray, z) => {
           const coordinate = new Coordinate(x, y, z);
-          const goma = this.findGoma(coordinate);
+          const goma = this._han[x][y][z];
           if (goma !== EMPTY_GOMA) {
             han.push({
               goma: GomaFactory.create(LEVEL.BEGINNER, goma.side, goma.name),
               coordinate: coordinate,
             });
           }
-        }
-      }
-    }
+        });
+      });
+    });
 
     return han;
   }
