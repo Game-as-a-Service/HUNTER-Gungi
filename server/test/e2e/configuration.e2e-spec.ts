@@ -46,7 +46,7 @@ describe.only('棋盤配置 (e2e)', () => {
     await app.close();
   });
 
-  async function given_createGame_furigoma(): Promise<string> {
+  async function given_gungi_and_furigoma_done(): Promise<string> {
     const gungiId = randomUUID();
     const player: Player[] = [];
 
@@ -127,7 +127,7 @@ describe.only('棋盤配置 (e2e)', () => {
     }
 
     // Given
-    const gungiId = await given_createGame_furigoma();
+    const gungiId = await given_gungi_and_furigoma_done();
 
     // When
     const view: ConfigurationView = await configuration(gungiId);
