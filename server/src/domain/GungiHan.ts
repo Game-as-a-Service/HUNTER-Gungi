@@ -21,12 +21,12 @@ export default class GungiHan {
 
   findGoma(targetCoordinate: Coordinate): Goma {
     const { x, y, z } = targetCoordinate;
-    return this._han[x - 1][y - 1][z - 1];
+    return this._han[x][y][z];
   }
 
   addGoma(goma: Goma, to: Coordinate) {
     const { x, y, z } = to;
-    this._han[x - 1][y - 1][z - 1] = goma;
+    this._han[x][y][z] = goma;
   }
 
   private setHan(gomas: GungiHanGoma[]) {
@@ -34,7 +34,7 @@ export default class GungiHan {
 
     gomas.forEach((goma) => {
       const { x, y, z } = goma.coordinate;
-      this._han[x - 1][y - 1][z - 1] = goma.goma;
+      this._han[x][y][z] = goma.goma;
     });
   }
 

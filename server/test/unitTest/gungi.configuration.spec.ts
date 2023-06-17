@@ -159,16 +159,16 @@ describe('Gungi', () => {
       let side = SIDE.WHITE;
       let name = GOMA.OSHO;
       let set: DataSet = createSet(jestName, side, name);
-      addGomaToHan(side, name, 5, 1, 1);
+      addGomaToHan(side, name, 4, 0, 0);
       set.setData.oki.count = 0;
       dataSet.push(set);
 
       jestName = '白色「兵」已配置！';
       name = GOMA.HEI;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 1, 3, 1);
-      addGomaToHan(side, name, 5, 3, 1);
-      addGomaToHan(side, name, 9, 3, 1);
+      addGomaToHan(side, name, 0, 2, 0);
+      addGomaToHan(side, name, 4, 2, 0);
+      addGomaToHan(side, name, 8, 2, 0);
       set.setData.oki.count = 1;
       dataSet.push(set);
 
@@ -187,45 +187,45 @@ describe('Gungi', () => {
       jestName = '白色「忍」已配置！';
       name = GOMA.SHINOBI;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 2, 2, 1);
-      addGomaToHan(side, name, 8, 2, 1);
+      addGomaToHan(side, name, 1, 1, 0);
+      addGomaToHan(side, name, 7, 1, 0);
       set.setData.oki.count = 0;
       dataSet.push(set);
 
       jestName = '白色「槍」已配置！';
       name = GOMA.YARI;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 5, 2, 1);
+      addGomaToHan(side, name, 4, 1, 0);
       set.setData.oki.count = 2;
       dataSet.push(set);
 
       jestName = '白色「中」已配置！';
       name = GOMA.CHU;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 6, 1, 1);
+      addGomaToHan(side, name, 5, 0, 0);
       set.setData.oki.count = 0;
       dataSet.push(set);
 
       jestName = '白色「大」已配置！';
       name = GOMA.DAI;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 4, 1, 1);
+      addGomaToHan(side, name, 3, 0, 0);
       set.setData.oki.count = 0;
       dataSet.push(set);
 
       jestName = '白色「侍」已配置！';
       name = GOMA.SHI;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 4, 3, 1);
-      addGomaToHan(side, name, 6, 3, 1);
+      addGomaToHan(side, name, 3, 2, 0);
+      addGomaToHan(side, name, 5, 2, 0);
       set.setData.oki.count = 0;
       dataSet.push(set);
 
       jestName = '白色「砦」已配置！（ㄓㄞˋ）';
       name = GOMA.TORIDE;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 3, 3, 1);
-      addGomaToHan(side, name, 7, 3, 1);
+      addGomaToHan(side, name, 2, 2, 0);
+      addGomaToHan(side, name, 6, 2, 0);
       set.setData.oki.count = 0;
       dataSet.push(set);
 
@@ -233,16 +233,16 @@ describe('Gungi', () => {
       side = SIDE.BLACK;
       name = GOMA.OSHO;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 5, 9, 1);
+      addGomaToHan(side, name, 4, 8, 0);
       set.setData.oki.count = 0;
       dataSet.push(set);
 
       jestName = '黑色「兵」已配置！';
       name = GOMA.HEI;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 1, 7, 1);
-      addGomaToHan(side, name, 5, 7, 1);
-      addGomaToHan(side, name, 9, 7, 1);
+      addGomaToHan(side, name, 0, 6, 0);
+      addGomaToHan(side, name, 4, 6, 0);
+      addGomaToHan(side, name, 8, 6, 0);
       set.setData.oki.count = 1;
       dataSet.push(set);
 
@@ -261,45 +261,45 @@ describe('Gungi', () => {
       jestName = '黑色「忍」已配置！';
       name = GOMA.SHINOBI;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 2, 8, 1);
-      addGomaToHan(side, name, 8, 8, 1);
+      addGomaToHan(side, name, 1, 7, 0);
+      addGomaToHan(side, name, 7, 7, 0);
       set.setData.oki.count = 0;
       dataSet.push(set);
 
       jestName = '黑色「槍」已配置！';
       name = GOMA.YARI;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 5, 8, 1);
+      addGomaToHan(side, name, 4, 7, 0);
       set.setData.oki.count = 2;
       dataSet.push(set);
 
       jestName = '黑色「中」已配置！';
       name = GOMA.CHU;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 4, 9, 1);
+      addGomaToHan(side, name, 3, 8, 0);
       set.setData.oki.count = 0;
       dataSet.push(set);
 
       jestName = '黑色「大」已配置！';
       name = GOMA.DAI;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 6, 9, 1);
+      addGomaToHan(side, name, 5, 8, 0);
       set.setData.oki.count = 0;
       dataSet.push(set);
 
       jestName = '黑色「侍」已配置！';
       name = GOMA.SHI;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 4, 7, 1);
-      addGomaToHan(side, name, 6, 7, 1);
+      addGomaToHan(side, name, 3, 6, 0);
+      addGomaToHan(side, name, 5, 6, 0);
       set.setData.oki.count = 0;
       dataSet.push(set);
 
       jestName = '黑色「砦」已配置！（ㄓㄞˋ）';
       name = GOMA.TORIDE;
       set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 3, 7, 1);
-      addGomaToHan(side, name, 7, 7, 1);
+      addGomaToHan(side, name, 2, 6, 0);
+      addGomaToHan(side, name, 6, 6, 0);
       set.setData.oki.count = 0;
       dataSet.push(set);
 

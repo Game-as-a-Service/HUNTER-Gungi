@@ -119,9 +119,9 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
   private gungiHanToData(gungiHan: GungiHan) {
     const gomasData: GomaData[] = [];
 
-    for (let x = 1; x <= HAN_X_MAX; x++) {
-      for (let y = 1; y <= HAN_Y_MAX; y++) {
-        for (let z = 1; z <= HAN_Z_MAX; z++) {
+    for (let x = 0; x < HAN_X_MAX; x++) {
+      for (let y = 0; y < HAN_Y_MAX; y++) {
+        for (let z = 0; z < HAN_Z_MAX; z++) {
           const coordinate = new Coordinate(x, y, z);
           const goma = gungiHan.findGoma(coordinate);
           if (goma !== EMPTY_GOMA) {
