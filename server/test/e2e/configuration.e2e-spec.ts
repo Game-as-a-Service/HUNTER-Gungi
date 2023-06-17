@@ -46,8 +46,7 @@ describe.only('棋盤配置 (e2e)', () => {
     await app.close();
   });
 
-  it('/(POST) gungi/:gungiId/configuration', async () => {
-    // Init
+  async function given_CreateGameAndFurigomaDone(): Promise<string> {
     const gungiId = randomUUID();
     const player: Player[] = [];
 
@@ -72,16 +71,13 @@ describe.only('棋盤配置 (e2e)', () => {
 
     const gungiHan: GungiHan = new GungiHan([]);
     const gungi = new Gungi(gungiId, LEVEL.BEGINNER, player, gungiHan);
-    gungi.sente = player[0];
-    gungi.gote = player[1];
     gungi.setCurrentTurn(SIDE.WHITE);
 
     await gungiRepository.save(gungi);
+    return gungi.id;
+  }
 
-    // Given
-    // None
-
-    // When
+  async function configuration(gungiId): Promise<ConfigurationView> {
     const body = {
       playerId: 'A',
     };
@@ -91,9 +87,10 @@ describe.only('棋盤配置 (e2e)', () => {
       .send(body);
 
     expect(response.status).toEqual(200);
+    return response.body;
+  }
 
-    const view: ConfigurationView = response.body;
-
+  it('/(POST) gungi/:gungiId/configuration', async () => {
     /** 預期盤棋上的棋子 */
     function expectGomaInHan(
       view: ConfigurationView,
@@ -129,6 +126,13 @@ describe.only('棋盤配置 (e2e)', () => {
       ).toEqual(count);
     }
 
+    // Given
+    const gungiId = await given_CreateGameAndFurigomaDone();
+
+    // When
+    const view: ConfigurationView = await configuration(gungiId);
+
+    // Then
     let side = SIDE.WHITE;
     expectGomaInHan(view, side, GOMA.OSHO, 4, 0, 0);
     expectGomaCountInOki(view, side, GOMA.OSHO, 0);
