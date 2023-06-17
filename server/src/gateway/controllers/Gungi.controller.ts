@@ -14,11 +14,15 @@ export default class GungiController {
   ) {}
 
   @Post('/gungi/:gungiId/furigoma')
-  async furigoma(@Param('gungiId') gungiId: string, @Body() body: any) {
+  async furigoma(
+    @Param('gungiId') gungiId: string,
+    @Body() body: any,
+    @Res() res,
+  ) {
     const presenter = new FurigomaPresenter();
     const input = new FurigomaUsecaseInput(gungiId, body.playerId);
     const response = await this._furigomaUsecase.execute(input, presenter);
-    return response;
+    return res.status(HttpStatus.OK).send(response);
   }
 
   @Post('/gungi/:id/surrender')

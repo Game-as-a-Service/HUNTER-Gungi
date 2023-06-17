@@ -2,7 +2,7 @@ import { Event } from 'src/domain/events/Event';
 import Presenter from 'src/usecases/Presenter';
 
 export default class FurigomaPresenter implements Presenter {
-  present(events: Event[]) {
+  present(events: Event[]): Event[] {
     const targetEvents = this.getTargetEvents(events);
     return targetEvents;
   }

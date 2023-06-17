@@ -158,40 +158,44 @@ describe('AppController (e2e)', () => {
   it('/(POST) gungi/:gungiId/furigoma', async () => {
     // Arrange
     const gungiId = randomUUID();
-    const player: Player[] = [];
-    player.push(
-      new Player(
-        'A',
-        'A',
-        SIDE.BLACK,
-        new GomaOki(LEVEL.BEGINNER, SIDE.BLACK, []),
-        new DeadArea(SIDE.BLACK, []),
-      ),
-    );
-    player.push(
-      new Player(
-        'B',
-        'B',
-        SIDE.WHITE,
-        new GomaOki(LEVEL.BEGINNER, SIDE.WHITE, []),
-        new DeadArea(SIDE.WHITE, []),
-      ),
-    );
+    const gungiData: GungiData = {
+      currentTurn: SIDE.WHITE,
+      gungiHan: { han: [] },
+      history: [],
+      _id: gungiId,
+      level: LEVEL.BEGINNER,
+      players: [
+        {
+          id: 'A',
+          name: 'A',
+          side: SIDE.WHITE,
+          gomaOki: { gomas: [] },
+          deadArea: { gomas: [] },
+        },
+        {
+          id: 'B',
+          name: 'B',
+          side: SIDE.BLACK,
+          gomaOki: { gomas: [] },
+          deadArea: { gomas: [] },
+        },
+      ],
+    };
+
+    const gungi = gungiDataModel.toDomain(gungiData);
+    await gungiRepository.save(gungi);
     const body = {
       playerId: 'A',
     };
 
-    // expect 200, and response has field name and data
-    request(app.getHttpServer())
+    const response = await request(app.getHttpServer())
       .post(`/gungi/${gungiId}/furigoma`)
-      .send(body)
-      .expect(200)
-      .expect((res) => {
-        expect(res.body).toHaveProperty('name');
-        expect(res.body).toHaveProperty('data');
-        // data has turn and result
-        expect(res.body.data).toHaveProperty('turn');
-        expect(res.body.data).toHaveProperty('result');
-      });
+      .send(body);
+    expect(response.status).toBe(200);
+    expect(response.body[0]).toHaveProperty('name');
+    expect(response.body[0]).toHaveProperty('data');
+    expect(response.body[0].data).toHaveProperty('turn');
+    expect(response.body[0].data).toHaveProperty('result');
+    expect(response.body[0].data.result.length).toBe(5);
   });
 });
