@@ -59,14 +59,14 @@ export default class ConfigurationPresenter
       }
     }
 
-    view.blackOki = event.data.blackOki.gomas.map((goma) => {
+    view.blackOki = event.data.senteGomaOki.gomas.map((goma) => {
       return {
         side: goma.side,
         name: goma.name,
       };
     });
 
-    view.whileOki = event.data.whiteOki.gomas.map((goma) => {
+    view.whileOki = event.data.goteGomaOki.gomas.map((goma) => {
       return {
         side: goma.side,
         name: goma.name,

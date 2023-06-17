@@ -6,7 +6,7 @@ export interface ConfigurationEvent extends Event {
   name: 'Configuration';
   data: {
     gungiHan: GungiHan;
-    blackOki: GomaOki;
-    whiteOki: GomaOki;
+    senteGomaOki: GomaOki;
+    goteGomaOki: GomaOki;
   };
 }
