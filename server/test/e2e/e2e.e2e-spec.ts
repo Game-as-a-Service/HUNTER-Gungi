@@ -45,7 +45,7 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await db.collection('Gungi').deleteMany({});
     await client.close(true);
     await app.close();
@@ -156,7 +156,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/(POST) gungi/:gungiId/furigoma', async () => {
-    // Arrange
+    // Given
     const gungiId = randomUUID();
     const gungiData: GungiData = {
       currentTurn: SIDE.WHITE,
