@@ -39,27 +39,16 @@ export default class ConfigurationPresenter
       goteGomaOki: [],
     };
 
-    for (let x = 0; x < HAN_X_MAX; x++) {
-      for (let y = 0; y < HAN_Y_MAX; y++) {
-        for (let z = 0; z < HAN_Z_MAX; z++) {
-          const coordinate = new Coordinate(x, y, z);
-          const goma = event.data.gungiHan.findGoma(coordinate);
-          if (goma !== EMPTY_GOMA) {
-            view.han.push({
-              goma: {
-                side: goma.side,
-                name: goma.name,
-              },
-              coordinate: {
-                x,
-                y,
-                z,
-              },
-            });
-          }
-        }
-      }
-    }
+    const allGoma = event.data.gungiHan.getAllGoma();
+    allGoma.forEach((item) => {
+      view.han.push({
+        goma: {
+          side: item.goma.side,
+          name: item.goma.name,
+        },
+        coordinate: item.coordinate.toData(),
+      });
+    });
 
     view.senteGomOki = event.data.senteGomaOki.gomas.map((goma) => {
       return {

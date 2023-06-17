@@ -6,6 +6,8 @@ import {
   HAN_Z_MAX,
   EMPTY_GOMA,
 } from './constant/constants';
+import LEVEL from './constant/LEVEL';
+import GomaFactory from './goma/GomaFactory';
 
 export type GungiHanGoma = {
   goma: Goma;
@@ -27,6 +29,27 @@ export default class GungiHan {
   addGoma(goma: Goma, to: Coordinate) {
     const { x, y, z } = to;
     this._han[x][y][z] = goma;
+  }
+
+  getAllGoma(): GungiHanGoma[] {
+    const han: GungiHanGoma[] = [];
+
+    for (let x = 0; x < HAN_X_MAX; x++) {
+      for (let y = 0; y < HAN_Y_MAX; y++) {
+        for (let z = 0; z < HAN_Z_MAX; z++) {
+          const coordinate = new Coordinate(x, y, z);
+          const goma = this.findGoma(coordinate);
+          if (goma !== EMPTY_GOMA) {
+            han.push({
+              goma: GomaFactory.create(LEVEL.BEGINNER, goma.side, goma.name),
+              coordinate: coordinate,
+            });
+          }
+        }
+      }
+    }
+
+    return han;
   }
 
   private setHan(gomas: GungiHanGoma[]) {
