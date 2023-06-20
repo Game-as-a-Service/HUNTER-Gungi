@@ -122,31 +122,10 @@ class Gungi {
   }
 
   setConfiguration(): Event[] {
-    const addGomaToHan = (
-      side: SIDE,
-      gomaConfig: { name: GOMA; x: number; y: number; z: number }[],
-    ): void => {
-      gomaConfig.forEach(({ name, x, y, z }) => {
-        const coordinate = new Coordinate(x, y, z);
-        const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
-
-        this.gungiHan.addGoma(goma, coordinate);
-      });
-    };
-
-    const addGomaToOki = (side: SIDE, gomaConfig: { name: GOMA }[]): void => {
-      gomaConfig.forEach(({ name }) => {
-        const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
-        const gomaOki =
-          this.sente.side === side ? this.sente.gomaOki : this.gote.gomaOki;
-        gomaOki.gomas.push(goma);
-      });
-    };
-
-    addGomaToHan(SIDE.WHITE, WHITE_HAN_CONFIG);
-    addGomaToOki(SIDE.WHITE, OKI_CONFIG);
-    addGomaToHan(SIDE.BLACK, BLACK_HAN_CONFIG);
-    addGomaToOki(SIDE.BLACK, OKI_CONFIG);
+    this.addGomaToHan(SIDE.WHITE, WHITE_HAN_CONFIG);
+    this.addGomaToOki(SIDE.WHITE, OKI_CONFIG);
+    this.addGomaToHan(SIDE.BLACK, BLACK_HAN_CONFIG);
+    this.addGomaToOki(SIDE.BLACK, OKI_CONFIG);
 
     const event: ConfigurationEvent = {
       name: 'Configuration',
@@ -192,6 +171,27 @@ class Gungi {
 
   getOpponent(player: Player): Player {
     return this._players.find((p) => p !== player);
+  }
+
+  private addGomaToHan(
+    side: SIDE,
+    gomaConfig: { name: GOMA; x: number; y: number; z: number }[],
+  ): void {
+    gomaConfig.forEach(({ name, x, y, z }) => {
+      const coordinate = new Coordinate(x, y, z);
+      const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
+
+      this.gungiHan.addGoma(goma, coordinate);
+    });
+  }
+
+  private addGomaToOki(side: SIDE, gomaConfig: { name: GOMA }[]): void {
+    gomaConfig.forEach(({ name }) => {
+      const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
+      const gomaOki =
+        this.sente.side === side ? this.sente.gomaOki : this.gote.gomaOki;
+      gomaOki.gomas.push(goma);
+    });
   }
 
   private setSenteGote(players: Player[]) {
