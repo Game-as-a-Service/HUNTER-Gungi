@@ -11,39 +11,70 @@ import GomaFactory from '../../src/domain/goma/GomaFactory';
 import GOMA from '../../src/domain/constant/GOMA';
 import Coordinate from '../../src/domain/Coordinate';
 
-function given() {
-  const level = LEVEL.BEGINNER;
-  const playerA = new Player(
-    'A',
-    'A',
-    SIDE.WHITE,
-    new GomaOki(level, SIDE.WHITE),
-    new DeadArea(SIDE.WHITE),
-  );
-
-  const playerB = new Player(
-    'B',
-    'B',
-    SIDE.BLACK,
-    new GomaOki(level, SIDE.BLACK),
-    new DeadArea(SIDE.BLACK),
-  );
-
-  const gungi = new Gungi(
-    'test',
-    LEVEL.BEGINNER,
-    [playerA, playerB],
-    new GungiHan(),
-  );
-
-  gungi.sente = playerA;
-  gungi.gote = playerB;
-  gungi.setCurrentTurn(SIDE.WHITE);
-
-  return { gungi };
-}
-
 describe('Gungi', () => {
+  function given() {
+    const level = LEVEL.BEGINNER;
+    const playerA = new Player(
+      'A',
+      'A',
+      SIDE.WHITE,
+      new GomaOki(level, SIDE.WHITE),
+      new DeadArea(SIDE.WHITE),
+    );
+
+    const playerB = new Player(
+      'B',
+      'B',
+      SIDE.BLACK,
+      new GomaOki(level, SIDE.BLACK),
+      new DeadArea(SIDE.BLACK),
+    );
+
+    const gungi = new Gungi(
+      'test',
+      LEVEL.BEGINNER,
+      [playerA, playerB],
+      new GungiHan(),
+    );
+
+    gungi.sente = playerA;
+    gungi.gote = playerB;
+    gungi.setCurrentTurn(SIDE.WHITE);
+
+    return { gungi };
+  }
+
+  /** 預期盤棋上的棋子 */
+  function expectGomaInHan(
+    gungi: Gungi,
+    side: SIDE,
+    name: GOMA,
+    x: number,
+    y: number,
+    z: number,
+  ) {
+    const coordinate = new Coordinate(x, y, z);
+    const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
+
+    expect(gungi.gungiHan.findGoma(coordinate)).toEqual(goma);
+  }
+
+  /** 預期備用區棋子的數量 */
+  function expectGomaCountInOki(
+    gungi: Gungi,
+    side: SIDE,
+    name: GOMA,
+    count: number,
+  ) {
+    const gomaOki =
+      gungi.sente.side === side ? gungi.sente.gomaOki : gungi.gote.gomaOki;
+
+    expect(
+      gomaOki.gomas.filter((goma) => goma.side === side && goma.name === name)
+        .length,
+    ).toBe(count);
+  }
+
   describe('配置盤面', () => {
     describe('基本測試', () => {
       it('棋子放到一個位置後，其它的位置還是空的', () => {
@@ -79,38 +110,6 @@ describe('Gungi', () => {
     });
 
     describe('入門級別 棋子要在指定位置', () => {
-      /** 預期盤棋上的棋子 */
-      function expectGomaInHan(
-        gungi: Gungi,
-        side: SIDE,
-        name: GOMA,
-        x: number,
-        y: number,
-        z: number,
-      ) {
-        const coordinate = new Coordinate(x, y, z);
-        const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
-
-        expect(gungi.gungiHan.findGoma(coordinate)).toEqual(goma);
-      }
-
-      /** 預期備用區棋子的數量 */
-      function expectGomaCountInOki(
-        gungi: Gungi,
-        side: SIDE,
-        name: GOMA,
-        count: number,
-      ) {
-        const gomaOki =
-          gungi.sente.side === side ? gungi.sente.gomaOki : gungi.gote.gomaOki;
-
-        expect(
-          gomaOki.gomas.filter(
-            (goma) => goma.side === side && goma.name === name,
-          ).length,
-        ).toBe(count);
-      }
-
       type DataSet = {
         jestName: string;
         setData: {
