@@ -6,6 +6,7 @@ import GOMA from '../../domain/constant/GOMA';
 import SIDE from '../../domain/constant/SIDE';
 import { Inject, Injectable } from '@nestjs/common';
 import Coordinate from '../../domain/Coordinate';
+import Usecase from '../Usecase';
 
 export interface ArataRequest {
   gungiId: string;
@@ -22,7 +23,7 @@ export interface ArataRequest {
 }
 
 @Injectable()
-export default class ArataUsecase {
+export default class ArataUsecase implements Usecase<ArataRequest> {
   constructor(
     @Inject('GungiRepository')
     private _gungiRepository: IRepository<Gungi>,
@@ -30,7 +31,7 @@ export default class ArataUsecase {
     private _eventBus: EventBus,
   ) {}
 
-  async execute<R>(request: ArataRequest, presenter: Presenter<R>) {
+  async execute<View>(request: ArataRequest, presenter: Presenter<View>) {
     const gungi = await this._gungiRepository.findById(request.gungiId);
     const player = gungi.getPlayer(request.playerId);
 
