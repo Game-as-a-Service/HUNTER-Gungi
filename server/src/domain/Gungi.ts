@@ -138,7 +138,7 @@ export default class Gungi {
       throw new Error(ERROR_MESSAGE.NOT_YOUR_TURN);
     }
 
-    if (player.side !== goma.side) {
+    if (!this.isSameSide(player, goma)) {
       throw new Error(ERROR_MESSAGE.NOT_YOUR_GOMA);
     }
 
@@ -166,6 +166,10 @@ export default class Gungi {
 
   getOpponent(player: Player): Player {
     return this._players.find((p) => p !== player);
+  }
+
+  private isSameSide(player: Player, goma: { name: GOMA; side: SIDE }) {
+    return player.side === goma.side;
   }
 
   private isYourTurn(player: Player) {
