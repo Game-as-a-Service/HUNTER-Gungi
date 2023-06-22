@@ -4,14 +4,11 @@ import Coordinate from '../Coordinate';
 import LEVEL from '../constant/LEVEL';
 import GOMA from '../constant/GOMA';
 
-export default class Yari extends Goma {
-  constructor(
-    _level: LEVEL,
-    _side: SIDE,
-    _name: GOMA,
-    _coordinate: Coordinate,
-  ) {
-    super(_level, _side, _name, _coordinate);
+export default class Yumi extends Goma {
+  protected _name: GOMA = GOMA.YUMI;
+
+  constructor(level: LEVEL, side: SIDE) {
+    super(level, side);
   }
 
   arata(to: Coordinate): void {

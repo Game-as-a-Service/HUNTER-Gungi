@@ -5,8 +5,11 @@ import GomaOki from './GomaOki';
 import SIDE from './constant/SIDE';
 import GOMA from './constant/GOMA';
 import Coordinate from './Coordinate';
-import { Event, SurrenderEvent } from './events/Event';
+import { ArataEvent, Event, SurrenderEvent } from './events/Event';
 import DeadArea from './DeadArea';
+import Goma from './goma/Goma';
+import GomaFactory from './goma/GomaFactory';
+import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
 
 export default class Gungi {
   constructor(
@@ -142,7 +145,24 @@ export default class Gungi {
     return [event];
   }
 
-  arata(player: Player, goma: { name: string; side: string }, to: Coordinate) {
+  arata(player: Player, goma: { name: GOMA; side: SIDE }, to: Coordinate) {
+    if (player.side !== goma.side) {
+      throw new Error(ERROR_MESSAGE.NOT_YOUR_GOMA);
+    }
+
+    const { targetGoma, targetCoordinate } = player.arata(
+      goma.name,
+      to,
+      this._gungiHan,
+    );
+
+    const event: ArataEvent = {
+      name: 'Arata',
+      data: {
+        goma: targetGoma,
+        to: targetCoordinate,
+      },
+    };
     return [event];
   }
 

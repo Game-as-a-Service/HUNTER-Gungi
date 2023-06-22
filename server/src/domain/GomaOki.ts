@@ -1,8 +1,10 @@
 import SIDE from './constant/SIDE';
 import Player from './Player';
 import Goma from './goma/Goma';
-import { GomaOkiData } from '../frameworks/data-services/GungiData';
 import LEVEL from './constant/LEVEL';
+import GOMA from './constant/GOMA';
+import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
+import Coordinate from './Coordinate';
 
 class GomaOki {
   constructor(
@@ -27,6 +29,16 @@ class GomaOki {
 
   isEmpty() {
     return this._gomas.length === 0;
+  }
+
+  draw(name: GOMA) {
+    const targetIndex = this._gomas.findIndex((goma) => goma.name === name);
+
+    if (targetIndex === -1) {
+      throw new Error(ERROR_MESSAGE.NOT_EXIST_GOMA);
+    }
+
+    return this._gomas.splice(targetIndex, 1)[0];
   }
 }
 

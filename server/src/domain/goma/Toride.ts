@@ -5,13 +5,10 @@ import LEVEL from '../constant/LEVEL';
 import GOMA from '../constant/GOMA';
 
 export default class Toride extends Goma {
-  constructor(
-    _level: LEVEL,
-    _side: SIDE,
-    _name: GOMA,
-    _coordinate: Coordinate,
-  ) {
-    super(_level, _side, _name, _coordinate);
+  protected _name: GOMA = GOMA.TORIDE;
+
+  constructor(level: LEVEL, side: SIDE) {
+    super(level, side);
   }
 
   arata(to: Coordinate): void {

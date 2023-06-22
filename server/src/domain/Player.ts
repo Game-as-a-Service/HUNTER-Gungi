@@ -1,12 +1,13 @@
 import SIDE from './constant/SIDE';
 import Gungi from './Gungi';
-import { PlayerData } from '../frameworks/data-services/GungiData';
 import GomaOki from './GomaOki';
 import DeadArea from './DeadArea';
 import Goma from './goma/Goma';
 import Coordinate from './Coordinate';
-import { ARATA_ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
+import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
 import GungiHan from './GungiHan';
+import { BOUNDARY } from './constant/GUNGI_HAN';
+import GOMA from './constant/GOMA';
 
 class Player {
   constructor(
@@ -51,28 +52,54 @@ class Player {
     this._gungi.winner = this._gungi.getOpponent(this);
   }
 
-  arata(goma: Goma, to: Coordinate, han: GungiHan) {
-    const limit = {
-      left: 1,
-      right: 9,
-      bottom: 1,
-      top: 9,
-    };
-
-    if (
-      to.x < limit.left ||
-      to.x > limit.right ||
-      to.y < limit.bottom ||
-      to.y > limit.top
-    ) {
-      throw new Error(ARATA_ERROR_MESSAGE.OUTSIDE_HAN);
+  arata(goma: GOMA, to: Coordinate, han: GungiHan) {
+    if (this.isOutOfBoundary(to)) {
+      throw new Error(ERROR_MESSAGE.OUTSIDE_HAN);
     }
 
     if (this.gomaOki.isEmpty()) {
-      throw new Error(ARATA_ERROR_MESSAGE.EMPTY_GOMAOKI);
+      throw new Error(ERROR_MESSAGE.EMPTY_GOMAOKI);
     }
 
-    han.addGoma(goma, to);
+    if (to.z > 0) {
+      if (!han.hasGomaAtBelow(to)) {
+        throw new Error(ERROR_MESSAGE.BELOW_NOT_EXIST_GOMA);
+      }
+
+      if (han.hasOSHOAtBelow(to)) {
+        throw new Error(ERROR_MESSAGE.CANNOT_SET_ON_OSHO);
+      }
+    }
+
+    if (this.isDestinationTooFar(han, to)) {
+      throw new Error(ERROR_MESSAGE.TOO_FAR);
+    }
+
+    const targetGoma = this.gomaOki.draw(goma);
+
+    han.addGoma(targetGoma, to);
+
+    return {
+      targetGoma,
+      targetCoordinate: to,
+    };
+  }
+
+  private isDestinationTooFar(han: GungiHan, to: Coordinate) {
+    const farthestGomaYCoordinate = han.getFarthestYCoordinate(this.side);
+    return (
+      (this.side === SIDE.WHITE && farthestGomaYCoordinate < to.y) ||
+      (this.side === SIDE.BLACK && farthestGomaYCoordinate > to.y)
+    );
+  }
+
+  private isOutOfBoundary(to: Coordinate) {
+    return (
+      to.x < BOUNDARY.LEFT ||
+      to.x > BOUNDARY.RIGHT ||
+      to.y < BOUNDARY.BOTTOM ||
+      to.y > BOUNDARY.TOP
+    );
   }
 }
 

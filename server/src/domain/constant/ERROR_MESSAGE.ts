@@ -1,8 +1,13 @@
-enum ARATA_ERROR_MESSAGE {
+enum ERROR_MESSAGE {
   'EMPTY_GOMAOKI' = '備用區沒棋不能 新',
   'OUTSIDE_HAN' = '不能放在棋盤外',
   'OVER_HEIGHT' = '不能疊超過高度',
   'TOO_FAR' = '不能超過我方最遠的棋子',
+  NOT_EXIST_GOMA = '沒有這個棋子',
+  NOT_YOUR_GOMA = '不是你的棋子',
+  BELOW_NOT_EXIST_GOMA = '下面沒有棋子不能疊',
+  CANNOT_SET_ON_OSHO = '不能放在帥上',
+  INVALID_SIDE = '無效的 side',
 }
 
-export { ARATA_ERROR_MESSAGE };
+export { ERROR_MESSAGE };
