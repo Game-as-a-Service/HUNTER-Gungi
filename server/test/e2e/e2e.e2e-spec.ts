@@ -37,7 +37,7 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
     await db.collection('Gungi').deleteMany({});
     await client.close(true);
     await app.close();
@@ -89,7 +89,14 @@ describe('AppController (e2e)', () => {
     const gungiId = randomUUID();
     const gungiData: GungiData = {
       currentTurn: SIDE.WHITE,
-      gungiHan: { han: [] },
+      gungiHan: {
+        han: [
+          {
+            goma: { side: SIDE.WHITE, name: GOMA.HEI },
+            coordinate: { x: 0, y: 5, z: 0 },
+          },
+        ],
+      },
       history: [],
       _id: gungiId,
       level: LEVEL.BEGINNER,
@@ -98,7 +105,7 @@ describe('AppController (e2e)', () => {
           id: 'A',
           name: 'A',
           side: SIDE.WHITE,
-          gomaOki: { gomas: [] },
+          gomaOki: { gomas: [{ side: SIDE.WHITE, name: GOMA.HEI }] },
           deadArea: { gomas: [] },
         },
         {
@@ -125,21 +132,26 @@ describe('AppController (e2e)', () => {
       to: {
         x: 1,
         y: 1,
-        z: 1,
+        z: 0,
       },
     };
 
     // request
-    await request(app.getHttpServer())
+    const response = await request(app.getHttpServer())
       .post(`/gungi/${gungiId}/arata`)
       .send(body)
-      .expect(200)
-      .expect({
-        to: {
-          x: 1,
-          y: 1,
-          z: 1,
-        },
-      });
+      .expect(200);
+
+    expect(response.body).toEqual({
+      goma: {
+        name: 'HEI',
+        side: 'WHITE',
+      },
+      to: {
+        x: 1,
+        y: 1,
+        z: 0,
+      },
+    });
   });
 });
