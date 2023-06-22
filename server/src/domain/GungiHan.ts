@@ -77,6 +77,24 @@ class GungiHan {
     return osho !== -1;
   }
 
+  getAllGoma() {
+    const gomas: GungiHanGoma[] = [];
+    this._han.forEach((row, x) =>
+      row.forEach((col, y) =>
+        col.forEach(
+          (goma, z) =>
+            goma &&
+            gomas.push({
+              goma,
+              coordinate: new Coordinate(x, y, z),
+            }),
+        ),
+      ),
+    );
+
+    return gomas;
+  }
+
   private decideCurrentFarthestCoordinate(
     side: SIDE,
     y: number,

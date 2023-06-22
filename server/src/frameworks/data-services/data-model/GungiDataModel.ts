@@ -1,5 +1,6 @@
 import Gungi from '../../../domain/Gungi';
 import {
+  CoordinateData,
   DeadAreaData,
   GomaData,
   GomaOkiData,
@@ -7,7 +8,7 @@ import {
   PlayerData,
 } from 'src/frameworks/data-services/GungiData';
 import Player from '../../../domain/Player';
-import GungiHan from '../../../domain/GungiHan';
+import GungiHan, { GungiHanGoma } from '../../../domain/GungiHan';
 import GomaOki from '../../../domain/GomaOki';
 import LEVEL from '../../../domain/constant/LEVEL';
 import Goma from '../../../domain/goma/Goma';
@@ -21,7 +22,7 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export default class GungiDataModel implements DataModel<Gungi, GungiData> {
   toData(gungi: Gungi): GungiData {
-    const gungiData = this.gungiHanToData(gungi.gungiHan);
+    const gungiHanData = this.gungiHanToData(gungi.gungiHan);
     const senteData = this.playerToData(gungi.sente);
     const goteData = this.playerToData(gungi.gote);
     const senteDeadArea = this.deadAreaToData(gungi.senteDeadArea);
@@ -35,7 +36,7 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
     return {
       _id: gungi.id,
       currentTurn,
-      gungiHan: gungiData,
+      gungiHan: gungiHanData,
       history: [],
       level,
       winner,
@@ -70,21 +71,20 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
   private createGungiHan(rawGungi: GungiData): GungiHan {
     const level = rawGungi.level;
 
-    const gomas = rawGungi.gungiHan.han.map((goma) => {
-      return this.createGoma(level, goma);
-    });
-    return new GungiHan(gomas);
+    const gomas = rawGungi.gungiHan.han.map<GungiHanGoma>(
+      ({ goma, coordinate }) => ({
+        goma: this.createGoma(level, goma),
+        coordinate: this.createCoordinate(coordinate),
+      }),
+    );
+
+    return new GungiHan(level, gomas);
   }
 
   private createGoma(level: LEVEL, gomaData: GomaData): Goma {
-    const { name, coordinate, side } = gomaData;
+    const { name, side } = gomaData;
 
-    return GomaFactory.create(
-      level,
-      side,
-      name,
-      new Coordinate(coordinate.x, coordinate.y, coordinate.z),
-    );
+    return GomaFactory.create(level, side, name);
   }
 
   private createPlayer(level: LEVEL, player: PlayerData) {
@@ -109,19 +109,18 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
     return new DeadArea(side, gomas);
   }
 
-  private gungiHanToData(gungiHan: GungiHan) {
-    const gomasData: GomaData[] = [];
+  private createCoordinate(coordinate: CoordinateData) {
+    return new Coordinate(coordinate.x, coordinate.y, coordinate.z);
+  }
 
-    gungiHan.han.forEach((yMap, x) => {
-      yMap.forEach((gomas, y) => {
-        gomas.forEach((goma) => {
-          gomasData.push(this.gomaToData(goma));
-        });
-      });
-    });
+  private gungiHanToData(gungiHan: GungiHan) {
+    const hanData = gungiHan.getAllGoma().map(({ goma, coordinate }) => ({
+      goma: this.gomaToData(goma),
+      coordinate: this.coordinateToData(coordinate),
+    }));
 
     return {
-      han: gomasData,
+      han: hanData,
     };
   }
 
@@ -129,7 +128,6 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
     return {
       side: goma.side,
       name: goma.name,
-      coordinate: goma.coordinate.toData(),
     };
   }
 
@@ -151,6 +149,14 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
   private gomaOkiToData(gomaOki: GomaOki) {
     return {
       gomas: gomaOki.gomas.map((goma) => this.gomaToData(goma)),
+    };
+  }
+
+  private coordinateToData(coordinate: Coordinate) {
+    return {
+      x: coordinate.x,
+      y: coordinate.y,
+      z: coordinate.z,
     };
   }
 }
