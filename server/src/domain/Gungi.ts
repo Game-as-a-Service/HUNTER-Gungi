@@ -7,8 +7,6 @@ import GOMA from './constant/GOMA';
 import Coordinate from './Coordinate';
 import { ArataEvent, Event, SurrenderEvent } from './events/Event';
 import DeadArea from './DeadArea';
-import Goma from './goma/Goma';
-import GomaFactory from './goma/GomaFactory';
 import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
 
 export default class Gungi {
@@ -26,8 +24,8 @@ export default class Gungi {
 
   private _currentTurn: Player;
 
-  get currentTurn(): Player {
-    return this._currentTurn;
+  get currentTurn(): SIDE {
+    return this._currentTurn.side;
   }
 
   private _senteGomaOki: GomaOki;
@@ -54,16 +52,6 @@ export default class Gungi {
     return this._goteDeadArea;
   }
 
-  private _loser: Player;
-
-  get loser(): Player {
-    return this._loser;
-  }
-
-  set loser(value: Player) {
-    this._loser = value;
-  }
-
   private _winner: Player;
 
   get winner(): Player {
@@ -80,8 +68,10 @@ export default class Gungi {
     return this._sente;
   }
 
-  set sente(value: Player) {
-    this._sente = value;
+  set sente(player: Player) {
+    this._sente = player;
+    this._senteDeadArea = player.deadArea;
+    this._senteGomaOki = player.gomaOki;
   }
 
   private _gote: Player;
@@ -90,8 +80,10 @@ export default class Gungi {
     return this._gote;
   }
 
-  set gote(value: Player) {
-    this._gote = value;
+  set gote(player: Player) {
+    this._gote = player;
+    this._goteDeadArea = player.deadArea;
+    this._goteGomaOki = player.gomaOki;
   }
 
   get id(): string {
@@ -104,10 +96,6 @@ export default class Gungi {
 
   get gungiHan(): GungiHan {
     return this._gungiHan;
-  }
-
-  set gungiHan(value: GungiHan) {
-    this._gungiHan = value;
   }
 
   setCurrentTurn(side: SIDE) {
@@ -130,8 +118,8 @@ export default class Gungi {
   }
 
   surrender(player: Player): Event[] {
-    if (this._currentTurn !== player) {
-      throw new Error('不是該回合的使用者');
+    if (!this.isYourTurn(player)) {
+      throw new Error(ERROR_MESSAGE.NOT_YOUR_TURN);
     }
 
     player.surrender();
@@ -146,6 +134,10 @@ export default class Gungi {
   }
 
   arata(player: Player, goma: { name: GOMA; side: SIDE }, to: Coordinate) {
+    if (!this.isYourTurn(player)) {
+      throw new Error(ERROR_MESSAGE.NOT_YOUR_TURN);
+    }
+
     if (player.side !== goma.side) {
       throw new Error(ERROR_MESSAGE.NOT_YOUR_GOMA);
     }
@@ -155,6 +147,8 @@ export default class Gungi {
       to,
       this._gungiHan,
     );
+
+    this._currentTurn = this.getOpponent(player);
 
     const event: ArataEvent = {
       name: 'Arata',
@@ -174,6 +168,10 @@ export default class Gungi {
     return this._players.find((p) => p !== player);
   }
 
+  private isYourTurn(player: Player) {
+    return this._currentTurn.side == player.side;
+  }
+
   private setSenteGote(players: Player[]) {
     players.forEach((player) => {
       switch (player.side) {
@@ -190,7 +188,7 @@ export default class Gungi {
           break;
         }
         default: {
-          throw new Error('沒有這個玩家');
+          throw new Error(ERROR_MESSAGE.INVALID_SIDE);
         }
       }
     });

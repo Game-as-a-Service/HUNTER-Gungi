@@ -48,11 +48,12 @@ describe('呼叫援軍', () => {
 
     const to = new Coordinate(5, 2, 0);
     when_arata_at_han(gungi, whitePlayer, targetGoma, to);
-    const expectedGoma = gungiHan.findGoma(to);
 
+    const expectedGoma = gungiHan.findGoma(to);
     expect(expectedGoma.name).toBe(targetGoma.name);
     expect(expectedGoma.side).toBe(targetGoma.side);
     expect(whiteGomaOki.isEmpty()).toBeTruthy();
+    expect(gungi.currentTurn).toBe(SIDE.BLACK);
   });
   it('呼叫援軍 小', () => {
     const { whitePlayer, gungi, whiteGomaOki, gungiHan, targetGoma } =
@@ -74,11 +75,12 @@ describe('呼叫援軍', () => {
 
     const to = new Coordinate(6, 2, 0);
     when_arata_at_han(gungi, whitePlayer, targetGoma, to);
-    const expectedGoma = gungiHan.findGoma(to);
 
+    const expectedGoma = gungiHan.findGoma(to);
     expect(expectedGoma.name).toBe(targetGoma.name);
     expect(expectedGoma.side).toBe(targetGoma.side);
     expect(whiteGomaOki.isEmpty()).toBeTruthy();
+    expect(gungi.currentTurn).toBe(SIDE.BLACK);
   });
 });
 

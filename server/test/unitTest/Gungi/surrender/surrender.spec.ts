@@ -5,10 +5,11 @@ import GomaOki from '../../../../src/domain/GomaOki';
 import DeadArea from '../../../../src/domain/DeadArea';
 import Gungi from '../../../../src/domain/Gungi';
 import GungiHan from '../../../../src/domain/GungiHan';
+import { ERROR_MESSAGE } from '../../../../src/domain/constant/ERROR_MESSAGE';
 
 describe('Gungi', () => {
+  const level = LEVEL.BEGINNER;
   it('使用者該回合使用者可以投降', () => {
-    const level = LEVEL.BEGINNER;
     const playerA = new Player(
       'A',
       'A',
@@ -39,8 +40,6 @@ describe('Gungi', () => {
     expect(gungi.winner).toBe(playerB);
   });
   it('使用者不是該回合使用者不可以投降', () => {
-    const level = LEVEL.BEGINNER;
-
     const playerA = new Player(
       'A',
 
@@ -68,6 +67,6 @@ describe('Gungi', () => {
     gungi.gote = playerB;
     gungi.setCurrentTurn(SIDE.BLACK);
 
-    expect(() => gungi.surrender(playerA)).toThrow('不是該回合的使用者');
+    expect(() => gungi.surrender(playerA)).toThrow(ERROR_MESSAGE.NOT_YOUR_TURN);
   });
 });

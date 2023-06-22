@@ -30,7 +30,7 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
     const senteGomaOkiData = this.gomaOkiToData(gungi.senteGomaOki);
     const goteGomaOkiData = this.gomaOkiToData(gungi.goteGomaOki);
     const level = gungi.level;
-    const currentTurn = gungi.currentTurn.side;
+    const currentTurn = gungi.currentTurn;
     const winner = gungi.winner?.side;
 
     return {

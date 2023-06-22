@@ -26,6 +26,7 @@ function given_levelBeginner_Gungi(parameters: {
     name: GOMA;
     side: SIDE;
   };
+  currentTurn?: SIDE;
 }) {
   const gungiId = randomUUID();
 
@@ -73,6 +74,11 @@ function given_levelBeginner_Gungi(parameters: {
   );
 
   const gungi = new Gungi(gungiId, level, [playerA, playerB], gungiHan);
+
+  gungi.setCurrentTurn(SIDE.WHITE);
+  if (parameters.currentTurn) {
+    gungi.setCurrentTurn(parameters.currentTurn);
+  }
 
   return {
     blackPlayer: playerA,

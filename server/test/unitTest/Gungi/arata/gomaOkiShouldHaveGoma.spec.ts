@@ -3,8 +3,6 @@ import GOMA from '../../../../src/domain/constant/GOMA';
 import SIDE from '../../../../src/domain/constant/SIDE';
 import { ERROR_MESSAGE } from '../../../../src/domain/constant/ERROR_MESSAGE';
 import Coordinate from '../../../../src/domain/Coordinate';
-import Gungi from '../../../../src/domain/Gungi';
-import Player from '../../../../src/domain/Player';
 import when_arata_at_han from './helper/whenArataTo';
 
 describe('備用區要有棋子', () => {
@@ -39,7 +37,7 @@ describe('備用區要有棋子', () => {
   });
 
   function given_empty_gomaOki_targetGoma(goma: GOMA) {
-    const { whitePlayer, gungi,  targetGoma } = given_levelBeginner_Gungi({
+    const { whitePlayer, gungi, targetGoma } = given_levelBeginner_Gungi({
       blackGomaOki: [],
       whiteGomaOki: [],
       hanGomas: [],
@@ -48,6 +46,6 @@ describe('備用區要有棋子', () => {
         side: SIDE.WHITE,
       },
     });
-    return { whitePlayer, gungi,  targetGoma };
+    return { whitePlayer, gungi, targetGoma };
   }
 });

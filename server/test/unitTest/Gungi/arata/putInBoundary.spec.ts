@@ -94,6 +94,7 @@ describe('不能超過 我方最遠的棋子 ', () => {
   function given_farthest_goma_at(
     side: SIDE,
     farthestGomaCoordinate: Coordinate,
+    currentTurn?: SIDE,
   ) {
     let blackGomaOki: GOMA[] = [];
     let whiteGomaOki: GOMA[] = [];
@@ -122,6 +123,7 @@ describe('不能超過 我方最遠的棋子 ', () => {
           name: GOMA.UMA,
           side,
         },
+        currentTurn,
       });
 
     const player = side === SIDE.BLACK ? blackPlayer : whitePlayer;
@@ -144,6 +146,7 @@ describe('不能超過 我方最遠的棋子 ', () => {
     const { player, gungi, targetGoma } = given_farthest_goma_at(
       SIDE.BLACK,
       new Coordinate(5, 2, 0),
+      SIDE.BLACK,
     );
 
     expect(() =>

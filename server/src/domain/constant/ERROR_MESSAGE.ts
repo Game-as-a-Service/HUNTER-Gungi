@@ -8,6 +8,7 @@ enum ERROR_MESSAGE {
   BELOW_NOT_EXIST_GOMA = '下面沒有棋子不能疊',
   CANNOT_SET_ON_OSHO = '不能放在帥上',
   INVALID_SIDE = '無效的 side',
+  NOT_YOUR_TURN = '不是你的回合',
 }
 
 export { ERROR_MESSAGE };
