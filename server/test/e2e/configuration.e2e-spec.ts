@@ -15,8 +15,12 @@ import Player from '../../src/domain/Player';
 import GungiHan from '../../src/domain/GungiHan';
 import GomaOki from '../../src/domain/GomaOki';
 import DeadArea from '../../src/domain/DeadArea';
-import GOMA from '../../src/domain/constant/GOMA';
 import { ConfigurationView } from '../../src/gateway/presenter/ConfigurationPresenter';
+import {
+  BLACK_HAN_CONFIG,
+  OKI_CONFIG,
+  WHITE_HAN_CONFIG,
+} from '../../src/domain/constant/constants';
 
 dotenv.config();
 
@@ -90,38 +94,59 @@ describe('棋盤配置 (e2e)', () => {
   }
 
   /** 預期盤棋上的棋子 */
-  function expectGomaInHan(
-    view: ConfigurationView,
-    side: SIDE,
-    name: GOMA,
-    x: number,
-    y: number,
-    z: number,
-  ) {
-    const count = view.han.filter(
-      (item) =>
-        item.goma.side === side &&
-        item.goma.name === name &&
-        item.coordinate.x === x &&
-        item.coordinate.y === y &&
-        item.coordinate.z === z,
-    ).length;
+  function expectGomaInHan(view: ConfigurationView) {
+    WHITE_HAN_CONFIG.forEach((config) => {
+      const count = view.han.filter(
+        (item) =>
+          item.goma.side === SIDE.WHITE &&
+          item.goma.name === config.name &&
+          item.coordinate.x === config.x &&
+          item.coordinate.y === config.y &&
+          item.coordinate.z === config.z,
+      ).length;
+      expect(count).toEqual(1);
+    });
 
-    expect(count).toEqual(1);
+    BLACK_HAN_CONFIG.forEach((config) => {
+      const count = view.han.filter(
+        (item) =>
+          item.goma.side === SIDE.BLACK &&
+          item.goma.name === config.name &&
+          item.coordinate.x === config.x &&
+          item.coordinate.y === config.y &&
+          item.coordinate.z === config.z,
+      ).length;
+      expect(count).toEqual(1);
+    });
   }
 
   /** 預期備用區棋子的數量 */
-  function expectGomaCountInOki(
-    view: ConfigurationView,
-    side: SIDE,
-    name: GOMA,
-    count: number,
-  ) {
-    const oki = side === SIDE.WHITE ? view.goteGomaOki : view.senteGomOki;
+  function expectGomaCountInOki(view: ConfigurationView) {
+    const set = new Set(OKI_CONFIG);
 
-    expect(
-      oki.filter((goma) => goma.side === side && goma.name === name).length,
-    ).toEqual(count);
+    set.forEach((item) => {
+      const expectCount = OKI_CONFIG.filter(
+        (config) => config.name === item.name,
+      ).length;
+
+      const okiCount = view.senteGomOki.filter(
+        (goma) => goma.side === SIDE.BLACK && goma.name === item.name,
+      ).length;
+
+      expect(okiCount).toEqual(expectCount);
+    });
+
+    set.forEach((item) => {
+      const expectCount = OKI_CONFIG.filter(
+        (config) => config.name === item.name,
+      ).length;
+
+      const okiCount = view.goteGomaOki.filter(
+        (goma) => goma.side === SIDE.WHITE && goma.name === item.name,
+      ).length;
+
+      expect(okiCount).toEqual(expectCount);
+    });
   }
 
   describe('/(POST) gungi/:gungiId/configuration', () => {
@@ -135,55 +160,8 @@ describe('棋盤配置 (e2e)', () => {
       const view: ConfigurationView = response.body;
 
       // Then
-      let side = SIDE.WHITE;
-      expectGomaInHan(view, side, GOMA.OSHO, 4, 0, 0);
-      expectGomaCountInOki(view, side, GOMA.OSHO, 0);
-      expectGomaInHan(view, side, GOMA.HEI, 0, 2, 0);
-      expectGomaInHan(view, side, GOMA.HEI, 4, 2, 0);
-      expectGomaInHan(view, side, GOMA.HEI, 8, 2, 0);
-      expectGomaCountInOki(view, side, GOMA.HEI, 1);
-      expectGomaCountInOki(view, side, GOMA.SHO, 2);
-      expectGomaCountInOki(view, side, GOMA.UMA, 2);
-      expectGomaInHan(view, side, GOMA.SHINOBI, 1, 1, 0);
-      expectGomaInHan(view, side, GOMA.SHINOBI, 7, 1, 0);
-      expectGomaCountInOki(view, side, GOMA.SHINOBI, 0);
-      expectGomaInHan(view, side, GOMA.YARI, 4, 1, 0);
-      expectGomaCountInOki(view, side, GOMA.YARI, 2);
-      expectGomaInHan(view, side, GOMA.CHU, 5, 0, 0);
-      expectGomaCountInOki(view, side, GOMA.CHU, 0);
-      expectGomaInHan(view, side, GOMA.DAI, 3, 0, 0);
-      expectGomaCountInOki(view, side, GOMA.DAI, 0);
-      expectGomaInHan(view, side, GOMA.SHI, 3, 2, 0);
-      expectGomaInHan(view, side, GOMA.SHI, 5, 2, 0);
-      expectGomaCountInOki(view, side, GOMA.SHI, 0);
-      expectGomaInHan(view, side, GOMA.TORIDE, 2, 2, 0);
-      expectGomaInHan(view, side, GOMA.TORIDE, 6, 2, 0);
-      expectGomaCountInOki(view, side, GOMA.TORIDE, 0);
-
-      side = SIDE.BLACK;
-      expectGomaInHan(view, side, GOMA.OSHO, 4, 8, 0);
-      expectGomaCountInOki(view, side, GOMA.OSHO, 0);
-      expectGomaInHan(view, side, GOMA.HEI, 0, 6, 0);
-      expectGomaInHan(view, side, GOMA.HEI, 4, 6, 0);
-      expectGomaInHan(view, side, GOMA.HEI, 8, 6, 0);
-      expectGomaCountInOki(view, side, GOMA.HEI, 1);
-      expectGomaCountInOki(view, side, GOMA.SHO, 2);
-      expectGomaCountInOki(view, side, GOMA.UMA, 2);
-      expectGomaInHan(view, side, GOMA.SHINOBI, 1, 7, 0);
-      expectGomaInHan(view, side, GOMA.SHINOBI, 7, 7, 0);
-      expectGomaCountInOki(view, side, GOMA.SHINOBI, 0);
-      expectGomaInHan(view, side, GOMA.YARI, 4, 7, 0);
-      expectGomaCountInOki(view, side, GOMA.YARI, 2);
-      expectGomaInHan(view, side, GOMA.CHU, 3, 8, 0);
-      expectGomaCountInOki(view, side, GOMA.CHU, 0);
-      expectGomaInHan(view, side, GOMA.DAI, 5, 8, 0);
-      expectGomaCountInOki(view, side, GOMA.DAI, 0);
-      expectGomaInHan(view, side, GOMA.SHI, 3, 6, 0);
-      expectGomaInHan(view, side, GOMA.SHI, 5, 6, 0);
-      expectGomaCountInOki(view, side, GOMA.SHI, 0);
-      expectGomaInHan(view, side, GOMA.TORIDE, 2, 6, 0);
-      expectGomaInHan(view, side, GOMA.TORIDE, 6, 6, 0);
-      expectGomaCountInOki(view, side, GOMA.TORIDE, 0);
+      expectGomaInHan(view);
+      expectGomaCountInOki(view);
     });
 
     it('重覆執行 (在不對的 GameState 呼叫)', async () => {
