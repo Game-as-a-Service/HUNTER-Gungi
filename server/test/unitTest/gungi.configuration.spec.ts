@@ -2,7 +2,12 @@ import Player from '../../src/domain/Player';
 import LEVEL from '../../src/domain/constant/LEVEL';
 import Gungi from '../../src/domain/Gungi';
 import GungiHan from '../../src/domain/GungiHan';
-import { EMPTY_GOMA } from '../../src/domain/constant/constants';
+import {
+  BLACK_HAN_CONFIG,
+  EMPTY_GOMA,
+  OKI_CONFIG,
+  WHITE_HAN_CONFIG,
+} from '../../src/domain/constant/constants';
 import SIDE from '../../src/domain/constant/SIDE';
 import GomaOki from '../../src/domain/GomaOki';
 import DeadArea from '../../src/domain/DeadArea';
@@ -12,7 +17,7 @@ import GOMA from '../../src/domain/constant/GOMA';
 import Coordinate from '../../src/domain/Coordinate';
 
 describe('Gungi', () => {
-  function given() {
+  function given_gungi_and_furigoma_done() {
     const level = LEVEL.BEGINNER;
     const playerA = new Player(
       'A',
@@ -45,34 +50,35 @@ describe('Gungi', () => {
   }
 
   /** 預期盤棋上的棋子 */
-  function expectGomaInHan(
-    gungi: Gungi,
-    side: SIDE,
-    name: GOMA,
-    x: number,
-    y: number,
-    z: number,
-  ) {
-    const coordinate = new Coordinate(x, y, z);
-    const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
+  function expectGomaInHan(side: SIDE, name: GOMA, gungi: Gungi) {
+    getHanConfig(side)
+      .filter((config) => config.name === name)
+      .forEach((data) => {
+        const coordinate = new Coordinate(data.x, data.y, data.z);
+        const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, data.name);
 
-    expect(gungi.gungiHan.findGoma(coordinate)).toEqual(goma);
+        expect(gungi.gungiHan.findGoma(coordinate)).toEqual(goma);
+      });
   }
 
   /** 預期備用區棋子的數量 */
-  function expectGomaCountInOki(
-    gungi: Gungi,
-    side: SIDE,
-    name: GOMA,
-    count: number,
-  ) {
+  function expectGomaCountInOki(name: GOMA, gungi: Gungi, side: SIDE) {
+    const expectCount = OKI_CONFIG.filter(
+      (config) => config.name === name,
+    ).length;
+
     const gomaOki =
       gungi.sente.side === side ? gungi.sente.gomaOki : gungi.gote.gomaOki;
 
-    expect(
-      gomaOki.gomas.filter((goma) => goma.side === side && goma.name === name)
-        .length,
-    ).toBe(count);
+    const count = gomaOki.gomas.filter(
+      (goma) => goma.side === side && goma.name === name,
+    ).length;
+
+    expect(count).toBe(expectCount);
+  }
+
+  function getHanConfig(side: SIDE) {
+    return side === SIDE.BLACK ? BLACK_HAN_CONFIG : WHITE_HAN_CONFIG;
   }
 
   describe('配置盤面', () => {
@@ -85,7 +91,7 @@ describe('Gungi', () => {
         const otherCoordinate = new Coordinate(1, 1, 1);
 
         // Given
-        const { gungi } = given();
+        const { gungi } = given_gungi_and_furigoma_done();
 
         // 目標位置本來是空的
         expect(gungi.gungiHan.findGoma(targetCoordinate)).toEqual(EMPTY_GOMA);
@@ -110,218 +116,304 @@ describe('Gungi', () => {
     });
 
     describe('入門級別 棋子要在指定位置', () => {
-      type DataSet = {
-        jestName: string;
-        setData: {
-          han: {
-            side: SIDE;
-            name: GOMA;
-            x: number;
-            y: number;
-            z: number;
-          }[];
-          oki: {
-            side: SIDE;
-            name: GOMA;
-            count: number;
-          };
-        };
-      };
-
-      const dataSet: DataSet[] = [];
-
-      const createSet = (jestName: string, side: SIDE, name: GOMA): DataSet => {
-        return {
-          jestName: jestName,
-          setData: {
-            han: [],
-            oki: {
-              side,
-              name,
-              count: -1,
-            },
-          },
-        };
-      };
-
-      const addGomaToHan = (
-        side: SIDE,
-        name: GOMA,
-        x: number,
-        y: number,
-        z: number,
-      ) => {
-        set.setData.han.push({ side, name, x, y, z });
-      };
-
-      let jestName = '白色「帥」已配置！';
-      let side = SIDE.WHITE;
-      let name = GOMA.OSHO;
-      let set: DataSet = createSet(jestName, side, name);
-      addGomaToHan(side, name, 4, 0, 0);
-      set.setData.oki.count = 0;
-      dataSet.push(set);
-
-      jestName = '白色「兵」已配置！';
-      name = GOMA.HEI;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 0, 2, 0);
-      addGomaToHan(side, name, 4, 2, 0);
-      addGomaToHan(side, name, 8, 2, 0);
-      set.setData.oki.count = 1;
-      dataSet.push(set);
-
-      jestName = '白色「小」已配置！';
-      name = GOMA.SHO;
-      set = createSet(jestName, side, name);
-      set.setData.oki.count = 2;
-      dataSet.push(set);
-
-      jestName = '白色「馬」已配置！';
-      name = GOMA.UMA;
-      set = createSet(jestName, side, name);
-      set.setData.oki.count = 2;
-      dataSet.push(set);
-
-      jestName = '白色「忍」已配置！';
-      name = GOMA.SHINOBI;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 1, 1, 0);
-      addGomaToHan(side, name, 7, 1, 0);
-      set.setData.oki.count = 0;
-      dataSet.push(set);
-
-      jestName = '白色「槍」已配置！';
-      name = GOMA.YARI;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 4, 1, 0);
-      set.setData.oki.count = 2;
-      dataSet.push(set);
-
-      jestName = '白色「中」已配置！';
-      name = GOMA.CHU;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 5, 0, 0);
-      set.setData.oki.count = 0;
-      dataSet.push(set);
-
-      jestName = '白色「大」已配置！';
-      name = GOMA.DAI;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 3, 0, 0);
-      set.setData.oki.count = 0;
-      dataSet.push(set);
-
-      jestName = '白色「侍」已配置！';
-      name = GOMA.SHI;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 3, 2, 0);
-      addGomaToHan(side, name, 5, 2, 0);
-      set.setData.oki.count = 0;
-      dataSet.push(set);
-
-      jestName = '白色「砦」已配置！（ㄓㄞˋ）';
-      name = GOMA.TORIDE;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 2, 2, 0);
-      addGomaToHan(side, name, 6, 2, 0);
-      set.setData.oki.count = 0;
-      dataSet.push(set);
-
-      jestName = '黑色「帥」已配置！';
-      side = SIDE.BLACK;
-      name = GOMA.OSHO;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 4, 8, 0);
-      set.setData.oki.count = 0;
-      dataSet.push(set);
-
-      jestName = '黑色「兵」已配置！';
-      name = GOMA.HEI;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 0, 6, 0);
-      addGomaToHan(side, name, 4, 6, 0);
-      addGomaToHan(side, name, 8, 6, 0);
-      set.setData.oki.count = 1;
-      dataSet.push(set);
-
-      jestName = '黑色「小」已配置！';
-      name = GOMA.SHO;
-      set = createSet(jestName, side, name);
-      set.setData.oki.count = 2;
-      dataSet.push(set);
-
-      jestName = '黑色「馬」已配置！';
-      name = GOMA.UMA;
-      set = createSet(jestName, side, name);
-      set.setData.oki.count = 2;
-      dataSet.push(set);
-
-      jestName = '黑色「忍」已配置！';
-      name = GOMA.SHINOBI;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 1, 7, 0);
-      addGomaToHan(side, name, 7, 7, 0);
-      set.setData.oki.count = 0;
-      dataSet.push(set);
-
-      jestName = '黑色「槍」已配置！';
-      name = GOMA.YARI;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 4, 7, 0);
-      set.setData.oki.count = 2;
-      dataSet.push(set);
-
-      jestName = '黑色「中」已配置！';
-      name = GOMA.CHU;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 3, 8, 0);
-      set.setData.oki.count = 0;
-      dataSet.push(set);
-
-      jestName = '黑色「大」已配置！';
-      name = GOMA.DAI;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 5, 8, 0);
-      set.setData.oki.count = 0;
-      dataSet.push(set);
-
-      jestName = '黑色「侍」已配置！';
-      name = GOMA.SHI;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 3, 6, 0);
-      addGomaToHan(side, name, 5, 6, 0);
-      set.setData.oki.count = 0;
-      dataSet.push(set);
-
-      jestName = '黑色「砦」已配置！（ㄓㄞˋ）';
-      name = GOMA.TORIDE;
-      set = createSet(jestName, side, name);
-      addGomaToHan(side, name, 2, 6, 0);
-      addGomaToHan(side, name, 6, 6, 0);
-      set.setData.oki.count = 0;
-      dataSet.push(set);
-
-      it.each(dataSet)('$jestName', ({ setData }) => {
+      it('白色「帥」已配置！', () => {
         // Given
-        const { gungi } = given();
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.WHITE;
+        const name = GOMA.OSHO;
 
         // When
         gungi.setConfiguration();
 
         // Then
-        // 棋盤上
-        setData.han.forEach((data) => {
-          expectGomaInHan(gungi, data.side, data.name, data.x, data.y, data.z);
-        });
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
 
-        // 備用區
-        expectGomaCountInOki(
-          gungi,
-          setData.oki.side,
-          setData.oki.name,
-          setData.oki.count,
-        );
+      it('白色「兵」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.WHITE;
+        const name = GOMA.HEI;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('白色「小」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.WHITE;
+        const name = GOMA.SHO;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('白色「馬」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.WHITE;
+        const name = GOMA.UMA;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('白色「忍」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.WHITE;
+        const name = GOMA.SHINOBI;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('白色「槍」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.WHITE;
+        const name = GOMA.YARI;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('白色「中」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.WHITE;
+        const name = GOMA.CHU;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('白色「大」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.WHITE;
+        const name = GOMA.DAI;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('白色「侍」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.WHITE;
+        const name = GOMA.SHI;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('白色「砦」已配置！（ㄓㄞˋ）', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.WHITE;
+        const name = GOMA.TORIDE;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('黑色「帥」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.BLACK;
+        const name = GOMA.OSHO;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('黑色「兵」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.BLACK;
+        const name = GOMA.HEI;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('黑色「小」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.BLACK;
+        const name = GOMA.SHO;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('黑色「馬」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.BLACK;
+        const name = GOMA.UMA;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('黑色「忍」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.BLACK;
+        const name = GOMA.SHINOBI;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('黑色「槍」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.BLACK;
+        const name = GOMA.YARI;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('黑色「中」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.BLACK;
+        const name = GOMA.CHU;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('黑色「大」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.BLACK;
+        const name = GOMA.DAI;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('黑色「侍」已配置！', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.BLACK;
+        const name = GOMA.SHI;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
+      });
+
+      it('黑色「砦」已配置！（ㄓㄞˋ）', () => {
+        // Given
+        const { gungi } = given_gungi_and_furigoma_done();
+
+        const side = SIDE.BLACK;
+        const name = GOMA.TORIDE;
+
+        // When
+        gungi.setConfiguration();
+
+        // Then
+        expectGomaInHan(side, name, gungi);
+        expectGomaCountInOki(name, gungi, side);
       });
     });
   });
