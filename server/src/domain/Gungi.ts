@@ -16,6 +16,7 @@ import {
   OKI_CONFIG,
   BLACK_HAN_CONFIG,
 } from './constant/constants';
+import { GameState } from './constant/GameState';
 
 class Gungi {
   constructor(
@@ -115,6 +116,22 @@ class Gungi {
 
   set gote(value: Player) {
     this._gote = value;
+  }
+
+  getState(): GameState {
+    if (this.sente === null && this.gote === null) {
+      return GameState.GAME_INIT;
+    }
+
+    if (this.gungiHan.getAllGoma().length === 0) {
+      return GameState.FURIGOMA_DONE;
+    }
+
+    if (this.winner === null) {
+      return GameState.GAME_START;
+    }
+
+    return GameState.GAME_END;
   }
 
   setCurrentTurn(side: SIDE) {

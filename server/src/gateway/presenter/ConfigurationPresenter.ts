@@ -1,13 +1,6 @@
 import Presenter from '../../usecases/Presenter';
 import { Event } from '../../domain/events/Event';
 import { ConfigurationEvent } from '../../domain/events/ConfigurationEvent';
-import {
-  EMPTY_GOMA,
-  HAN_X_MAX,
-  HAN_Y_MAX,
-  HAN_Z_MAX,
-} from '../../domain/constant/constants';
-import Coordinate from '../../domain/Coordinate';
 
 export interface Goma {
   name: string; // 棋子的名稱

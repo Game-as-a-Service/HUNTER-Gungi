@@ -20,7 +20,7 @@ import { ConfigurationView } from '../../src/gateway/presenter/ConfigurationPres
 
 dotenv.config();
 
-describe.only('棋盤配置 (e2e)', () => {
+describe('棋盤配置 (e2e)', () => {
   let app: INestApplication;
   let gungiRepository: GungiRepository;
   let db: Db;
@@ -77,7 +77,7 @@ describe.only('棋盤配置 (e2e)', () => {
     return gungi.id;
   }
 
-  async function configuration(gungiId): Promise<ConfigurationView> {
+  async function configuration(gungiId): Promise<request.Response> {
     const body = {
       playerId: 'A',
     };
@@ -86,101 +86,116 @@ describe.only('棋盤配置 (e2e)', () => {
       .post(`/gungi/${gungiId}/configuration`)
       .send(body);
 
-    expect(response.status).toEqual(200);
-    return response.body;
+    return response;
   }
 
-  it('/(POST) gungi/:gungiId/configuration', async () => {
-    /** 預期盤棋上的棋子 */
-    function expectGomaInHan(
-      view: ConfigurationView,
-      side: SIDE,
-      name: GOMA,
-      x: number,
-      y: number,
-      z: number,
-    ) {
-      const count = view.han.filter(
-        (item) =>
-          item.goma.side === side &&
-          item.goma.name === name &&
-          item.coordinate.x === x &&
-          item.coordinate.y === y &&
-          item.coordinate.z === z,
-      ).length;
+  /** 預期盤棋上的棋子 */
+  function expectGomaInHan(
+    view: ConfigurationView,
+    side: SIDE,
+    name: GOMA,
+    x: number,
+    y: number,
+    z: number,
+  ) {
+    const count = view.han.filter(
+      (item) =>
+        item.goma.side === side &&
+        item.goma.name === name &&
+        item.coordinate.x === x &&
+        item.coordinate.y === y &&
+        item.coordinate.z === z,
+    ).length;
 
-      expect(count).toEqual(1);
-    }
+    expect(count).toEqual(1);
+  }
 
-    /** 預期備用區棋子的數量 */
-    function expectGomaCountInOki(
-      view: ConfigurationView,
-      side: SIDE,
-      name: GOMA,
-      count: number,
-    ) {
-      const oki = side === SIDE.WHITE ? view.goteGomaOki : view.senteGomOki;
+  /** 預期備用區棋子的數量 */
+  function expectGomaCountInOki(
+    view: ConfigurationView,
+    side: SIDE,
+    name: GOMA,
+    count: number,
+  ) {
+    const oki = side === SIDE.WHITE ? view.goteGomaOki : view.senteGomOki;
 
-      expect(
-        oki.filter((goma) => goma.side === side && goma.name === name).length,
-      ).toEqual(count);
-    }
+    expect(
+      oki.filter((goma) => goma.side === side && goma.name === name).length,
+    ).toEqual(count);
+  }
 
-    // Given
-    const gungiId = await given_gungi_and_furigoma_done();
+  describe('/(POST) gungi/:gungiId/configuration', () => {
+    it('基本流程 Happy Path', async () => {
+      // Given
+      const gungiId = await given_gungi_and_furigoma_done();
 
-    // When
-    const view: ConfigurationView = await configuration(gungiId);
+      // When
+      const response = await configuration(gungiId);
+      expect(response.status).toEqual(200);
+      const view: ConfigurationView = response.body;
 
-    // Then
-    let side = SIDE.WHITE;
-    expectGomaInHan(view, side, GOMA.OSHO, 4, 0, 0);
-    expectGomaCountInOki(view, side, GOMA.OSHO, 0);
-    expectGomaInHan(view, side, GOMA.HEI, 0, 2, 0);
-    expectGomaInHan(view, side, GOMA.HEI, 4, 2, 0);
-    expectGomaInHan(view, side, GOMA.HEI, 8, 2, 0);
-    expectGomaCountInOki(view, side, GOMA.HEI, 1);
-    expectGomaCountInOki(view, side, GOMA.SHO, 2);
-    expectGomaCountInOki(view, side, GOMA.UMA, 2);
-    expectGomaInHan(view, side, GOMA.SHINOBI, 1, 1, 0);
-    expectGomaInHan(view, side, GOMA.SHINOBI, 7, 1, 0);
-    expectGomaCountInOki(view, side, GOMA.SHINOBI, 0);
-    expectGomaInHan(view, side, GOMA.YARI, 4, 1, 0);
-    expectGomaCountInOki(view, side, GOMA.YARI, 2);
-    expectGomaInHan(view, side, GOMA.CHU, 5, 0, 0);
-    expectGomaCountInOki(view, side, GOMA.CHU, 0);
-    expectGomaInHan(view, side, GOMA.DAI, 3, 0, 0);
-    expectGomaCountInOki(view, side, GOMA.DAI, 0);
-    expectGomaInHan(view, side, GOMA.SHI, 3, 2, 0);
-    expectGomaInHan(view, side, GOMA.SHI, 5, 2, 0);
-    expectGomaCountInOki(view, side, GOMA.SHI, 0);
-    expectGomaInHan(view, side, GOMA.TORIDE, 2, 2, 0);
-    expectGomaInHan(view, side, GOMA.TORIDE, 6, 2, 0);
-    expectGomaCountInOki(view, side, GOMA.TORIDE, 0);
+      // Then
+      let side = SIDE.WHITE;
+      expectGomaInHan(view, side, GOMA.OSHO, 4, 0, 0);
+      expectGomaCountInOki(view, side, GOMA.OSHO, 0);
+      expectGomaInHan(view, side, GOMA.HEI, 0, 2, 0);
+      expectGomaInHan(view, side, GOMA.HEI, 4, 2, 0);
+      expectGomaInHan(view, side, GOMA.HEI, 8, 2, 0);
+      expectGomaCountInOki(view, side, GOMA.HEI, 1);
+      expectGomaCountInOki(view, side, GOMA.SHO, 2);
+      expectGomaCountInOki(view, side, GOMA.UMA, 2);
+      expectGomaInHan(view, side, GOMA.SHINOBI, 1, 1, 0);
+      expectGomaInHan(view, side, GOMA.SHINOBI, 7, 1, 0);
+      expectGomaCountInOki(view, side, GOMA.SHINOBI, 0);
+      expectGomaInHan(view, side, GOMA.YARI, 4, 1, 0);
+      expectGomaCountInOki(view, side, GOMA.YARI, 2);
+      expectGomaInHan(view, side, GOMA.CHU, 5, 0, 0);
+      expectGomaCountInOki(view, side, GOMA.CHU, 0);
+      expectGomaInHan(view, side, GOMA.DAI, 3, 0, 0);
+      expectGomaCountInOki(view, side, GOMA.DAI, 0);
+      expectGomaInHan(view, side, GOMA.SHI, 3, 2, 0);
+      expectGomaInHan(view, side, GOMA.SHI, 5, 2, 0);
+      expectGomaCountInOki(view, side, GOMA.SHI, 0);
+      expectGomaInHan(view, side, GOMA.TORIDE, 2, 2, 0);
+      expectGomaInHan(view, side, GOMA.TORIDE, 6, 2, 0);
+      expectGomaCountInOki(view, side, GOMA.TORIDE, 0);
 
-    side = SIDE.BLACK;
-    expectGomaInHan(view, side, GOMA.OSHO, 4, 8, 0);
-    expectGomaCountInOki(view, side, GOMA.OSHO, 0);
-    expectGomaInHan(view, side, GOMA.HEI, 0, 6, 0);
-    expectGomaInHan(view, side, GOMA.HEI, 4, 6, 0);
-    expectGomaInHan(view, side, GOMA.HEI, 8, 6, 0);
-    expectGomaCountInOki(view, side, GOMA.HEI, 1);
-    expectGomaCountInOki(view, side, GOMA.SHO, 2);
-    expectGomaCountInOki(view, side, GOMA.UMA, 2);
-    expectGomaInHan(view, side, GOMA.SHINOBI, 1, 7, 0);
-    expectGomaInHan(view, side, GOMA.SHINOBI, 7, 7, 0);
-    expectGomaCountInOki(view, side, GOMA.SHINOBI, 0);
-    expectGomaInHan(view, side, GOMA.YARI, 4, 7, 0);
-    expectGomaCountInOki(view, side, GOMA.YARI, 2);
-    expectGomaInHan(view, side, GOMA.CHU, 3, 8, 0);
-    expectGomaCountInOki(view, side, GOMA.CHU, 0);
-    expectGomaInHan(view, side, GOMA.DAI, 5, 8, 0);
-    expectGomaCountInOki(view, side, GOMA.DAI, 0);
-    expectGomaInHan(view, side, GOMA.SHI, 3, 6, 0);
-    expectGomaInHan(view, side, GOMA.SHI, 5, 6, 0);
-    expectGomaCountInOki(view, side, GOMA.SHI, 0);
-    expectGomaInHan(view, side, GOMA.TORIDE, 2, 6, 0);
-    expectGomaInHan(view, side, GOMA.TORIDE, 6, 6, 0);
-    expectGomaCountInOki(view, side, GOMA.TORIDE, 0);
+      side = SIDE.BLACK;
+      expectGomaInHan(view, side, GOMA.OSHO, 4, 8, 0);
+      expectGomaCountInOki(view, side, GOMA.OSHO, 0);
+      expectGomaInHan(view, side, GOMA.HEI, 0, 6, 0);
+      expectGomaInHan(view, side, GOMA.HEI, 4, 6, 0);
+      expectGomaInHan(view, side, GOMA.HEI, 8, 6, 0);
+      expectGomaCountInOki(view, side, GOMA.HEI, 1);
+      expectGomaCountInOki(view, side, GOMA.SHO, 2);
+      expectGomaCountInOki(view, side, GOMA.UMA, 2);
+      expectGomaInHan(view, side, GOMA.SHINOBI, 1, 7, 0);
+      expectGomaInHan(view, side, GOMA.SHINOBI, 7, 7, 0);
+      expectGomaCountInOki(view, side, GOMA.SHINOBI, 0);
+      expectGomaInHan(view, side, GOMA.YARI, 4, 7, 0);
+      expectGomaCountInOki(view, side, GOMA.YARI, 2);
+      expectGomaInHan(view, side, GOMA.CHU, 3, 8, 0);
+      expectGomaCountInOki(view, side, GOMA.CHU, 0);
+      expectGomaInHan(view, side, GOMA.DAI, 5, 8, 0);
+      expectGomaCountInOki(view, side, GOMA.DAI, 0);
+      expectGomaInHan(view, side, GOMA.SHI, 3, 6, 0);
+      expectGomaInHan(view, side, GOMA.SHI, 5, 6, 0);
+      expectGomaCountInOki(view, side, GOMA.SHI, 0);
+      expectGomaInHan(view, side, GOMA.TORIDE, 2, 6, 0);
+      expectGomaInHan(view, side, GOMA.TORIDE, 6, 6, 0);
+      expectGomaCountInOki(view, side, GOMA.TORIDE, 0);
+    });
+
+    it('重覆執行 (在不對的 GameState 呼叫)', async () => {
+      // Given
+      const gungiId = await given_gungi_and_furigoma_done();
+
+      // When
+      await configuration(gungiId);
+      const response = await configuration(gungiId);
+
+      // Then
+      expect(response.status).toEqual(500);
+    });
   });
 });
