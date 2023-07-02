@@ -4,15 +4,12 @@ import IRepository from '../Repository';
 import Gungi from '../../domain/Gungi';
 import { Event } from '../../domain/events/Event';
 import Presenter from '../Presenter';
-export class FurigomaUsecaseInput {
+
+export type FurigomaRequest = {
   gungiId: string;
   playerId: string;
+};
 
-  constructor(gungiId: string, playerId: string) {
-    this.gungiId = gungiId;
-    this.playerId = playerId;
-  }
-}
 @Injectable()
 export default class FurigomaUsecase {
   constructor(
@@ -22,7 +19,10 @@ export default class FurigomaUsecase {
     private _eventBus: EventBus,
   ) {}
 
-  async execute(input: FurigomaUsecaseInput, presenter: Presenter) {
+  async execute<R>(
+    input: FurigomaRequest,
+    presenter: Presenter<R>,
+  ): Promise<R> {
     const gungi = await this._gungiRepository.findById(input.gungiId);
     const player = gungi.getPlayer(input.playerId);
     const opponent = gungi.getOpponent(player);

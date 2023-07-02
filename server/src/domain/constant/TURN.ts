@@ -1,6 +1,6 @@
 enum TURN {
-  FIRST = 1,
-  SECOND = 0,
+  SENTE = 1,
+  GOTE = 0,
 }
 
 export default TURN;

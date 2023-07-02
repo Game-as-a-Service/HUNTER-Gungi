@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json ",
-    "test:unit": "jest --config ./test/unitTest/jest.confg.js",
+    "test:unit": "jest --config ./test/unitTest/jest.config.js",
     "test": "npm run test:unit && npm run test:e2e"
   },
   "dependencies": {

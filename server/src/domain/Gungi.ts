@@ -10,6 +10,7 @@ import DeadArea from './DeadArea';
 import Goma from './goma/Goma';
 import GomaFactory from './goma/GomaFactory';
 import TURN from './constant/TURN';
+import FURIGOMA from './constant/FURIGOMA';
 
 class Gungi {
   constructor(
@@ -21,7 +22,6 @@ class Gungi {
     this._players.forEach((player) => {
       player.gungi = this;
     });
-    this.setSenteGote(_players);
   }
 
   get id(): string {
@@ -142,41 +142,37 @@ class Gungi {
   private determineTurn(sum: number): TURN {
     if (sum >= 3) {
       // first
-      return TURN.FIRST;
+      return TURN.SENTE;
     } else {
-      return TURN.SECOND;
+      return TURN.GOTE;
     }
   }
 
-  private genFiveRandomsNum(): (1 | 0)[] {
-    return [
-      Math.random(),
-      Math.random(),
-      Math.random(),
-      Math.random(),
-      Math.random(),
-    ].map((num) => {
+  private async genRandomsNum(): Promise<(FURIGOMA.HEADS | FURIGOMA.TAILS)[]> {
+    return Array.from({ length: 5 }, () => Math.random()).map((num) => {
+      // 50 percent tails, 50 percent heads
       if (num < 0.5) {
-        return 0;
+        return FURIGOMA.TAILS;
       }
-      return 1;
+      return FURIGOMA.HEADS;
     });
   }
 
   async furigoma(player: Player, opponent: Player): Promise<Event[]> {
     try {
-      // five random number range 0 - 1
-      const fiveRandomsNum = await this.genFiveRandomsNum();
-      const sum = fiveRandomsNum.reduce((acc, num) => (acc += num), 0);
+      // five random numbers, 0 or 1
+      const randomNums: FURIGOMA[] = await this.genRandomsNum();
+      const sum = randomNums.reduce((acc, num) => (acc += num), 0);
       const turn: TURN = this.determineTurn(sum);
-      player.side = turn === TURN.FIRST ? SIDE.BLACK : SIDE.WHITE;
-      opponent.side = turn === TURN.FIRST ? SIDE.WHITE : SIDE.BLACK;
+      player.side = turn === TURN.SENTE ? SIDE.BLACK : SIDE.WHITE;
+      opponent.side = turn === TURN.SENTE ? SIDE.WHITE : SIDE.BLACK;
       this.setCurrentTurn(SIDE.BLACK);
+      this.setSenteGote(this._players);
       const event: FurigomaEvent = {
         name: 'Furigoma',
         data: {
           turn,
-          result: fiveRandomsNum,
+          result: randomNums,
         },
       };
       return [event];

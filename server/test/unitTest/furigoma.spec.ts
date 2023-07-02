@@ -33,7 +33,7 @@ describe('Furigoma - 躑駒', () => {
         new GungiHan(),
       );
       jest
-        .spyOn(gungi as any, 'genFiveRandomsNum')
+        .spyOn(gungi as any, 'genRandomsNum')
         .mockResolvedValueOnce([1, 1, 1, 0, 0]);
       // When
       await gungi.furigoma(playerA, playerB);
@@ -68,7 +68,7 @@ describe('Furigoma - 躑駒', () => {
         new GungiHan(),
       );
       jest
-        .spyOn(gungi as any, 'genFiveRandomsNum')
+        .spyOn(gungi as any, 'genRandomsNum')
         .mockResolvedValueOnce([1, 1, 0, 0, 0]);
 
       // When
@@ -79,7 +79,7 @@ describe('Furigoma - 躑駒', () => {
     });
   });
 
-  describe('genFiveRandomsNum', () => {
+  describe('genRandomsNum', () => {
     it('產生五個 0 - 1 的隨機數字，< 0,5 回傳 0，>= 0.5 回傳 1', async () => {
       // Given
       const gungi = new Gungi('test', LEVEL.BEGINNER, [], new GungiHan());
@@ -92,7 +92,7 @@ describe('Furigoma - 躑駒', () => {
         .mockReturnValueOnce(0.3)
         .mockReturnValueOnce(0.5)
         .mockReturnValueOnce(0.6);
-      const result: (0 | 1)[] = await gungi['genFiveRandomsNum']();
+      const result: (0 | 1)[] = await gungi['genRandomsNum']();
 
       // Then
       expect(spyRandom).toBeCalledTimes(5);
@@ -101,7 +101,7 @@ describe('Furigoma - 躑駒', () => {
   });
 
   describe('determineTurn', () => {
-    it('躑駒正面 >= 3，房主為先手玩家，回傳 TURN.FIRST', async () => {
+    it('躑駒正面 >= 3，房主為先手玩家，回傳 TURN.SENTE', async () => {
       // Given
       const gungi = new Gungi('test', LEVEL.BEGINNER, [], new GungiHan());
 
@@ -109,7 +109,7 @@ describe('Furigoma - 躑駒', () => {
       const result = await gungi['determineTurn'](3);
 
       // Then
-      expect(result).toBe(TURN.FIRST);
+      expect(result).toBe(TURN.SENTE);
     });
 
     it('躑駒正面 < 3，房主為後手玩家，回傳 TURN.SECOND', async () => {
@@ -120,7 +120,7 @@ describe('Furigoma - 躑駒', () => {
       const result = await gungi['determineTurn'](2);
 
       // Then
-      expect(result).toBe(TURN.SECOND);
+      expect(result).toBe(TURN.GOTE);
     });
   });
 });
