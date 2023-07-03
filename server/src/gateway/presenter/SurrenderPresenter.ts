@@ -2,7 +2,11 @@ import Presenter from '../../usecases/Presenter';
 import { Event } from '../../domain/events/Event';
 import gungiViewModel from '../../frameworks/view-model/GungiViewModel';
 
-export default class SurrenderPresenter implements Presenter {
+export interface SurrenderView {
+  winner: string;
+}
+
+export default class SurrenderPresenter implements Presenter<SurrenderView> {
   present(events: Event[]) {
     const targetEvents = this.getTargetEvents(events);
     return gungiViewModel.surrender(targetEvents);

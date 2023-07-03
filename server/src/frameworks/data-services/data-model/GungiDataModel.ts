@@ -22,12 +22,14 @@ import { Injectable } from '@nestjs/common';
 export default class GungiDataModel implements DataModel<Gungi, GungiData> {
   toData(gungi: Gungi): GungiData {
     const gungiData = this.gungiHanToData(gungi.gungiHan);
-    const senteData = this.playerToData(gungi.sente);
-    const goteData = this.playerToData(gungi.gote);
-    const senteDeadArea = this.deadAreaToData(gungi.senteDeadArea);
-    const goteDeadArea = this.deadAreaToData(gungi.goteDeadArea);
-    const senteGomaOkiData = this.gomaOkiToData(gungi.senteGomaOki);
-    const goteGomaOkiData = this.gomaOkiToData(gungi.goteGomaOki);
+    const senteId = gungi.sente ? gungi.sente.id : null;
+    const goteId = gungi.gote ? gungi.gote.id : null;
+    const playerOne = this.playerToData(gungi.players[0]);
+    const playerTwo = this.playerToData(gungi.players[1]);
+    const playerOneDeadArea = this.deadAreaToData(gungi.players[0].deadArea);
+    const playerTwoDeadArea = this.deadAreaToData(gungi.players[1].deadArea);
+    const playerOneGomaOkiData = this.gomaOkiToData(gungi.players[0].gomaOki);
+    const playerTwoGomaOkiData = this.gomaOkiToData(gungi.players[1].gomaOki);
     const level = gungi.level;
     const currentTurn = gungi.currentTurn.side;
     const winner = gungi.winner?.side;
@@ -39,16 +41,20 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
       history: [],
       level,
       winner,
+      turn: {
+        sente: senteId,
+        gote: goteId,
+      },
       players: [
         {
-          ...senteData,
-          deadArea: senteDeadArea,
-          gomaOki: senteGomaOkiData,
+          ...playerOne,
+          deadArea: playerOneDeadArea,
+          gomaOki: playerOneGomaOkiData,
         },
         {
-          ...goteData,
-          deadArea: goteDeadArea,
-          gomaOki: goteGomaOkiData,
+          ...playerTwo,
+          deadArea: playerTwoDeadArea,
+          gomaOki: playerTwoGomaOkiData,
         },
       ],
     };
@@ -134,11 +140,10 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
   }
 
   private playerToData(player: Player) {
-    const { id, side, name } = player;
     return {
-      id,
-      side,
-      name,
+      id: player.id,
+      side: player.side,
+      name: player.name,
     };
   }
 

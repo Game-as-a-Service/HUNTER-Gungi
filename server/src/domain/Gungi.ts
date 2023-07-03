@@ -32,6 +32,10 @@ class Gungi {
     return this._level;
   }
 
+  get players(): Player[] {
+    return this._players;
+  }
+
   get gungiHan(): GungiHan {
     return this._gungiHan;
   }
