@@ -8,6 +8,15 @@ import Coordinate from './Coordinate';
 import { Event, SurrenderEvent } from './events/Event';
 import DeadArea from './DeadArea';
 import { GungiData } from '../frameworks/data-services/GungiData';
+import Goma from './goma/Goma';
+import GomaFactory from './goma/GomaFactory';
+import { ConfigurationEvent } from './events/ConfigurationEvent';
+import {
+  WHITE_HAN_CONFIG,
+  OKI_CONFIG,
+  BLACK_HAN_CONFIG,
+} from './constant/constants';
+import { GameState } from './constant/GameState';
 
 class Gungi {
   constructor(
@@ -30,6 +39,7 @@ class Gungi {
     return this._level;
   }
 
+  /** 軍儀棋盤 */
   get gungiHan(): GungiHan {
     return this._gungiHan;
   }
@@ -108,13 +118,42 @@ class Gungi {
     this._gote = value;
   }
 
+  getState(): GameState {
+    if (this.sente === null && this.gote === null) {
+      return GameState.GAME_INIT;
+    }
+
+    if (this.gungiHan.getAllGoma().length === 0) {
+      return GameState.FURIGOMA_DONE;
+    }
+
+    if (this.winner === null) {
+      return GameState.GAME_START;
+    }
+
+    return GameState.GAME_END;
+  }
+
   setCurrentTurn(side: SIDE) {
     this._currentTurn = this._players.find((player) => player.side === side);
   }
 
-  setConfiguration() {
-    // TODO
-    throw new Error('Method not implemented.');
+  setConfiguration(): Event[] {
+    this.addGomaToHan(SIDE.WHITE, WHITE_HAN_CONFIG);
+    this.addGomaToOki(SIDE.WHITE, OKI_CONFIG);
+    this.addGomaToHan(SIDE.BLACK, BLACK_HAN_CONFIG);
+    this.addGomaToOki(SIDE.BLACK, OKI_CONFIG);
+
+    const event: ConfigurationEvent = {
+      name: 'Configuration',
+      data: {
+        gungiHan: this.gungiHan,
+        senteGomaOki: this.sente.gomaOki,
+        goteGomaOki: this.gote.gomaOki,
+      },
+    };
+
+    return [event];
   }
 
   furiGoma() {
@@ -149,6 +188,27 @@ class Gungi {
 
   getOpponent(player: Player): Player {
     return this._players.find((p) => p !== player);
+  }
+
+  private addGomaToHan(
+    side: SIDE,
+    gomaConfig: { name: GOMA; x: number; y: number; z: number }[],
+  ): void {
+    gomaConfig.forEach(({ name, x, y, z }) => {
+      const coordinate = new Coordinate(x, y, z);
+      const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
+
+      this.gungiHan.addGoma(goma, coordinate);
+    });
+  }
+
+  private addGomaToOki(side: SIDE, gomaConfig: { name: GOMA }[]): void {
+    gomaConfig.forEach(({ name }) => {
+      const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
+      const gomaOki =
+        this.sente.side === side ? this.sente.gomaOki : this.gote.gomaOki;
+      gomaOki.gomas.push(goma);
+    });
   }
 
   private setSenteGote(players: Player[]) {
