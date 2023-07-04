@@ -143,7 +143,20 @@ class Gungi {
     // this._goteGomaOki.gomas.push(xxx);
   }
 
-  private determineTurn(sum: number): TURN {
+  private async genTossResult(): Promise<(FURIGOMA.HEADS | FURIGOMA.TAILS)[]> {
+    return Array.from({ length: 5 }, () => Math.random()).map((num) => {
+      // 50 percent tails, 50 percent heads
+      const percentage = 0.5;
+      if (num < percentage) {
+        return FURIGOMA.TAILS;
+      }
+      return FURIGOMA.HEADS;
+    });
+  }
+
+  private async determineTurn(tossResult: FURIGOMA[]): Promise<TURN> {
+    const sum = tossResult.reduce((acc, num) => (acc += num), 0);
+    // 3 or more heads, sente
     if (sum >= 3) {
       // first
       return TURN.SENTE;
@@ -152,22 +165,11 @@ class Gungi {
     }
   }
 
-  private async genRandomsNum(): Promise<(FURIGOMA.HEADS | FURIGOMA.TAILS)[]> {
-    return Array.from({ length: 5 }, () => Math.random()).map((num) => {
-      // 50 percent tails, 50 percent heads
-      if (num < 0.5) {
-        return FURIGOMA.TAILS;
-      }
-      return FURIGOMA.HEADS;
-    });
-  }
-
   async furigoma(player: Player, opponent: Player): Promise<Event[]> {
     try {
-      // five random numbers, 0 or 1
-      const randomNums: FURIGOMA[] = await this.genRandomsNum();
-      const sum = randomNums.reduce((acc, num) => (acc += num), 0);
-      const turn: TURN = this.determineTurn(sum);
+      // toss gomas to determine turn
+      const tossResult: FURIGOMA[] = await this.genTossResult();
+      const turn: TURN = await this.determineTurn(tossResult);
       player.side = turn === TURN.SENTE ? SIDE.BLACK : SIDE.WHITE;
       opponent.side = turn === TURN.SENTE ? SIDE.WHITE : SIDE.BLACK;
       this.setCurrentTurn(SIDE.BLACK);
@@ -176,7 +178,7 @@ class Gungi {
         name: 'Furigoma',
         data: {
           turn,
-          result: randomNums,
+          result: tossResult,
         },
       };
       return [event];
