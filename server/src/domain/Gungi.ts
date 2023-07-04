@@ -94,7 +94,7 @@ class Gungi {
     this._winner = value;
   }
 
-  private _sente: Player;
+  private _sente: Player = null;
 
   get sente(): Player {
     return this._sente;
@@ -104,7 +104,7 @@ class Gungi {
     this._sente = value;
   }
 
-  private _gote: Player;
+  private _gote: Player = null;
 
   get gote(): Player {
     return this._gote;
