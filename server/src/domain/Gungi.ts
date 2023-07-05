@@ -7,8 +7,16 @@ import GOMA from './constant/GOMA';
 import Coordinate from './Coordinate';
 import { Event, SurrenderEvent, FurigomaEvent } from './events/Event';
 import DeadArea from './DeadArea';
+import { GungiData } from '../frameworks/data-services/GungiData';
 import Goma from './goma/Goma';
 import GomaFactory from './goma/GomaFactory';
+import { ConfigurationEvent } from './events/ConfigurationEvent';
+import {
+  WHITE_HAN_CONFIG,
+  OKI_CONFIG,
+  BLACK_HAN_CONFIG,
+} from './constant/constants';
+import { GameState } from './constant/GameState';
 import TURN from './constant/TURN';
 import FURIGOMA from './constant/FURIGOMA';
 
@@ -36,6 +44,7 @@ class Gungi {
     return this._players;
   }
 
+  /** 軍儀棋盤 */
   get gungiHan(): GungiHan {
     return this._gungiHan;
   }
@@ -114,33 +123,42 @@ class Gungi {
     this._gote = value;
   }
 
+  getState(): GameState {
+    if (this.sente === null && this.gote === null) {
+      return GameState.GAME_INIT;
+    }
+
+    if (this.gungiHan.getAllGoma().length === 0) {
+      return GameState.FURIGOMA_DONE;
+    }
+
+    if (this.winner === null) {
+      return GameState.GAME_START;
+    }
+
+    return GameState.GAME_END;
+  }
+
   setCurrentTurn(side: SIDE) {
     this._currentTurn = this._players.find((player) => player.side === side);
   }
 
   setConfiguration(): Event[] {
-    throw new Error('Method not implemented.');
+    this.addGomaToHan(SIDE.WHITE, WHITE_HAN_CONFIG);
+    this.addGomaToOki(SIDE.WHITE, OKI_CONFIG);
+    this.addGomaToHan(SIDE.BLACK, BLACK_HAN_CONFIG);
+    this.addGomaToOki(SIDE.BLACK, OKI_CONFIG);
 
-    // TODO: 棋盤
-    const gomas: { goma: Goma; to: Coordinate }[] = [];
+    const event: ConfigurationEvent = {
+      name: 'Configuration',
+      data: {
+        gungiHan: this.gungiHan,
+        senteGomaOki: this.sente.gomaOki,
+        goteGomaOki: this.gote.gomaOki,
+      },
+    };
 
-    const goma: Goma = GomaFactory.create(
-      LEVEL.BEGINNER,
-      SIDE.BLACK,
-      GOMA.OSHO,
-      new Coordinate(-1, -1, -1),
-    );
-    const to = new Coordinate(5, 1, 1);
-    gomas.push({ goma, to });
-
-    gomas.forEach(({ goma, to }) => {
-      this.gungiHan.updateHan(goma, to);
-      goma.coordinate = to;
-    });
-
-    // TODO: 備用區
-    // this._senteGomaOki.gomas.push(xxx);
-    // this._goteGomaOki.gomas.push(xxx);
+    return [event];
   }
 
   private genTossResult(): FURIGOMA[] {
@@ -173,7 +191,7 @@ class Gungi {
       player.side = turn === TURN.SENTE ? SIDE.BLACK : SIDE.WHITE;
       opponent.side = turn === TURN.SENTE ? SIDE.WHITE : SIDE.BLACK;
       this.setCurrentTurn(SIDE.BLACK);
-      this.setSenteGote(this._players);
+      this.setSenteGote();
       const event: FurigomaEvent = {
         name: 'Furigoma',
         data: {
@@ -217,26 +235,43 @@ class Gungi {
     return this._players.find((p) => p !== player);
   }
 
-  private setSenteGote(players: Player[]) {
-    players.forEach((player) => {
-      switch (player.side) {
-        case SIDE.BLACK: {
-          this._sente = player;
-          this._senteDeadArea = player.deadArea;
-          this._senteGomaOki = player.gomaOki;
-          break;
-        }
-        case SIDE.WHITE: {
-          this._gote = player;
-          this._goteDeadArea = player.deadArea;
-          this._goteGomaOki = player.gomaOki;
-          break;
-        }
-        default: {
-          throw new Error('沒有這個玩家');
-        }
-      }
+  private addGomaToHan(
+    side: SIDE,
+    gomaConfig: { name: GOMA; x: number; y: number; z: number }[],
+  ): void {
+    gomaConfig.forEach(({ name, x, y, z }) => {
+      const coordinate = new Coordinate(x, y, z);
+      const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
+
+      this.gungiHan.addGoma(goma, coordinate);
     });
+  }
+
+  private addGomaToOki(side: SIDE, gomaConfig: { name: GOMA }[]): void {
+    gomaConfig.forEach(({ name }) => {
+      const goma: Goma = GomaFactory.create(LEVEL.BEGINNER, side, name);
+      const gomaOki =
+        this.sente.side === side ? this.sente.gomaOki : this.gote.gomaOki;
+      gomaOki.gomas.push(goma);
+    });
+  }
+
+  // setSenteGote(players: Player[]) {
+  setSenteGote() {
+    const sente = this.players.find((player) => player.side === SIDE.BLACK);
+    const gote = this.players.find((player) => player.side === SIDE.WHITE);
+
+    if (!sente || !gote) {
+      return new Error('Insufficient players');
+    }
+
+    this._sente = sente;
+    this._senteDeadArea = sente.deadArea;
+    this._senteGomaOki = sente.gomaOki;
+
+    this._gote = gote;
+    this._goteDeadArea = gote.deadArea;
+    this._goteGomaOki = gote.gomaOki;
   }
 }
 

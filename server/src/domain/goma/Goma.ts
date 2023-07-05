@@ -8,7 +8,6 @@ export default abstract class Goma {
     private _level: LEVEL,
     private _side: SIDE,
     private _name: GOMA,
-    private _coordinate: Coordinate,
   ) {}
 
   get name(): GOMA {
@@ -17,26 +16,6 @@ export default abstract class Goma {
 
   get side(): SIDE {
     return this._side;
-  }
-
-  get coordinate(): Coordinate {
-    return this._coordinate;
-  }
-
-  set coordinate(to: Coordinate) {
-    this._coordinate = to;
-  }
-
-  getCoordinateX(): number {
-    return this._coordinate.x;
-  }
-
-  getCoordinateY(): number {
-    return this._coordinate.y;
-  }
-
-  getCoordinateZ(): number {
-    return this._coordinate.z;
   }
 
   abstract arata(to: Coordinate): void;

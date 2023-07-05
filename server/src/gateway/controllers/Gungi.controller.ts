@@ -8,11 +8,17 @@ import FurigomaPresenter, {
 } from '../presenter/FurigomaPresenter';
 import { FurigomaRequest } from '../../usecases/service-class/FurigomaUsecase';
 import SurrenderPresenter from '../presenter/SurrenderPresenter';
+import ConfigurationUsecase, {
+  ConfigurationRequest,
+} from '../../usecases/service-class/ConfigurationUsecase';
+import ConfigurationPresenter from '../presenter/ConfigurationPresenter';
+
 @Controller()
 export default class GungiController {
   constructor(
     private _furigomaUsecase: FurigomaUsecase,
     private _surrenderUsecase: SurrenderUsecase,
+    private _configurationUsecase: ConfigurationUsecase,
   ) {}
 
   @Post('/gungi/:gungiId/furigoma')
@@ -43,6 +49,26 @@ export default class GungiController {
 
     const presenter = new SurrenderPresenter();
     const response = await this._surrenderUsecase.execute(request, presenter);
+
+    return res.status(HttpStatus.OK).send(response);
+  }
+
+  @Post('/gungi/:id/configuration')
+  async configuration(
+    @Param('id') id: string,
+    @Body() body: { playerId: string },
+    @Res() res,
+  ) {
+    const request: ConfigurationRequest = {
+      gungiId: id,
+      playerId: body.playerId,
+    };
+
+    const presenter = new ConfigurationPresenter();
+    const response = await this._configurationUsecase.execute(
+      request,
+      presenter,
+    );
 
     return res.status(HttpStatus.OK).send(response);
   }
