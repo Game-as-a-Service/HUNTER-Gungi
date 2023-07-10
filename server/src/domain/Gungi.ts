@@ -7,7 +7,6 @@ import GOMA from './constant/GOMA';
 import Coordinate from './Coordinate';
 import { Event, SurrenderEvent, FurigomaEvent } from './events/Event';
 import DeadArea from './DeadArea';
-import { GungiData } from '../frameworks/data-services/GungiData';
 import Goma from './goma/Goma';
 import GomaFactory from './goma/GomaFactory';
 import { ConfigurationEvent } from './events/ConfigurationEvent';
@@ -256,7 +255,6 @@ class Gungi {
     });
   }
 
-  // setSenteGote(players: Player[]) {
   setSenteGote() {
     const sente = this.players.find((player) => player.side === SIDE.BLACK);
     const gote = this.players.find((player) => player.side === SIDE.WHITE);
