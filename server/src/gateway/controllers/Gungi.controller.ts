@@ -3,6 +3,10 @@ import FurigomaUsecase from '../../usecases/service-class/FurigomaUsecase';
 import SurrenderUsecase, {
   SurrenderRequest,
 } from '../../usecases/service-class/SurrenderUsecase';
+import FurigomaPresenter, {
+  FurigomaView,
+} from '../presenter/FurigomaPresenter';
+import { FurigomaRequest } from '../../usecases/service-class/FurigomaUsecase';
 import SurrenderPresenter from '../presenter/SurrenderPresenter';
 import ConfigurationUsecase, {
   ConfigurationRequest,
@@ -17,16 +21,19 @@ export default class GungiController {
     private _configurationUsecase: ConfigurationUsecase,
   ) {}
 
-  @Post('/gungi/:id/furigoma')
-  async furigoma(@Param('id') id: string, @Body() body: any) {
-    // set temp
-    const request = {
-      gungiId: id,
-      body,
-    };
-
-    const response = await this._furigomaUsecase.execute();
-    return response;
+  @Post('/gungi/:gungiId/furigoma')
+  async furigoma(
+    @Param('gungiId') gungiId: string,
+    @Body() body: { gungiId: string; playerId: string },
+    @Res() res,
+  ) {
+    const presenter = new FurigomaPresenter();
+    const input: FurigomaRequest = { gungiId, playerId: body.playerId };
+    const response: FurigomaView = await this._furigomaUsecase.execute(
+      input,
+      presenter,
+    );
+    return res.status(HttpStatus.OK).send(response);
   }
 
   @Post('/gungi/:id/surrender')

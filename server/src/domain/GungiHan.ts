@@ -1,5 +1,5 @@
-import Goma from './goma/Goma';
 import Coordinate from './Coordinate';
+import Goma from './goma/Goma';
 import {
   HAN_X_MAX,
   HAN_Y_MAX,

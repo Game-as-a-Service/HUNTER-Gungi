@@ -1,4 +1,5 @@
 import Player from '../Player';
+import TURN from '../constant/TURN';
 
 interface Event {
   name: string;
@@ -11,5 +12,12 @@ interface SurrenderEvent extends Event {
     winner: Player;
   };
 }
+interface FurigomaEvent extends Event {
+  name: 'Furigoma';
+  data: {
+    turn: TURN;
+    result: number[];
+  };
+}
 
-export { SurrenderEvent, Event };
+export { SurrenderEvent, FurigomaEvent, Event };

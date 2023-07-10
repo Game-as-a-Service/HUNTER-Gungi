@@ -75,7 +75,7 @@ describe('棋盤配置 (e2e)', () => {
 
     const gungiHan: GungiHan = new GungiHan([]);
     const gungi = new Gungi(gungiId, LEVEL.BEGINNER, player, gungiHan);
-    gungi.setCurrentTurn(SIDE.WHITE);
+    gungi.furigoma(player[0], player[1]);
 
     await gungiRepository.save(gungi);
     return gungi.id;

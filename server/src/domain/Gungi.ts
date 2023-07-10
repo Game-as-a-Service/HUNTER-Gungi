@@ -5,9 +5,8 @@ import GomaOki from './GomaOki';
 import SIDE from './constant/SIDE';
 import GOMA from './constant/GOMA';
 import Coordinate from './Coordinate';
-import { Event, SurrenderEvent } from './events/Event';
+import { Event, SurrenderEvent, FurigomaEvent } from './events/Event';
 import DeadArea from './DeadArea';
-import { GungiData } from '../frameworks/data-services/GungiData';
 import Goma from './goma/Goma';
 import GomaFactory from './goma/GomaFactory';
 import { ConfigurationEvent } from './events/ConfigurationEvent';
@@ -17,6 +16,8 @@ import {
   BLACK_HAN_CONFIG,
 } from './constant/constants';
 import { GameState } from './constant/GameState';
+import TURN from './constant/TURN';
+import FURIGOMA from './constant/FURIGOMA';
 
 class Gungi {
   constructor(
@@ -28,7 +29,6 @@ class Gungi {
     this._players.forEach((player) => {
       player.gungi = this;
     });
-    this.setSenteGote(_players);
   }
 
   get id(): string {
@@ -37,6 +37,10 @@ class Gungi {
 
   get level(): LEVEL {
     return this._level;
+  }
+
+  get players(): Player[] {
+    return this._players;
   }
 
   /** 軍儀棋盤 */
@@ -98,7 +102,7 @@ class Gungi {
     this._winner = value;
   }
 
-  private _sente: Player;
+  private _sente: Player = null;
 
   get sente(): Player {
     return this._sente;
@@ -108,7 +112,7 @@ class Gungi {
     this._sente = value;
   }
 
-  private _gote: Player;
+  private _gote: Player = null;
 
   get gote(): Player {
     return this._gote;
@@ -156,9 +160,49 @@ class Gungi {
     return [event];
   }
 
-  furiGoma() {
-    // TODO
-    throw new Error('Method not implemented.');
+  private genTossResult(): FURIGOMA[] {
+    return Array.from({ length: 5 }, () => Math.random()).map((num) => {
+      // 50 percent tails, 50 percent heads
+      const percentage = 0.5;
+      if (num < percentage) {
+        return FURIGOMA.TAILS;
+      }
+      return FURIGOMA.HEADS;
+    });
+  }
+
+  private determineTurn(tossResult: FURIGOMA[]): TURN {
+    const sum = tossResult.reduce((acc, num) => (acc += num), 0);
+    // 3 or more heads, sente
+    if (sum >= 3) {
+      // first
+      return TURN.SENTE;
+    } else {
+      return TURN.GOTE;
+    }
+  }
+
+  async furigoma(player: Player, opponent: Player): Promise<Event[]> {
+    try {
+      // toss gomas to determine turn
+      const tossResult: FURIGOMA[] = this.genTossResult();
+      const turn: TURN = this.determineTurn(tossResult);
+      player.side = turn === TURN.SENTE ? SIDE.BLACK : SIDE.WHITE;
+      opponent.side = turn === TURN.SENTE ? SIDE.WHITE : SIDE.BLACK;
+      this.setCurrentTurn(SIDE.BLACK);
+      this.setSenteGote();
+      const event: FurigomaEvent = {
+        name: 'Furigoma',
+        data: {
+          turn,
+          result: tossResult,
+        },
+      };
+      return [event];
+    } catch (err) {
+      console.log(`furiGoma error: ${err.message}`);
+      throw err;
+    }
   }
 
   ugokiGoma(color: SIDE, gomaName: GOMA, from: Coordinate, to: Coordinate) {
@@ -211,26 +255,21 @@ class Gungi {
     });
   }
 
-  private setSenteGote(players: Player[]) {
-    players.forEach((player) => {
-      switch (player.side) {
-        case SIDE.BLACK: {
-          this._sente = player;
-          this._senteDeadArea = player.deadArea;
-          this._senteGomaOki = player.gomaOki;
-          break;
-        }
-        case SIDE.WHITE: {
-          this._gote = player;
-          this._goteDeadArea = player.deadArea;
-          this._goteGomaOki = player.gomaOki;
-          break;
-        }
-        default: {
-          throw new Error('沒有這個玩家');
-        }
-      }
-    });
+  setSenteGote() {
+    const sente = this.players.find((player) => player.side === SIDE.BLACK);
+    const gote = this.players.find((player) => player.side === SIDE.WHITE);
+
+    if (!sente || !gote) {
+      return new Error('Insufficient players');
+    }
+
+    this._sente = sente;
+    this._senteDeadArea = sente.deadArea;
+    this._senteGomaOki = sente.gomaOki;
+
+    this._gote = gote;
+    this._goteDeadArea = gote.deadArea;
+    this._goteGomaOki = gote.gomaOki;
   }
 }
 
