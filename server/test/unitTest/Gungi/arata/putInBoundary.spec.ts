@@ -159,7 +159,7 @@ describe('成功疊棋', () => {
     const { whitePlayer, whiteGomaOki, gungiHan, gungi, targetGoma } =
       given_levelBeginner_Gungi({
         blackGomaOki: [],
-        whiteGomaOki: [GOMA.YUMI],
+        whiteGomaOki: [GOMA.DAI],
         hanGomas: [
           {
             name: GOMA.HEI,
@@ -168,7 +168,7 @@ describe('成功疊棋', () => {
           },
         ],
         targetGoma: {
-          name: GOMA.YUMI,
+          name: GOMA.DAI,
           side: SIDE.WHITE,
         },
       });
@@ -177,7 +177,7 @@ describe('成功疊棋', () => {
     when_arata_at_han(gungi, whitePlayer, targetGoma, to);
 
     const expectedGoma = gungiHan.findGoma(to);
-    expect(expectedGoma.name).toBe(GOMA.YUMI);
+    expect(expectedGoma.name).toBe(GOMA.DAI);
     expect(expectedGoma.side).toBe(SIDE.WHITE);
     expect(whiteGomaOki.isEmpty()).toBeTruthy();
   });

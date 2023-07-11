@@ -11,7 +11,10 @@ import { randomUUID } from 'crypto';
 import SIDE from '../../src/domain/constant/SIDE';
 import { Db, MongoClient } from 'mongodb';
 import * as dotenv from 'dotenv';
+
 import GOMA from '../../src/domain/constant/GOMA';
+
+import Gungi from '../../src/domain/Gungi';
 
 dotenv.config();
 
@@ -51,6 +54,10 @@ describe('AppController (e2e)', () => {
       history: [],
       _id: gungiId,
       level: LEVEL.BEGINNER,
+      turn: {
+        sente: 'A',
+        gote: 'B',
+      },
       players: [
         {
           id: 'A',
@@ -88,6 +95,10 @@ describe('AppController (e2e)', () => {
   it('/POST/gungi/:gungiId/arata', async () => {
     const gungiId = randomUUID();
     const gungiData: GungiData = {
+      turn: {
+        gote: 'B',
+        sente: 'A',
+      },
       currentTurn: SIDE.WHITE,
       gungiHan: {
         han: [
@@ -153,5 +164,52 @@ describe('AppController (e2e)', () => {
         z: 0,
       },
     });
+  });
+  it('/(POST) gungi/:gungiId/furigoma', async () => {
+    // Given
+    const gungiId = randomUUID();
+    const gungiData: GungiData = {
+      currentTurn: SIDE.WHITE,
+      gungiHan: { han: [] },
+      history: [],
+      _id: gungiId,
+      turn: {
+        sente: null,
+        gote: null,
+      },
+      level: LEVEL.BEGINNER,
+      players: [
+        {
+          id: 'A',
+          name: 'A',
+          side: SIDE.WHITE,
+          gomaOki: { gomas: [] },
+          deadArea: { gomas: [] },
+        },
+        {
+          id: 'B',
+          name: 'B',
+          side: SIDE.BLACK,
+          gomaOki: { gomas: [] },
+          deadArea: { gomas: [] },
+        },
+      ],
+    };
+
+    const gungi: Gungi = gungiDataModel.toDomain(gungiData);
+    await gungiRepository.save(gungi);
+    const body = {
+      playerId: 'A',
+    };
+
+    const response = await request(app.getHttpServer())
+      .post(`/gungi/${gungiId}/furigoma`)
+      .send(body);
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('name');
+    expect(response.body).toHaveProperty('data');
+    expect(response.body.data).toHaveProperty('turn');
+    expect(response.body.data).toHaveProperty('result');
+    expect(response.body.data.result.length).toBe(5);
   });
 });

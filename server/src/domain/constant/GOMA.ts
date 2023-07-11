@@ -9,15 +9,27 @@ enum GOMA {
   CHU = 'CHU',
   /** 大 */
   DAI = 'DAI',
+  /** 帥 */
   OSHO = 'OSHO',
+  /** 馬 */
   UMA = 'UMA',
+  /** 侍 */
   SHI = 'SHI',
+  /** 槍 */
   YARI = 'YARI',
-  HO = 'HO',
-  YUMI = 'YUMI',
-  TSUTSU = 'TSUTSU',
+  /** 砦 */
   TORIDE = 'TORIDE',
+  // 以上是入門
+  /** 弓 */
+  YUMI = 'YUMI',
+  // 以上是初級
+  /** 砲 */
+  HO = 'HO',
+  /** 筒 */
+  TSUTSU = 'TSUTSU',
+  /** 謀 */
   HAKARU = 'HAKARU',
 }
 
+export const EMPTY_GOMA = null;
 export default GOMA;

@@ -64,6 +64,10 @@ interface GungiData {
   level: LEVEL;
   winner?: SIDE;
   currentTurn: SIDE;
+  turn: {
+    sente: string | null;
+    gote: string | null;
+  };
   players: PlayerData[];
   gungiHan: GungiHanData;
   history: RecordData[];

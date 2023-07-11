@@ -53,7 +53,7 @@ describe('呼叫援軍', () => {
     expect(expectedGoma.name).toBe(targetGoma.name);
     expect(expectedGoma.side).toBe(targetGoma.side);
     expect(whiteGomaOki.isEmpty()).toBeTruthy();
-    expect(gungi.currentTurn).toBe(SIDE.BLACK);
+    expect(gungi.currentTurn.side).toBe(SIDE.BLACK);
   });
   it('呼叫援軍 小', () => {
     const { whitePlayer, gungi, whiteGomaOki, gungiHan, targetGoma } =
@@ -80,7 +80,7 @@ describe('呼叫援軍', () => {
     expect(expectedGoma.name).toBe(targetGoma.name);
     expect(expectedGoma.side).toBe(targetGoma.side);
     expect(whiteGomaOki.isEmpty()).toBeTruthy();
-    expect(gungi.currentTurn).toBe(SIDE.BLACK);
+    expect(gungi.currentTurn.side).toBe(SIDE.BLACK);
   });
 });
 

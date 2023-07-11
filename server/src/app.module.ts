@@ -7,7 +7,7 @@ import { DataServicesModule } from './frameworks/data-services/DataService.modul
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: './server/.env',
+      isGlobal: true,
     }),
     DataServicesModule,
     GungiUsecaseModule,

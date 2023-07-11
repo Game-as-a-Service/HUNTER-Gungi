@@ -1,17 +1,17 @@
-import Goma from './goma/Goma';
 import Coordinate from './Coordinate';
+import Goma from './goma/Goma';
 import { BOUNDARY, HEIGHT_LIMIT } from './constant/GUNGI_HAN';
 import LEVEL from './constant/LEVEL';
 import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
 import SIDE from './constant/SIDE';
-import GOMA from './constant/GOMA';
+import GOMA, { EMPTY_GOMA } from './constant/GOMA';
+import GomaFactory from './goma/GomaFactory';
 
 export type GungiHanGoma = {
   goma: Goma;
   coordinate: Coordinate;
 };
-
-class GungiHan {
+export default class GungiHan {
   private _han: Goma[][][];
 
   constructor(private _level: LEVEL, gomas: GungiHanGoma[] = []) {
@@ -77,22 +77,25 @@ class GungiHan {
     return osho !== -1;
   }
 
-  getAllGoma() {
-    const gomas: GungiHanGoma[] = [];
-    this._han.forEach((row, x) =>
-      row.forEach((col, y) =>
-        col.forEach(
-          (goma, z) =>
-            goma &&
-            gomas.push({
-              goma,
-              coordinate: new Coordinate(x, y, z),
-            }),
-        ),
-      ),
-    );
+  getAllGoma(): GungiHanGoma[] {
+    const han: GungiHanGoma[] = [];
 
-    return gomas;
+    this._han.forEach((xArray, x) => {
+      xArray.forEach((yArray, y) => {
+        yArray.forEach((zArray, z) => {
+          const coordinate = new Coordinate(x, y, z);
+          const goma = this._han[x][y][z];
+          if (goma !== EMPTY_GOMA) {
+            han.push({
+              goma: GomaFactory.create(LEVEL.BEGINNER, goma.side, goma.name),
+              coordinate: coordinate,
+            });
+          }
+        });
+      });
+    });
+
+    return han;
   }
 
   private decideCurrentFarthestCoordinate(
@@ -142,16 +145,17 @@ class GungiHan {
     this.createInitialHan();
     gomas.forEach((gungiHanGoma) => {
       const { goma, coordinate } = gungiHanGoma;
-      this._han[coordinate.x][coordinate.y][coordinate.z] = goma;
+      const { x, y, z } = coordinate;
+      this._han[x][y][z] = goma;
     });
   }
 
   // create 9x9x3  not same memory array
   private createInitialHan() {
     this._han = Array.from({ length: 9 }, () =>
-      Array.from({ length: 9 }, () => Array.from({ length: 3 })),
+      Array.from({ length: 9 }, () =>
+        Array.from({ length: 3 }).map(() => EMPTY_GOMA),
+      ),
     );
   }
 }
-
-export default GungiHan;

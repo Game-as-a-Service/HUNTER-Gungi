@@ -6,6 +6,7 @@ import GOMA from './constant/GOMA';
 import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
 import Coordinate from './Coordinate';
 
+/** 備用區 */
 class GomaOki {
   constructor(
     private _level: LEVEL,
