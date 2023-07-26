@@ -8,8 +8,8 @@ import Coordinate from './Coordinate';
 import {
   ArataEvent,
   Event,
-  SurrenderEvent,
   FurigomaEvent,
+  SurrenderEvent,
 } from './events/Event';
 import DeadArea from './DeadArea';
 import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';

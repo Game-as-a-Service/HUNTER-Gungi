@@ -1,12 +1,13 @@
 import { Body, Controller, HttpStatus, Param, Post, Res } from '@nestjs/common';
-import FurigomaUsecase from '../../usecases/service-class/FurigomaUsecase';
+import FurigomaUsecase, {
+  FurigomaRequest,
+} from '../../usecases/service-class/FurigomaUsecase';
 import SurrenderUsecase, {
   SurrenderRequest,
 } from '../../usecases/service-class/SurrenderUsecase';
 import FurigomaPresenter, {
   FurigomaView,
 } from '../presenter/FurigomaPresenter';
-import { FurigomaRequest } from '../../usecases/service-class/FurigomaUsecase';
 import SurrenderPresenter from '../presenter/SurrenderPresenter';
 import SIDE from '../../domain/constant/SIDE';
 import GOMA from '../../domain/constant/GOMA';

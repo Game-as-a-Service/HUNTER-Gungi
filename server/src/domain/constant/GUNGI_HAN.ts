@@ -8,6 +8,12 @@ const BOUNDARY = {
   TOP: 8,
 };
 
+const SIZE = {
+  LENGTH: 9,
+  WIDTH: 9,
+  HEIGHT: 3,
+};
+
 const HEIGHT_LIMIT = {
   [LEVEL.BEGINNER]: 1,
 };
@@ -56,6 +62,7 @@ const OKI_CONFIG = [
 
 export {
   BOUNDARY,
+  SIZE,
   HEIGHT_LIMIT,
   WHITE_HAN_CONFIG,
   BLACK_HAN_CONFIG,

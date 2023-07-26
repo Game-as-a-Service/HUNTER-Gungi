@@ -2,7 +2,6 @@ import SIDE from './constant/SIDE';
 import Gungi from './Gungi';
 import GomaOki from './GomaOki';
 import DeadArea from './DeadArea';
-import Goma from './goma/Goma';
 import Coordinate from './Coordinate';
 import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
 import GungiHan from './GungiHan';
@@ -62,11 +61,11 @@ class Player {
     }
 
     if (to.z > 0) {
-      if (!han.hasGomaAtBelow(to)) {
+      if (!han.hasGomaBelow(to)) {
         throw new Error(ERROR_MESSAGE.BELOW_NOT_EXIST_GOMA);
       }
 
-      if (han.hasOSHOAtBelow(to)) {
+      if (han.hasOSHOBelow(to)) {
         throw new Error(ERROR_MESSAGE.CANNOT_SET_ON_OSHO);
       }
     }

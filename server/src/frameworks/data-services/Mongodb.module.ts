@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
-import { MongoClient, Db } from 'mongodb';
+import { MongoClient } from 'mongodb';
+
 @Module({
   providers: [
     {

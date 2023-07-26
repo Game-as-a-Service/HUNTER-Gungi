@@ -3,8 +3,7 @@ import Player from './Player';
 import Goma from './goma/Goma';
 import LEVEL from './constant/LEVEL';
 import GOMA from './constant/GOMA';
-import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
-import Coordinate from './Coordinate';
+import {ERROR_MESSAGE} from './constant/ERROR_MESSAGE';
 
 /** 備用區 */
 class GomaOki {

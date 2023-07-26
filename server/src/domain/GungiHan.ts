@@ -1,6 +1,6 @@
 import Coordinate from './Coordinate';
 import Goma from './goma/Goma';
-import { BOUNDARY, HEIGHT_LIMIT } from './constant/GUNGI_HAN';
+import { BOUNDARY, HEIGHT_LIMIT, SIZE } from './constant/GUNGI_HAN';
 import LEVEL from './constant/LEVEL';
 import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
 import SIDE from './constant/SIDE';
@@ -23,12 +23,6 @@ export default class GungiHan {
       throw new Error(ERROR_MESSAGE.OUTSIDE_HAN);
     }
     const { x, y, z } = targetCoordinate;
-    const goma = this._han[x][y][z];
-
-    if (!goma) {
-      return null;
-    }
-
     return this._han[x][y][z];
   }
 
@@ -58,17 +52,13 @@ export default class GungiHan {
     return targetY;
   }
 
-  hasGomaAtBelow(to: Coordinate) {
+  hasGomaBelow(to: Coordinate) {
     const { x, y, z } = to;
-    for (let zIndex = z - 1; zIndex >= 0; zIndex--) {
-      if (this._han[x][y][zIndex]) {
-        return true;
-      }
-    }
-    return false;
+    const zColumn = this._han[x][y];
+    return zColumn.slice(0, z).some((goma) => goma !== EMPTY_GOMA);
   }
 
-  hasOSHOAtBelow(to: Coordinate) {
+  hasOSHOBelow(to: Coordinate) {
     const { x, y } = to;
     const gomasAtZCoordinate = this._han[x][y];
     const osho = gomasAtZCoordinate.findIndex(
@@ -152,9 +142,9 @@ export default class GungiHan {
 
   // create 9x9x3  not same memory array
   private createInitialHan() {
-    this._han = Array.from({ length: 9 }, () =>
-      Array.from({ length: 9 }, () =>
-        Array.from({ length: 3 }).map(() => EMPTY_GOMA),
+    this._han = Array.from({ length: SIZE.LENGTH }, () =>
+      Array.from({ length: SIZE.WIDTH }, () =>
+        Array.from({ length: SIZE.HEIGHT }).map(() => EMPTY_GOMA),
       ),
     );
   }
