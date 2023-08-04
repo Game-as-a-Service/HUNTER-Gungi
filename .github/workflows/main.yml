@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        subdir: [server]
+        subdir: [server, frontend]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        subdir: [server]
+        subdir: [server, frontend]
         mongodb-version: ['6.0']
     env:
       DB_CONN_STRING: localhost
