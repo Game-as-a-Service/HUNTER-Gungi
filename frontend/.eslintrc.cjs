@@ -11,5 +11,10 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 'latest'
-  }
+  },
+  env: {
+    // tailwind.config.js - error - 'module' is not defined - no-undef
+    // https://eslint.org/docs/rules/no-undef
+    node: true,
+  },
 }
