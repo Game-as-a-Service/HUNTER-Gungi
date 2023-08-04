@@ -33,7 +33,7 @@
 - 後端框架:
    + nest.js (https://nestjs.com/)
 - 前端框架: 
-   + next.js (https://nextjs.org/)
+   + Vue 3 / vue.js (https://vuejs.org/)
    + tailwind CSS
 - 開發流程:
    + github flow
