@@ -1,85 +1,65 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
-import HelloWorld from './components/HelloWorld.vue';
+import Player from '@/components/Player.vue';
+import Area from '@/components/Area.vue';
+import Furigoma from '@/components/Furigoma.vue';
+import * as fakeData from '@/api/fakeData';
+
+// 可以先寫待會再重購嗎ＸＤ
+const NUM = 11;
+const board = [...Array(NUM)].map((_, row) => {
+  return [...Array(NUM)].map((_, cell) => {
+    return `${row},${cell}`;
+  });
+});
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
+  <!-- name 可以被 form 認出來 -->
+  <div class="w-full h-full flex flex-row items-center justify-around gap-10">
+    <div class="flex flex-col items-center gap-10">
+      <Player name="Opponent" />
+      <Area type="RESERVATION" side="BLACK" :gomas="fakeData.blackGomas" />
+      <Area type="DEAD" side="BLACK" :gomas="fakeData.blackGomas" />
     </div>
-  </header>
-
-  <RouterView />
+    <div class="board">
+      <div class="row" v-for="row of board">
+        <div v-for="cell of row" class="cell">
+          <span>{{ cell }}</span>
+        </div>
+      </div>
+      <!-- <Furigoma /> -->
+    </div>
+    <div class="flex flex-col items-center gap-10">
+      <Area type="DEAD" side="WHITE" :gomas="fakeData.whiteGomas" />
+      <Area type="RESERVATION" side="WHITE" :gomas="fakeData.whiteGomas" />
+      <Player name="Me" />
+    </div>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
-}
+.board {
+  @apply grid grid-cols-11;
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
+  .row {
+    background-color: chocolate;
+  }
+  .row:first-child,
+  .row:last-child {
+    background-color: black;
+  }
+  .row > .cell {
+    @apply underline;
   }
 
-  .logo {
-    margin: 0 2rem 0 0;
+  .cell {
+    @apply text-black text-xs w-[40px] flex justify-center items-center;
+    @apply border-black border-x-4 border-y-2 border-solid;
+    aspect-ratio: 1/1;
+    background-color: inherit;
   }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+  .cell:not(:first-child):not(:last-child) {
+    background-color: aquamarine;
   }
 }
 </style>
