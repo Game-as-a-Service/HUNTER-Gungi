@@ -1,6 +1,4 @@
 <script setup lang="ts">
-defineProps<{}>();
-
 const furigoma = () => {
   // TODO
 };
