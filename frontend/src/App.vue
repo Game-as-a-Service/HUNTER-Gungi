@@ -3,6 +3,8 @@ import Player from '@/components/Player.vue';
 import Area from '@/components/Area.vue';
 import Board from './components/Board.vue';
 import * as fakeData from '@/api/fakeData';
+
+// TODO: GET /gungi/:gungiId
 </script>
 
 <template>

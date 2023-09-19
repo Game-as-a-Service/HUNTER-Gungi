@@ -9,3 +9,9 @@ export type Goma = {
     z: number;
   };
 };
+
+export type Player = {
+  id: string;
+  name: string;
+  side: Side;
+};

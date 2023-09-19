@@ -19,17 +19,19 @@ const board: BoardCell[][] = [...Array(HAN_X_MAX + 2)].map((_, row) =>
 </script>
 
 <template>
-  <Furigoma />
-  <div class="board">
-    <div class="row" v-for="row of board" :key="row[0].column">
-      <div
-        v-for="cell of row"
-        class="cell"
-        :key="cell.row"
-        :data-col="cell.column"
-        :data-row="cell.row"
-      >
-        <slot> </slot>
+  <div>
+    <Furigoma />
+    <div class="board">
+      <div class="row" v-for="row of board" :key="row[0].column">
+        <div
+          v-for="cell of row"
+          class="cell"
+          :key="cell.row"
+          :data-col="cell.column"
+          :data-row="cell.row"
+        >
+          <slot> </slot>
+        </div>
       </div>
     </div>
   </div>
