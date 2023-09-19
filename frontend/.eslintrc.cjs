@@ -1,9 +1,9 @@
 /* eslint-env node */
-require('@rushstack/eslint-patch/modern-module-resolution')
+require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   root: true,
-  'extends': [
+  extends: [
     'plugin:vue/vue3-essential',
     'eslint:recommended',
     '@vue/eslint-config-typescript',
@@ -15,6 +15,9 @@ module.exports = {
   env: {
     // tailwind.config.js - error - 'module' is not defined - no-undef
     // https://eslint.org/docs/rules/no-undef
-    node: true,
+    node: true
   },
-}
+  rules: {
+    'vue/multi-word-component-names': 'off'
+  }
+};
