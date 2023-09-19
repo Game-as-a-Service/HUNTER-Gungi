@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 
 import { mount } from '@vue/test-utils';
-import ThePlayer from '../src/components/ThePlayer.vue';
+import ThePlayer from '../src/components/Player.vue';
 
 describe('ThePlayer', () => {
   it('renders properly', () => {
