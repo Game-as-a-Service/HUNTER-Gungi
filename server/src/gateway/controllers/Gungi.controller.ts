@@ -37,7 +37,7 @@ export default class GungiController {
   ) {
     const presenter = new FurigomaPresenter();
     const input: FurigomaRequest = { gungiId, playerId: body.playerId };
-    const response: FurigomaView = await this._furigomaUsecase.execute(
+    const response: FurigomaView = await this._furigomaUsecase.present(
       input,
       presenter,
     );
@@ -56,7 +56,7 @@ export default class GungiController {
     };
 
     const presenter = new SurrenderPresenter();
-    const response = await this._surrenderUsecase.execute(request, presenter);
+    const response = await this._surrenderUsecase.present(request, presenter);
 
     return res.status(HttpStatus.OK).send(response);
   }
@@ -89,7 +89,7 @@ export default class GungiController {
 
     const presenter = new ArataPresenter();
 
-    const response = await this._arataUsecase.execute(request, presenter);
+    const response = await this._arataUsecase.present(request, presenter);
     return res.status(HttpStatus.OK).send(response);
   }
 
@@ -105,7 +105,7 @@ export default class GungiController {
     };
 
     const presenter = new ConfigurationPresenter();
-    const response = await this._configurationUsecase.execute(
+    const response = await this._configurationUsecase.present(
       request,
       presenter,
     );

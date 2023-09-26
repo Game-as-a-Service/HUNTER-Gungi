@@ -19,7 +19,7 @@ export default class SurrenderUsecase implements Usecase<SurrenderRequest> {
     private _eventBus: EventBus,
   ) {}
 
-  async execute<View>(request: SurrenderRequest, presenter: Presenter<View>) {
+  async present<View>(request: SurrenderRequest, presenter: Presenter<View>) {
     const gungi = await this._gungiRepository.findById(request.gungiId);
     const player = gungi.getPlayer(request.playerId);
     const events = gungi.surrender(player);

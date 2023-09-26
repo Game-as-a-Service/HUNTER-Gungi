@@ -31,7 +31,7 @@ export default class ArataUsecase implements Usecase<ArataRequest> {
     private _eventBus: EventBus,
   ) {}
 
-  async execute<View>(request: ArataRequest, presenter: Presenter<View>) {
+  async present<View>(request: ArataRequest, presenter: Presenter<View>) {
     const gungi = await this._gungiRepository.findById(request.gungiId);
     const player = gungi.getPlayer(request.playerId);
 

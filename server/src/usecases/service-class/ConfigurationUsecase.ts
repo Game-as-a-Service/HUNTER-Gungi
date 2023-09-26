@@ -4,6 +4,7 @@ import IRepository from '../Repository';
 import Gungi from '../../domain/Gungi';
 import Presenter from '../Presenter';
 import { GameState } from '../../domain/constant/GameState';
+import Usecase from '../Usecase';
 
 export interface ConfigurationRequest {
   gungiId: string;
@@ -11,7 +12,9 @@ export interface ConfigurationRequest {
 }
 
 @Injectable()
-export default class ConfigurationUsecase {
+export default class ConfigurationUsecase
+  implements Usecase<ConfigurationRequest>
+{
   constructor(
     @Inject('GungiRepository')
     private _gungiRepository: IRepository<Gungi>,
@@ -19,7 +22,7 @@ export default class ConfigurationUsecase {
     private _eventBus: EventBus,
   ) {}
 
-  async execute<R>(request: ConfigurationRequest, presenter: Presenter<R>) {
+  async present<R>(request: ConfigurationRequest, presenter: Presenter<R>) {
     const gungi = await this._gungiRepository.findById(request.gungiId);
 
     if (gungi.getState() !== GameState.FURIGOMA_DONE) {
