@@ -83,6 +83,11 @@ export default class GungiHan {
     return han;
   }
 
+  isOccupied(to: Coordinate) {
+    const goma = this.findGoma(to);
+    return !!goma;
+  }
+
   private decideCurrentFarthestCoordinate(
     side: SIDE,
     y: number,

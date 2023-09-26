@@ -9,6 +9,7 @@ enum ERROR_MESSAGE {
   CANNOT_SET_ON_OSHO = '不能放在帥上',
   INVALID_SIDE = '無效的 side',
   NOT_YOUR_TURN = '不是你的回合',
+  POSITION_OCCUPIED = '這個位置已經有棋子了',
 }
 
 export { ERROR_MESSAGE };

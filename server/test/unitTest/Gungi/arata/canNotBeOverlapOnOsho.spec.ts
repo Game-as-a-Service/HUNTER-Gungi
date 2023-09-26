@@ -3,8 +3,6 @@ import GOMA from '../../../../src/domain/constant/GOMA';
 import SIDE from '../../../../src/domain/constant/SIDE';
 import Coordinate from '../../../../src/domain/Coordinate';
 import { ERROR_MESSAGE } from '../../../../src/domain/constant/ERROR_MESSAGE';
-import Gungi from '../../../../src/domain/Gungi';
-import Player from '../../../../src/domain/Player';
 import when_arata_at_han from './helper/whenArataTo';
 
 describe('不能疊在這', () => {

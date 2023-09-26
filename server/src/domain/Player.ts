@@ -58,6 +58,10 @@ class Player {
       throw new Error(ERROR_MESSAGE.EMPTY_GOMAOKI);
     }
 
+    if (han.isOccupied(to)) {
+      throw new Error(ERROR_MESSAGE.POSITION_OCCUPIED);
+    }
+
     if (to.z > 0) {
       if (!han.hasGomaBelow(to)) {
         throw new Error(ERROR_MESSAGE.BELOW_NOT_EXIST_GOMA);
@@ -72,7 +76,6 @@ class Player {
       throw new Error(ERROR_MESSAGE.TOO_FAR);
     }
 
-    // TODO: check to position has goma or not
     const targetGoma = this.gomaOki.draw(goma);
 
     han.addGoma(targetGoma, to);
