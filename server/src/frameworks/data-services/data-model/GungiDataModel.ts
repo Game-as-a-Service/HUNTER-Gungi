@@ -117,7 +117,7 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
     return new DeadArea(side, gomas);
   }
 
-  private createCoordinate(coordinate: CoordinateData) {
+  private createCoordinate(coordinate: CoordinateData): Coordinate {
     return new Coordinate(coordinate.x, coordinate.y, coordinate.z);
   }
 
