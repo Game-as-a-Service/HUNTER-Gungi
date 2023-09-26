@@ -1,5 +1,3 @@
-// TODO: should separate to each event to each file
-
 interface Event {
   name: string;
   data: any;
