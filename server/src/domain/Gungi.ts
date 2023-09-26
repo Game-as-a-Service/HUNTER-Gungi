@@ -5,12 +5,7 @@ import GomaOki from './GomaOki';
 import SIDE from './constant/SIDE';
 import GOMA from './constant/GOMA';
 import Coordinate from './Coordinate';
-import {
-  ArataEvent,
-  Event,
-  FurigomaEvent,
-  SurrenderEvent,
-} from './events/Event';
+import { Event } from './events/Event';
 import DeadArea from './DeadArea';
 import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
 import Goma from './goma/Goma';
@@ -24,6 +19,9 @@ import {
   OKI_CONFIG,
   WHITE_HAN_CONFIG,
 } from './constant/GUNGI_HAN';
+import SurrenderEvent from './events/SurrenderEvent';
+import FurigomaEvent from './events/FurigomaEvent';
+import ArataEvent from './events/ArataEvent';
 
 export default class Gungi {
   constructor(
