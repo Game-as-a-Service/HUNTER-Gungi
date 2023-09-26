@@ -5,8 +5,8 @@ import DeadArea from './DeadArea';
 import Coordinate from './Coordinate';
 import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
 import GungiHan from './GungiHan';
-import { BOUNDARY } from './constant/GUNGI_HAN';
 import GOMA from './constant/GOMA';
+import { validateGungiHanBoundaries } from './util/util';
 
 class Player {
   constructor(
@@ -52,9 +52,7 @@ class Player {
   }
 
   arata(goma: GOMA, to: Coordinate, han: GungiHan) {
-    if (this.isOutOfBoundary(to)) {
-      throw new Error(ERROR_MESSAGE.OUTSIDE_HAN);
-    }
+    validateGungiHanBoundaries(to, this._gungi.level);
 
     if (this.gomaOki.isEmpty()) {
       throw new Error(ERROR_MESSAGE.EMPTY_GOMAOKI);
@@ -74,6 +72,7 @@ class Player {
       throw new Error(ERROR_MESSAGE.TOO_FAR);
     }
 
+    // TODO: check to position has goma or not
     const targetGoma = this.gomaOki.draw(goma);
 
     han.addGoma(targetGoma, to);
@@ -89,15 +88,6 @@ class Player {
     return (
       (this.side === SIDE.WHITE && farthestGomaYCoordinate < to.y) ||
       (this.side === SIDE.BLACK && farthestGomaYCoordinate > to.y)
-    );
-  }
-
-  private isOutOfBoundary(to: Coordinate) {
-    return (
-      to.x < BOUNDARY.LEFT ||
-      to.x > BOUNDARY.RIGHT ||
-      to.y < BOUNDARY.BOTTOM ||
-      to.y > BOUNDARY.TOP
     );
   }
 }

@@ -1,11 +1,12 @@
 import Coordinate from './Coordinate';
 import Goma from './goma/Goma';
-import { BOUNDARY, HEIGHT_LIMIT, SIZE } from './constant/GUNGI_HAN';
+import { BOUNDARY, SIZE } from './constant/GUNGI_HAN';
 import LEVEL from './constant/LEVEL';
 import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
 import SIDE from './constant/SIDE';
 import GOMA, { EMPTY_GOMA } from './constant/GOMA';
 import GomaFactory from './goma/GomaFactory';
+import { validateGungiHanBoundaries } from './util/util';
 
 export type GungiHanGoma = {
   goma: Goma;
@@ -19,25 +20,19 @@ export default class GungiHan {
   }
 
   findGoma(targetCoordinate: Coordinate): Goma {
-    if (this.isOutOfBoundary(targetCoordinate)) {
-      throw new Error(ERROR_MESSAGE.OUTSIDE_HAN);
-    }
+    validateGungiHanBoundaries(targetCoordinate, this._level);
     const { x, y, z } = targetCoordinate;
     return this._han[x][y][z];
   }
 
   addGoma(goma: Goma, to: Coordinate) {
-    if (this.isOutOfBoundary(to)) {
-      throw new Error(ERROR_MESSAGE.OUTSIDE_HAN);
-    }
-    if (this.isOverHeight(to)) {
-      throw new Error(ERROR_MESSAGE.OVER_HEIGHT);
-    }
+    validateGungiHanBoundaries(to, this._level);
 
     const { x, y, z } = to;
     this._han[x][y][z] = goma;
   }
 
+  // TODO: exclude controlled gomas
   getFarthestYCoordinate(side: SIDE) {
     let targetY = this.getLowestYCoordinate(side);
     this._han.forEach((row) => {
@@ -112,23 +107,6 @@ export default class GungiHan {
       default:
         throw new Error(ERROR_MESSAGE.INVALID_SIDE);
     }
-  }
-
-  private isOutOfBoundary(coordinate: Coordinate) {
-    const { x, y } = coordinate;
-
-    return (
-      x < BOUNDARY.LEFT ||
-      x > BOUNDARY.RIGHT ||
-      y < BOUNDARY.BOTTOM ||
-      y > BOUNDARY.TOP
-    );
-  }
-
-  private isOverHeight(coordinate: Coordinate) {
-    const { z } = coordinate;
-    const heightLimit = HEIGHT_LIMIT[this._level];
-    return z > heightLimit;
   }
 
   private setHan(gomas: GungiHanGoma[]) {
