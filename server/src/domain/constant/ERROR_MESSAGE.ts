@@ -10,6 +10,7 @@ enum ERROR_MESSAGE {
   INVALID_SIDE = '無效的 side',
   NOT_YOUR_TURN = '不是你的回合',
   POSITION_OCCUPIED = '這個位置已經有棋子了',
+  CANNOT_SET_ON_OPPONENT_GOMA = '下面的棋子不能有對方棋子',
 }
 
 export { ERROR_MESSAGE };

@@ -63,6 +63,10 @@ class Player {
     }
 
     if (to.z > 0) {
+      if (!han.hasOpponentGomaBelow(to, this.side)) {
+        throw new Error(ERROR_MESSAGE.CANNOT_SET_ON_OPPONENT_GOMA);
+      }
+
       if (!han.hasGomaBelow(to)) {
         throw new Error(ERROR_MESSAGE.BELOW_NOT_EXIST_GOMA);
       }

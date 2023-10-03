@@ -32,7 +32,7 @@ export default class GungiHan {
     this._han[x][y][z] = goma;
   }
 
-  // TODO: exclude controlled gomas
+  // TODO: should exclude controlled goma
   getFarthestYCoordinate(side: SIDE) {
     let targetY = this.getLowestYCoordinate(side);
     this._han.forEach((row) => {
@@ -86,6 +86,19 @@ export default class GungiHan {
   isOccupied(to: Coordinate) {
     const goma = this.findGoma(to);
     return !!goma;
+  }
+
+  hasOpponentGomaBelow(to: Coordinate, side: SIDE) {
+    for (let i = 0; i < to.z; i++) {
+      const goma = this.findGoma(new Coordinate(to.x, to.y, i));
+      if (goma === null) {
+        continue;
+      }
+      if (goma.side !== side) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private decideCurrentFarthestCoordinate(
