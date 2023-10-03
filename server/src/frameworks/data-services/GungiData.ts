@@ -12,7 +12,6 @@ type CoordinateData = {
 type GomaData = {
   side: SIDE;
   name: GOMA;
-  coordinate: CoordinateData;
 };
 
 // 備用區
@@ -31,7 +30,10 @@ type PlayerData = {
 
 // 棋盤
 type GungiHanData = {
-  han: GomaData[];
+  han: {
+    goma: GomaData;
+    coordinate: CoordinateData;
+  }[];
 };
 
 // 死區

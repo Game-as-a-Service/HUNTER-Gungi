@@ -4,6 +4,7 @@ import IRepository from '../Repository';
 import Gungi from '../../domain/Gungi';
 import { Event } from '../../domain/events/Event';
 import Presenter from '../Presenter';
+import Usecase from '../Usecase';
 
 export type FurigomaRequest = {
   gungiId: string;
@@ -11,7 +12,7 @@ export type FurigomaRequest = {
 };
 
 @Injectable()
-export default class FurigomaUsecase {
+export default class FurigomaUsecase implements Usecase<FurigomaRequest> {
   constructor(
     @Inject('GungiRepository')
     private _gungiRepository: IRepository<Gungi>,
@@ -19,7 +20,7 @@ export default class FurigomaUsecase {
     private _eventBus: EventBus,
   ) {}
 
-  async execute<R>(
+  async present<R>(
     input: FurigomaRequest,
     presenter: Presenter<R>,
   ): Promise<R> {

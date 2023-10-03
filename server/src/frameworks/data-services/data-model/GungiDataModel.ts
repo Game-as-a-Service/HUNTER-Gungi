@@ -1,5 +1,6 @@
 import Gungi from '../../../domain/Gungi';
 import {
+  CoordinateData,
   DeadAreaData,
   GomaData,
   GomaOkiData,
@@ -8,12 +9,6 @@ import {
 } from 'src/frameworks/data-services/GungiData';
 import Player from '../../../domain/Player';
 import GungiHan, { GungiHanGoma } from '../../../domain/GungiHan';
-import {
-  EMPTY_GOMA,
-  HAN_X_MAX,
-  HAN_Y_MAX,
-  HAN_Z_MAX,
-} from '../../../domain/constant/constants';
 import GomaOki from '../../../domain/GomaOki';
 import LEVEL from '../../../domain/constant/LEVEL';
 import Goma from '../../../domain/goma/Goma';
@@ -27,7 +22,7 @@ import { Injectable } from '@nestjs/common';
 @Injectable()
 export default class GungiDataModel implements DataModel<Gungi, GungiData> {
   toData(gungi: Gungi): GungiData {
-    const gungiData = this.gungiHanToData(gungi.gungiHan);
+    const gungiHanData = this.gungiHanToData(gungi.gungiHan);
     const senteId = gungi.sente ? gungi.sente.id : null;
     const goteId = gungi.gote ? gungi.gote.id : null;
     const playerOne = this.playerToData(gungi.players[0]);
@@ -43,7 +38,7 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
     return {
       _id: gungi.id,
       currentTurn,
-      gungiHan: gungiData,
+      gungiHan: gungiHanData,
       history: [],
       level,
       winner,
@@ -84,17 +79,14 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
 
   private createGungiHan(rawGungi: GungiData): GungiHan {
     const level = rawGungi.level;
+    const gomas = rawGungi.gungiHan.han.map<GungiHanGoma>(
+      ({ goma, coordinate }) => ({
+        goma: this.createGoma(level, goma),
+        coordinate: this.createCoordinate(coordinate),
+      }),
+    );
 
-    const gomas: GungiHanGoma[] = rawGungi.gungiHan.han.map((goma) => ({
-      goma: this.createGoma(level, goma),
-      coordinate: new Coordinate(
-        goma.coordinate.x,
-        goma.coordinate.y,
-        goma.coordinate.z,
-      ),
-    }));
-
-    return new GungiHan(gomas);
+    return new GungiHan(level, gomas);
   }
 
   private createGoma(level: LEVEL, gomaData: GomaData): Goma {
@@ -125,31 +117,25 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
     return new DeadArea(side, gomas);
   }
 
-  private gungiHanToData(gungiHan: GungiHan) {
-    const gomasData: GomaData[] = [];
+  private createCoordinate(coordinate: CoordinateData): Coordinate {
+    return new Coordinate(coordinate.x, coordinate.y, coordinate.z);
+  }
 
-    for (let x = 0; x < HAN_X_MAX; x++) {
-      for (let y = 0; y < HAN_Y_MAX; y++) {
-        for (let z = 0; z < HAN_Z_MAX; z++) {
-          const coordinate = new Coordinate(x, y, z);
-          const goma = gungiHan.findGoma(coordinate);
-          if (goma !== EMPTY_GOMA) {
-            gomasData.push(this.gomaToData(goma, coordinate));
-          }
-        }
-      }
-    }
+  private gungiHanToData(gungiHan: GungiHan) {
+    const hanData = gungiHan.getAllGoma().map(({ goma, coordinate }) => ({
+      goma: this.gomaToData(goma),
+      coordinate: this.coordinateToData(coordinate),
+    }));
 
     return {
-      han: gomasData,
+      han: hanData,
     };
   }
 
-  private gomaToData(goma: Goma, coordinate: Coordinate) {
+  private gomaToData(goma: Goma) {
     return {
       side: goma.side,
       name: goma.name,
-      coordinate: coordinate.toData(),
     };
   }
 
@@ -163,17 +149,21 @@ export default class GungiDataModel implements DataModel<Gungi, GungiData> {
 
   private deadAreaToData(deadArea: DeadArea) {
     return {
-      gomas: deadArea.gomas.map((goma) =>
-        this.gomaToData(goma, new Coordinate(-1, -1, -1)),
-      ),
+      gomas: deadArea.gomas.map((goma) => this.gomaToData(goma)),
     };
   }
 
   private gomaOkiToData(gomaOki: GomaOki) {
     return {
-      gomas: gomaOki.gomas.map((goma) =>
-        this.gomaToData(goma, new Coordinate(-1, -1, -1)),
-      ),
+      gomas: gomaOki.gomas.map((goma) => this.gomaToData(goma)),
+    };
+  }
+
+  private coordinateToData(coordinate: Coordinate) {
+    return {
+      x: coordinate.x,
+      y: coordinate.y,
+      z: coordinate.z,
     };
   }
 }

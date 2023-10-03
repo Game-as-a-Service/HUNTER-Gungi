@@ -2,19 +2,18 @@ import Player from '../../src/domain/Player';
 import LEVEL from '../../src/domain/constant/LEVEL';
 import Gungi from '../../src/domain/Gungi';
 import GungiHan from '../../src/domain/GungiHan';
-import {
-  BLACK_HAN_CONFIG,
-  EMPTY_GOMA,
-  OKI_CONFIG,
-  WHITE_HAN_CONFIG,
-} from '../../src/domain/constant/constants';
 import SIDE from '../../src/domain/constant/SIDE';
 import GomaOki from '../../src/domain/GomaOki';
 import DeadArea from '../../src/domain/DeadArea';
 import Goma from '../../src/domain/goma/Goma';
 import GomaFactory from '../../src/domain/goma/GomaFactory';
-import GOMA from '../../src/domain/constant/GOMA';
+import GOMA, { EMPTY_GOMA } from '../../src/domain/constant/GOMA';
 import Coordinate from '../../src/domain/Coordinate';
+import {
+  BLACK_HAN_CONFIG,
+  OKI_CONFIG,
+  WHITE_HAN_CONFIG,
+} from '../../src/domain/constant/GUNGI_HAN';
 
 describe('Gungi', () => {
   function given_gungi_and_furigoma_done() {
@@ -39,7 +38,7 @@ describe('Gungi', () => {
       'test',
       LEVEL.BEGINNER,
       [playerA, playerB],
-      new GungiHan(),
+      new GungiHan(level, []),
     );
 
     gungi.sente = playerA;

@@ -4,11 +4,9 @@ import GOMA from '../constant/GOMA';
 import LEVEL from '../constant/LEVEL';
 
 export default abstract class Goma {
-  constructor(
-    private _level: LEVEL,
-    private _side: SIDE,
-    private _name: GOMA,
-  ) {}
+  protected constructor(private _level: LEVEL, private _side: SIDE) {}
+
+  protected abstract _name: GOMA;
 
   get name(): GOMA {
     return this._name;

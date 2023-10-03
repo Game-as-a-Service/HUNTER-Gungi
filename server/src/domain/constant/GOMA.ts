@@ -31,4 +31,5 @@ enum GOMA {
   HAKARU = 'HAKARU',
 }
 
+export const EMPTY_GOMA = null;
 export default GOMA;

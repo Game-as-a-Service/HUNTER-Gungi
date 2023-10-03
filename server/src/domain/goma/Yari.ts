@@ -1,12 +1,14 @@
 import Goma from './Goma';
-import SIDE from '../constant/SIDE';
 import Coordinate from '../Coordinate';
+import SIDE from '../constant/SIDE';
 import LEVEL from '../constant/LEVEL';
 import GOMA from '../constant/GOMA';
 
 export default class Yari extends Goma {
-  constructor(_level: LEVEL, _side: SIDE, _name: GOMA) {
-    super(_level, _side, _name);
+  protected _name: GOMA = GOMA.YARI;
+
+  constructor(level: LEVEL, side: SIDE) {
+    super(level, side);
   }
 
   arata(to: Coordinate): void {

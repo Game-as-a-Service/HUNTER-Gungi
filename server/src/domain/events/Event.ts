@@ -1,23 +1,10 @@
-import Player from '../Player';
-import TURN from '../constant/TURN';
-
 interface Event {
   name: string;
   data: any;
 }
 
-interface SurrenderEvent extends Event {
-  name: 'Surrender';
-  data: {
-    winner: Player;
-  };
-}
-interface FurigomaEvent extends Event {
-  name: 'Furigoma';
-  data: {
-    turn: TURN;
-    result: number[];
-  };
-}
+const findByEventName = (events: Event[], name: string) => {
+  return events.find((event) => event.name === name);
+};
 
-export { SurrenderEvent, FurigomaEvent, Event };
+export { findByEventName, Event };

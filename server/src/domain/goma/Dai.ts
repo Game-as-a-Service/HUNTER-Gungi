@@ -5,8 +5,10 @@ import SIDE from '../constant/SIDE';
 import GOMA from '../constant/GOMA';
 
 export default class Dai extends Goma {
-  constructor(level: LEVEL, side: SIDE, name: GOMA) {
-    super(level, side, name);
+  protected _name: GOMA = GOMA.DAI;
+
+  constructor(level: LEVEL, side: SIDE) {
+    super(level, side);
   }
 
   arata(to: Coordinate): void {

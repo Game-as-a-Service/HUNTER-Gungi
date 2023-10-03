@@ -5,8 +5,10 @@ import LEVEL from '../constant/LEVEL';
 import GOMA from '../constant/GOMA';
 
 export default class Shi extends Goma {
-  constructor(_level: LEVEL, _side: SIDE, _name: GOMA) {
-    super(_level, _side, _name);
+  protected _name: GOMA = GOMA.SHI;
+
+  constructor(level: LEVEL, side: SIDE) {
+    super(level, side);
   }
 
   arata(to: Coordinate): void {

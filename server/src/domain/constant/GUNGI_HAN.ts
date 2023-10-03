@@ -1,18 +1,24 @@
+import LEVEL from './LEVEL';
 import GOMA from './GOMA';
 
-/** 棋盤上沒有棋子的狀態 */
-export const EMPTY_GOMA = null;
+const BOUNDARY = {
+  LEFT: 0,
+  RIGHT: 8,
+  BOTTOM: 0,
+  TOP: 8,
+};
 
-/** 棋盤 x 軸最大值 */
-export const HAN_X_MAX = 9;
+const SIZE = {
+  LENGTH: 9,
+  WIDTH: 9,
+  HEIGHT: 3,
+};
 
-/** 棋盤 y 軸最大值 */
-export const HAN_Y_MAX = 9;
+const HEIGHT_LIMIT = {
+  [LEVEL.BEGINNER]: 1,
+};
 
-/** 棋盤 z 軸最大值 */
-export const HAN_Z_MAX = 3;
-
-export const WHITE_HAN_CONFIG = [
+const WHITE_HAN_CONFIG = [
   { name: GOMA.OSHO, x: 4, y: 0, z: 0 },
   { name: GOMA.HEI, x: 0, y: 2, z: 0 },
   { name: GOMA.HEI, x: 4, y: 2, z: 0 },
@@ -28,7 +34,7 @@ export const WHITE_HAN_CONFIG = [
   { name: GOMA.TORIDE, x: 6, y: 2, z: 0 },
 ];
 
-export const BLACK_HAN_CONFIG = [
+const BLACK_HAN_CONFIG = [
   { name: GOMA.OSHO, x: 4, y: 8, z: 0 },
   { name: GOMA.HEI, x: 0, y: 6, z: 0 },
   { name: GOMA.HEI, x: 4, y: 6, z: 0 },
@@ -44,7 +50,7 @@ export const BLACK_HAN_CONFIG = [
   { name: GOMA.TORIDE, x: 6, y: 6, z: 0 },
 ];
 
-export const OKI_CONFIG = [
+const OKI_CONFIG = [
   { name: GOMA.HEI },
   { name: GOMA.SHO },
   { name: GOMA.SHO },
@@ -53,3 +59,12 @@ export const OKI_CONFIG = [
   { name: GOMA.YARI },
   { name: GOMA.YARI },
 ];
+
+export {
+  BOUNDARY,
+  SIZE,
+  HEIGHT_LIMIT,
+  WHITE_HAN_CONFIG,
+  BLACK_HAN_CONFIG,
+  OKI_CONFIG,
+};

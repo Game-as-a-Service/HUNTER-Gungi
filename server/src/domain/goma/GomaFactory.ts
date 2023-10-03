@@ -16,34 +16,34 @@ export default class GomaFactory {
   static create(level: LEVEL, side: SIDE, name: GOMA) {
     switch (name) {
       case GOMA.OSHO: {
-        return new Osho(level, side, name);
+        return new Osho(level, side);
       }
       case GOMA.HEI: {
-        return new Hei(level, side, name);
+        return new Hei(level, side);
       }
       case GOMA.SHO: {
-        return new Sho(level, side, name);
+        return new Sho(level, side);
       }
       case GOMA.UMA: {
-        return new Uma(level, side, name);
+        return new Uma(level, side);
       }
       case GOMA.SHINOBI: {
-        return new Shinobi(level, side, name);
+        return new Shinobi(level, side);
       }
       case GOMA.YARI: {
-        return new Yari(level, side, name);
+        return new Yari(level, side);
       }
       case GOMA.CHU: {
-        return new Chu(level, side, name);
+        return new Chu(level, side);
       }
       case GOMA.DAI: {
-        return new Dai(level, side, name);
+        return new Dai(level, side);
       }
       case GOMA.SHI: {
-        return new Shi(level, side, name);
+        return new Shi(level, side);
       }
       case GOMA.TORIDE: {
-        return new Toride(level, side, name);
+        return new Toride(level, side);
       }
       default: {
         throw new Error('Goma name is not exist');

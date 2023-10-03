@@ -2,6 +2,11 @@ import SIDE from './constant/SIDE';
 import Gungi from './Gungi';
 import GomaOki from './GomaOki';
 import DeadArea from './DeadArea';
+import Coordinate from './Coordinate';
+import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
+import GungiHan from './GungiHan';
+import GOMA from './constant/GOMA';
+import { validateGungiHanBoundaries } from './util/util';
 
 class Player {
   constructor(
@@ -11,6 +16,12 @@ class Player {
     private _gomaOki: GomaOki,
     private _deadArea: DeadArea,
   ) {}
+
+  private _gungi: Gungi;
+
+  set gungi(gungi: Gungi) {
+    this._gungi = gungi;
+  }
 
   get id(): string {
     return this._id;
@@ -22,12 +33,6 @@ class Player {
 
   get deadArea(): DeadArea {
     return this._deadArea;
-  }
-
-  private _gungi: Gungi;
-
-  set gungi(gungi: Gungi) {
-    this._gungi = gungi;
   }
 
   get name(): string {
@@ -44,6 +49,53 @@ class Player {
 
   surrender() {
     this._gungi.winner = this._gungi.getOpponent(this);
+  }
+
+  arata(goma: GOMA, to: Coordinate, han: GungiHan) {
+    validateGungiHanBoundaries(to, this._gungi.level);
+
+    if (this.gomaOki.isEmpty()) {
+      throw new Error(ERROR_MESSAGE.EMPTY_GOMAOKI);
+    }
+
+    if (han.isOccupied(to)) {
+      throw new Error(ERROR_MESSAGE.POSITION_OCCUPIED);
+    }
+
+    if (to.z > 0) {
+      if (!han.hasOpponentGomaBelow(to, this.side)) {
+        throw new Error(ERROR_MESSAGE.CANNOT_SET_ON_OPPONENT_GOMA);
+      }
+
+      if (!han.hasGomaBelow(to)) {
+        throw new Error(ERROR_MESSAGE.BELOW_NOT_EXIST_GOMA);
+      }
+
+      if (han.hasOSHOBelow(to)) {
+        throw new Error(ERROR_MESSAGE.CANNOT_SET_ON_OSHO);
+      }
+    }
+
+    if (this.isDestinationTooFar(han, to)) {
+      throw new Error(ERROR_MESSAGE.TOO_FAR);
+    }
+
+    const targetGoma = this.gomaOki.draw(goma);
+
+    han.addGoma(targetGoma, to);
+
+    return {
+      targetGoma,
+      targetCoordinate: to,
+    };
+  }
+
+  private isDestinationTooFar(han: GungiHan, to: Coordinate) {
+    const farthestGomaYCoordinate = han.getFarthestYCoordinate(this.side);
+    return (
+      (this.side === SIDE.WHITE && farthestGomaYCoordinate < to.y) ||
+      (this.side === SIDE.BLACK && farthestGomaYCoordinate > to.y)
+    );
   }
 }
 

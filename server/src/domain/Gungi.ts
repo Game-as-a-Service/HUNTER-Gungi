@@ -5,21 +5,25 @@ import GomaOki from './GomaOki';
 import SIDE from './constant/SIDE';
 import GOMA from './constant/GOMA';
 import Coordinate from './Coordinate';
-import { Event, SurrenderEvent, FurigomaEvent } from './events/Event';
+import { Event } from './events/Event';
 import DeadArea from './DeadArea';
+import { ERROR_MESSAGE } from './constant/ERROR_MESSAGE';
 import Goma from './goma/Goma';
 import GomaFactory from './goma/GomaFactory';
 import { ConfigurationEvent } from './events/ConfigurationEvent';
-import {
-  WHITE_HAN_CONFIG,
-  OKI_CONFIG,
-  BLACK_HAN_CONFIG,
-} from './constant/constants';
 import { GameState } from './constant/GameState';
 import TURN from './constant/TURN';
 import FURIGOMA from './constant/FURIGOMA';
+import {
+  BLACK_HAN_CONFIG,
+  OKI_CONFIG,
+  WHITE_HAN_CONFIG,
+} from './constant/GUNGI_HAN';
+import SurrenderEvent from './events/SurrenderEvent';
+import FurigomaEvent from './events/FurigomaEvent';
+import ArataEvent from './events/ArataEvent';
 
-class Gungi {
+export default class Gungi {
   constructor(
     private _id: string,
     private _level: LEVEL,
@@ -31,25 +35,8 @@ class Gungi {
     });
   }
 
-  get id(): string {
-    return this._id;
-  }
-
-  get level(): LEVEL {
-    return this._level;
-  }
-
   get players(): Player[] {
     return this._players;
-  }
-
-  /** 軍儀棋盤 */
-  get gungiHan(): GungiHan {
-    return this._gungiHan;
-  }
-
-  set gungiHan(value: GungiHan) {
-    this._gungiHan = value;
   }
 
   private _currentTurn: Player;
@@ -82,16 +69,6 @@ class Gungi {
     return this._goteDeadArea;
   }
 
-  private _loser: Player;
-
-  get loser(): Player {
-    return this._loser;
-  }
-
-  set loser(value: Player) {
-    this._loser = value;
-  }
-
   private _winner: Player;
 
   get winner(): Player {
@@ -108,8 +85,10 @@ class Gungi {
     return this._sente;
   }
 
-  set sente(value: Player) {
-    this._sente = value;
+  set sente(player: Player) {
+    this._sente = player;
+    this._senteDeadArea = player.deadArea;
+    this._senteGomaOki = player.gomaOki;
   }
 
   private _gote: Player = null;
@@ -118,8 +97,22 @@ class Gungi {
     return this._gote;
   }
 
-  set gote(value: Player) {
-    this._gote = value;
+  set gote(player: Player) {
+    this._gote = player;
+    this._goteDeadArea = player.deadArea;
+    this._goteGomaOki = player.gomaOki;
+  }
+
+  get id(): string {
+    return this._id;
+  }
+
+  get level(): LEVEL {
+    return this._level;
+  }
+
+  get gungiHan(): GungiHan {
+    return this._gungiHan;
   }
 
   getState(): GameState {
@@ -160,28 +153,6 @@ class Gungi {
     return [event];
   }
 
-  private genTossResult(): FURIGOMA[] {
-    return Array.from({ length: 5 }, () => Math.random()).map((num) => {
-      // 50 percent tails, 50 percent heads
-      const percentage = 0.5;
-      if (num < percentage) {
-        return FURIGOMA.TAILS;
-      }
-      return FURIGOMA.HEADS;
-    });
-  }
-
-  private determineTurn(tossResult: FURIGOMA[]): TURN {
-    const sum = tossResult.reduce((acc, num) => (acc += num), 0);
-    // 3 or more heads, sente
-    if (sum >= 3) {
-      // first
-      return TURN.SENTE;
-    } else {
-      return TURN.GOTE;
-    }
-  }
-
   async furigoma(player: Player, opponent: Player): Promise<Event[]> {
     try {
       // toss gomas to determine turn
@@ -211,8 +182,8 @@ class Gungi {
   }
 
   surrender(player: Player): Event[] {
-    if (this._currentTurn !== player) {
-      throw new Error('不是該回合的使用者');
+    if (!this.isYourTurn(player)) {
+      throw new Error(ERROR_MESSAGE.NOT_YOUR_TURN);
     }
 
     player.surrender();
@@ -226,12 +197,86 @@ class Gungi {
     return [event];
   }
 
+  arata(player: Player, goma: { name: GOMA; side: SIDE }, to: Coordinate) {
+    if (!this.isYourTurn(player)) {
+      throw new Error(ERROR_MESSAGE.NOT_YOUR_TURN);
+    }
+
+    if (!this.isSameSide(player, goma)) {
+      throw new Error(ERROR_MESSAGE.NOT_YOUR_GOMA);
+    }
+
+    const { targetGoma, targetCoordinate } = player.arata(
+      goma.name,
+      to,
+      this._gungiHan,
+    );
+
+    this._currentTurn = this.getOpponent(player);
+
+    const event: ArataEvent = {
+      name: 'Arata',
+      data: {
+        goma: targetGoma,
+        to: targetCoordinate,
+      },
+    };
+    return [event];
+  }
+
   getPlayer(playerId: string): Player {
     return this._players.find((player) => player.id === playerId);
   }
 
   getOpponent(player: Player): Player {
     return this._players.find((p) => p !== player);
+  }
+
+  setSenteGote() {
+    const sente = this._players.find((player) => player.side === SIDE.BLACK);
+    const gote = this._players.find((player) => player.side === SIDE.WHITE);
+
+    if (!sente || !gote) {
+      return new Error('Insufficient players');
+    }
+
+    this._sente = sente;
+    this._senteDeadArea = sente.deadArea;
+    this._senteGomaOki = sente.gomaOki;
+
+    this._gote = gote;
+    this._goteDeadArea = gote.deadArea;
+    this._goteGomaOki = gote.gomaOki;
+  }
+
+  private genTossResult(): FURIGOMA[] {
+    return Array.from({ length: 5 }, () => Math.random()).map((num) => {
+      // 50 percent tails, 50 percent heads
+      const percentage = 0.5;
+      if (num < percentage) {
+        return FURIGOMA.TAILS;
+      }
+      return FURIGOMA.HEADS;
+    });
+  }
+
+  private determineTurn(tossResult: FURIGOMA[]): TURN {
+    const sum = tossResult.reduce((acc, num) => (acc += num), 0);
+    // 3 or more heads, sente
+    if (sum >= 3) {
+      // first
+      return TURN.SENTE;
+    } else {
+      return TURN.GOTE;
+    }
+  }
+
+  private isSameSide(player: Player, goma: { name: GOMA; side: SIDE }) {
+    return player.side === goma.side;
+  }
+
+  private isYourTurn(player: Player) {
+    return this._currentTurn.side == player.side;
   }
 
   private addGomaToHan(
@@ -254,23 +299,4 @@ class Gungi {
       gomaOki.gomas.push(goma);
     });
   }
-
-  setSenteGote() {
-    const sente = this.players.find((player) => player.side === SIDE.BLACK);
-    const gote = this.players.find((player) => player.side === SIDE.WHITE);
-
-    if (!sente || !gote) {
-      return new Error('Insufficient players');
-    }
-
-    this._sente = sente;
-    this._senteDeadArea = sente.deadArea;
-    this._senteGomaOki = sente.gomaOki;
-
-    this._gote = gote;
-    this._goteDeadArea = gote.deadArea;
-    this._goteGomaOki = gote.gomaOki;
-  }
 }
-
-export default Gungi;

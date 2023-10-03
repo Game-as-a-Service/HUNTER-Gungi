@@ -1,11 +1,11 @@
-import Coordinate from '../Coordinate';
 import Goma from './Goma';
-import LEVEL from '../constant/LEVEL';
 import SIDE from '../constant/SIDE';
+import Coordinate from '../Coordinate';
+import LEVEL from '../constant/LEVEL';
 import GOMA from '../constant/GOMA';
 
-export default class Chu extends Goma {
-  protected _name: GOMA = GOMA.CHU;
+export default class Yumi extends Goma {
+  protected _name: GOMA = GOMA.YUMI;
 
   constructor(level: LEVEL, side: SIDE) {
     super(level, side);

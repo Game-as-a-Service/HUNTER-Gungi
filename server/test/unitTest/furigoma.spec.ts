@@ -21,11 +21,12 @@ function given_playerA_playerB_and_gungi() {
     new GomaOki(LEVEL.BEGINNER, SIDE.BLACK),
     new DeadArea(SIDE.BLACK),
   );
+  const level = LEVEL.BEGINNER;
   const gungi = new Gungi(
     'test',
     LEVEL.BEGINNER,
     [playerA, playerB],
-    new GungiHan(),
+    new GungiHan(level, []),
   );
   return { gungi, playerA, playerB };
 }
@@ -96,7 +97,13 @@ describe('Furigoma - 躑駒', () => {
   describe('genTossResult', () => {
     it('產生五個 0 - 1 的隨機數字，< 0,5 回傳 0，>= 0.5 回傳 1', async () => {
       // Given
-      const gungi = new Gungi('test', LEVEL.BEGINNER, [], new GungiHan());
+      const level = LEVEL.BEGINNER;
+      const gungi = new Gungi(
+        'test',
+        LEVEL.BEGINNER,
+        [],
+        new GungiHan(level, []),
+      );
 
       // When
       const spyRandom = when_toss_result_tails_is_more_than_heads();

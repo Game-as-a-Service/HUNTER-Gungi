@@ -20,7 +20,7 @@ import {
   BLACK_HAN_CONFIG,
   OKI_CONFIG,
   WHITE_HAN_CONFIG,
-} from '../../src/domain/constant/constants';
+} from '../../src/domain/constant/GUNGI_HAN';
 
 dotenv.config();
 
@@ -51,6 +51,7 @@ describe('棋盤配置 (e2e)', () => {
   });
 
   async function given_gungi_and_furigoma_done(): Promise<string> {
+    const level = LEVEL.BEGINNER;
     const gungiId = randomUUID();
     const player: Player[] = [];
 
@@ -73,7 +74,7 @@ describe('棋盤配置 (e2e)', () => {
       ),
     );
 
-    const gungiHan: GungiHan = new GungiHan([]);
+    const gungiHan: GungiHan = new GungiHan(level, []);
     const gungi = new Gungi(gungiId, LEVEL.BEGINNER, player, gungiHan);
     gungi.furigoma(player[0], player[1]);
 
