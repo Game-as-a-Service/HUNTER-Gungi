@@ -3,8 +3,6 @@ import GOMA from '../../../../src/domain/constant/GOMA';
 import SIDE from '../../../../src/domain/constant/SIDE';
 import { ERROR_MESSAGE } from '../../../../src/domain/constant/ERROR_MESSAGE';
 import Coordinate from '../../../../src/domain/Coordinate';
-import Gungi from '../../../../src/domain/Gungi';
-import Player from '../../../../src/domain/Player';
 import when_arata_at_han from './helper/whenArataTo';
 
 describe('下面沒棋別亂疊', () => {
