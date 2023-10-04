@@ -1,12 +1,20 @@
 import IRepository from 'src/usecases/Repository';
 import Gungi from 'src/domain/Gungi';
-import { GungiData } from 'src/frameworks/data-services/GungiData';
+import { GungiData, PlayerData } from 'src/frameworks/data-services/GungiData';
 import GungiDao from './dao/GungiDao';
 import GungiDataModel from './data-model/GungiDataModel';
 import { Injectable } from '@nestjs/common';
+import LEVEL from '../../domain/constant/LEVEL';
+import { randomUUID } from 'crypto';
+import SIDE from '../../domain/constant/SIDE';
+
+export type InitRequest = {
+  level: LEVEL;
+  players: { id: string; nickname: string }[];
+};
 
 @Injectable()
-export class GungiRepository implements IRepository<Gungi> {
+export class GungiRepository implements IRepository<Gungi, InitRequest> {
   constructor(private _dao: GungiDao, private _dataModel: GungiDataModel) {}
 
   async findById(id: string): Promise<Gungi | null> {
@@ -20,5 +28,38 @@ export class GungiRepository implements IRepository<Gungi> {
   async save(gungi: Gungi): Promise<void> {
     const data: GungiData = this._dataModel.toData(gungi);
     await this._dao.save(data);
+  }
+
+  create(request: InitRequest): Gungi {
+    const players = request.players.map<PlayerData>((player, index) => {
+      return {
+        id: player.id,
+        name: player.nickname,
+        deadArea: {
+          gomas: [],
+        },
+        gomaOki: {
+          gomas: [],
+        },
+        side: index === 0 ? SIDE.WHITE : SIDE.BLACK,
+      };
+    });
+
+    const initData: GungiData = {
+      _id: randomUUID(),
+      level: request.level,
+      currentTurn: SIDE.WHITE,
+      turn: {
+        sente: null,
+        gote: null,
+      },
+      players,
+      gungiHan: {
+        han: [],
+      },
+      history: [],
+    };
+
+    return this._dataModel.toDomain(initData);
   }
 }

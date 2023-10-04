@@ -4,6 +4,7 @@ import IRepository from '../Repository';
 import Gungi from '../../domain/Gungi';
 import Presenter from '../Presenter';
 import Usecase from '../Usecase';
+import { InitRequest } from '../../frameworks/data-services/GungiRepository';
 
 export interface SurrenderRequest {
   gungiId: string;
@@ -14,7 +15,7 @@ export interface SurrenderRequest {
 export default class SurrenderUsecase implements Usecase<SurrenderRequest> {
   constructor(
     @Inject('GungiRepository')
-    private _gungiRepository: IRepository<Gungi>,
+    private _gungiRepository: IRepository<Gungi, InitRequest>,
     @Inject('EventBus')
     private _eventBus: EventBus,
   ) {}

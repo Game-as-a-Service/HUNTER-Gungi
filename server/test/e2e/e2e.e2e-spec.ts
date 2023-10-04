@@ -46,6 +46,35 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
+  it('/(POST) gungi/create', async () => {
+    const body = {
+      players: [
+        {
+          id: '6497f6f226b40d440b9a90cc',
+          nickname: '金城武',
+        },
+        {
+          id: '6498112b26b40d440b9a90ce',
+          nickname: '重智',
+        },
+      ],
+    };
+
+    const response = await request(app.getHttpServer())
+      .post(`/gungi/create`)
+      .send(body)
+      .expect(200);
+
+    const responseData = response.body;
+    const url = responseData.url;
+    const regex = /\/gungi\/(?<gungiId>[^/]+)/;
+    const {
+      groups: { gungiId },
+    } = url.match(regex) || {};
+
+    expect(gungiId).toBeDefined();
+  });
+
   it('/(POST) gungi/:gungiId/surrender', async () => {
     const gungiId = randomUUID();
     const gungiData: GungiData = {
