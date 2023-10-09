@@ -5,6 +5,7 @@ import FurigomaUsecase from './service-class/FurigomaUsecase';
 import ImplEventBus from '../gateway/eventBus/ImplEventBus';
 import ArataUsecase from './service-class/ArataUsecase';
 import ConfigurationUsecase from './service-class/ConfigurationUsecase';
+import GetGungiUsecase from './service-class/GetGungiUsecase';
 
 @Module({
   imports: [GungiRepositoryModule],
@@ -13,6 +14,7 @@ import ConfigurationUsecase from './service-class/ConfigurationUsecase';
     FurigomaUsecase,
     ArataUsecase,
     ConfigurationUsecase,
+    GetGungiUsecase,
     {
       provide: 'EventBus',
       useClass: ImplEventBus,
@@ -23,6 +25,7 @@ import ConfigurationUsecase from './service-class/ConfigurationUsecase';
     FurigomaUsecase,
     ConfigurationUsecase,
     ArataUsecase,
+    GetGungiUsecase,
   ],
 })
 export default class GungiUsecaseModule {}

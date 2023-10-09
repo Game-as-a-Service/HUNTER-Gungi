@@ -46,6 +46,49 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
+  it('/GET /gungi/:gungiId', async () => {
+    const gungiId = randomUUID();
+    const gungiData: GungiData = {
+      currentTurn: SIDE.WHITE,
+      gungiHan: { han: [] },
+      history: [],
+      _id: gungiId,
+      level: LEVEL.BEGINNER,
+      turn: {
+        sente: 'A',
+        gote: 'B',
+      },
+      players: [
+        {
+          id: 'A',
+          name: 'A',
+          side: SIDE.WHITE,
+          gomaOki: { gomas: [] },
+          deadArea: { gomas: [] },
+        },
+        {
+          id: 'B',
+          name: 'B',
+          side: SIDE.BLACK,
+          gomaOki: { gomas: [] },
+          deadArea: { gomas: [] },
+        },
+      ],
+    };
+
+    const gungi = gungiDataModel.toDomain(gungiData);
+
+    await gungiRepository.save(gungi);
+
+    await request(app.getHttpServer())
+      .get(`/gungi/${gungiId}`)
+      .expect(200)
+      .expect((res) => {
+        const state = res.body.state;
+        expect(state).toBe(1);
+      });
+  });
+
   it('/(POST) gungi/:gungiId/surrender', async () => {
     const gungiId = randomUUID();
     const gungiData: GungiData = {

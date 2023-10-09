@@ -1,4 +1,12 @@
-import { Body, Controller, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import FurigomaUsecase, {
   FurigomaRequest,
 } from '../../usecases/service-class/FurigomaUsecase';
@@ -19,6 +27,10 @@ import ConfigurationUsecase, {
   ConfigurationRequest,
 } from '../../usecases/service-class/ConfigurationUsecase';
 import ConfigurationPresenter from '../presenter/ConfigurationPresenter';
+import GetGungiUsecase, {
+  GetGungiRequest,
+} from '../../usecases/service-class/GetGungiUsecase';
+import GetGungiPresenter from '../presenter/GetGungiPresenter';
 
 @Controller()
 export default class GungiController {
@@ -27,6 +39,7 @@ export default class GungiController {
     private _surrenderUsecase: SurrenderUsecase,
     private _arataUsecase: ArataUsecase,
     private _configurationUsecase: ConfigurationUsecase,
+    private _getGungiUsecase: GetGungiUsecase,
   ) {}
 
   @Post('/gungi/:gungiId/furigoma')
@@ -110,6 +123,14 @@ export default class GungiController {
       presenter,
     );
 
+    return res.status(HttpStatus.OK).send(response);
+  }
+
+  @Get('/gungi/:gungiId')
+  async getGungi(@Param('gungiId') gungiId: string, @Res() res) {
+    const request: GetGungiRequest = { gungiId };
+    const presenter = new GetGungiPresenter();
+    const response = await this._getGungiUsecase.present(request, presenter);
     return res.status(HttpStatus.OK).send(response);
   }
 }
