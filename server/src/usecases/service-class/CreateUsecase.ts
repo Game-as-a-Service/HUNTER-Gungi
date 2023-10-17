@@ -5,7 +5,13 @@ import { Inject, Injectable } from '@nestjs/common';
 import IRepository from '../Repository';
 import Gungi from '../../domain/Gungi';
 import EventBus from '../EventBus';
+import { randomUUID } from 'crypto';
 import LEVEL from '../../domain/constant/LEVEL';
+import Player from '../../domain/Player';
+import GungiHan from '../../domain/GungiHan';
+import SIDE from '../../domain/constant/SIDE';
+import DeadArea from '../../domain/DeadArea';
+import GomaOki from '../../domain/GomaOki';
 
 export type CreateGungiRequest = {
   players: { id: string; nickname: string }[];
@@ -24,15 +30,20 @@ export default class CreateUsecase implements Usecase<CreateGungiRequest> {
     request: CreateGungiRequest,
     presenter: Presenter<View>,
   ): Promise<View> {
-    const initRequest = {
-      level: LEVEL.BEGINNER,
-      players: request.players.map((player) => ({
-        id: player.id,
-        name: player.nickname,
-      })),
-    };
+    const level = LEVEL.BEGINNER;
+    const gungi = new Gungi(
+      randomUUID(),
+      level,
+      request.players.map<Player>((player, index) => {
+        const side = index === 0 ? SIDE.WHITE : SIDE.BLACK;
+        const deadArea = new DeadArea(side, []);
+        const gomaOki = new GomaOki(level, side, []);
+        return new Player(player.id, player.nickname, side, gomaOki, deadArea);
+      }),
+      new GungiHan(level),
+    );
+    gungi.setCurrentTurn(SIDE.WHITE);
 
-    const gungi = this._gungiRepository.create(initRequest);
     await this._gungiRepository.save(gungi);
 
     const event: CreateEvent = {
