@@ -6,7 +6,6 @@ import IRepository from '../Repository';
 import Gungi from '../../domain/Gungi';
 import EventBus from '../EventBus';
 import LEVEL from '../../domain/constant/LEVEL';
-import { InitRequest } from '../../frameworks/data-services/GungiRepository';
 
 export type CreateGungiRequest = {
   players: { id: string; nickname: string }[];
@@ -16,7 +15,7 @@ export type CreateGungiRequest = {
 export default class CreateUsecase implements Usecase<CreateGungiRequest> {
   constructor(
     @Inject('GungiRepository')
-    private _gungiRepository: IRepository<Gungi, InitRequest>,
+    private _gungiRepository: IRepository<Gungi>,
     @Inject('EventBus')
     private _eventBus: EventBus,
   ) {}
@@ -25,9 +24,12 @@ export default class CreateUsecase implements Usecase<CreateGungiRequest> {
     request: CreateGungiRequest,
     presenter: Presenter<View>,
   ): Promise<View> {
-    const initRequest: InitRequest = {
+    const initRequest = {
       level: LEVEL.BEGINNER,
-      players: request.players,
+      players: request.players.map((player) => ({
+        id: player.id,
+        name: player.nickname,
+      })),
     };
 
     const gungi = this._gungiRepository.create(initRequest);

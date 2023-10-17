@@ -5,7 +5,6 @@ import Gungi from '../../domain/Gungi';
 import Presenter from '../Presenter';
 import { GameState } from '../../domain/constant/GameState';
 import Usecase from '../Usecase';
-import { InitRequest } from '../../frameworks/data-services/GungiRepository';
 
 export interface ConfigurationRequest {
   gungiId: string;
@@ -18,7 +17,7 @@ export default class ConfigurationUsecase
 {
   constructor(
     @Inject('GungiRepository')
-    private _gungiRepository: IRepository<Gungi, InitRequest>,
+    private _gungiRepository: IRepository<Gungi>,
     @Inject('EventBus')
     private _eventBus: EventBus,
   ) {}

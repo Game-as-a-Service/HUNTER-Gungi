@@ -1,20 +1,14 @@
-import IRepository from 'src/usecases/Repository';
+import IRepository, { DeepPartial } from 'src/usecases/Repository';
 import Gungi from 'src/domain/Gungi';
 import { GungiData, PlayerData } from 'src/frameworks/data-services/GungiData';
 import GungiDao from './dao/GungiDao';
 import GungiDataModel from './data-model/GungiDataModel';
 import { Injectable } from '@nestjs/common';
-import LEVEL from '../../domain/constant/LEVEL';
 import { randomUUID } from 'crypto';
 import SIDE from '../../domain/constant/SIDE';
 
-export type InitRequest = {
-  level: LEVEL;
-  players: { id: string; nickname: string }[];
-};
-
 @Injectable()
-export class GungiRepository implements IRepository<Gungi, InitRequest> {
+export class GungiRepository implements IRepository<Gungi> {
   constructor(private _dao: GungiDao, private _dataModel: GungiDataModel) {}
 
   async findById(id: string): Promise<Gungi | null> {
@@ -30,11 +24,11 @@ export class GungiRepository implements IRepository<Gungi, InitRequest> {
     await this._dao.save(data);
   }
 
-  create(request: InitRequest): Gungi {
+  create(request: Gungi | DeepPartial<Gungi>): Gungi {
     const players = request.players.map<PlayerData>((player, index) => {
       return {
         id: player.id,
-        name: player.nickname,
+        name: player.name,
         deadArea: {
           gomas: [],
         },

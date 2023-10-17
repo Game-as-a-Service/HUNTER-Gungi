@@ -5,7 +5,6 @@ import Gungi from '../../domain/Gungi';
 import { Event } from '../../domain/events/Event';
 import Presenter from '../Presenter';
 import Usecase from '../Usecase';
-import { InitRequest } from '../../frameworks/data-services/GungiRepository';
 
 export type FurigomaRequest = {
   gungiId: string;
@@ -16,7 +15,7 @@ export type FurigomaRequest = {
 export default class FurigomaUsecase implements Usecase<FurigomaRequest> {
   constructor(
     @Inject('GungiRepository')
-    private _gungiRepository: IRepository<Gungi, InitRequest>,
+    private _gungiRepository: IRepository<Gungi>,
     @Inject('EventBus')
     private _eventBus: EventBus,
   ) {}
