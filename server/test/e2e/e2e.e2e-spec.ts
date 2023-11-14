@@ -169,6 +169,30 @@ describe('AppController (e2e)', () => {
       .expect({ winner: 'B' });
   });
 
+  it('should return 400 when request body is empty', async () => {
+    const body = {};
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/surrender')
+      .send(body)
+      .expect(400);
+  });
+
+  it('should return 400 when "playerId" field is missing', async () => {
+    const body = { someOtherField: 'value' };
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/surrender')
+      .send(body)
+      .expect(400);
+  });
+
+  it('should return 400 when "playerId" field is an empty string', async () => {
+    const body = { playerId: '' };
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/surrender')
+      .send(body)
+      .expect(400);
+  });
+
   it('/POST/gungi/:gungiId/arata', async () => {
     const gungiId = randomUUID();
     const gungiData: GungiData = {
@@ -242,6 +266,7 @@ describe('AppController (e2e)', () => {
       },
     });
   });
+
   it('/(POST) gungi/:gungiId/furigoma', async () => {
     // Given
     const gungiId = randomUUID();
@@ -290,7 +315,7 @@ describe('AppController (e2e)', () => {
     expect(response.body.data.result.length).toBe(5);
   });
 
-  it.only('should return 400 when request body is empty', async () => {
+  it('should return 400 when request body is empty', async () => {
     const body = {};
     await request(app.getHttpServer())
       .post('/gungi/someGungiId/furigoma')
@@ -298,7 +323,7 @@ describe('AppController (e2e)', () => {
       .expect(400);
   });
 
-  it.only('should return 400 when "playerId" field is missing', async () => {
+  it('should return 400 when "playerId" field is missing', async () => {
     const body = { someOtherField: 'value' };
     await request(app.getHttpServer())
       .post('/gungi/someGungiId/furigoma')
@@ -306,7 +331,7 @@ describe('AppController (e2e)', () => {
       .expect(400);
   });
 
-  it.only('should return 400 when "playerId" field is an empty string', async () => {
+  it('should return 400 when "playerId" field is an empty string', async () => {
     const body = { playerId: '' };
     await request(app.getHttpServer())
       .post('/gungi/someGungiId/furigoma')

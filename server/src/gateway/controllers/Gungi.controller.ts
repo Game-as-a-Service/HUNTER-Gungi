@@ -26,6 +26,7 @@ import CreatePresenter from '../presenter/CreatePresenter';
 import { ZodPipe } from '../../frameworks/pipe/ZodPipe';
 import CreateGungiValidator from '../validation/create-body-validation';
 import FurigomaBodyValidator from '../validation/furigoma-body-validation';
+import SurrenderBodyValidator from '../validation/surrender-body-validation';
 
 @Controller()
 export default class GungiController {
@@ -71,7 +72,7 @@ export default class GungiController {
   @Post('/gungi/:id/surrender')
   async surrender(
     @Param('id') id: string,
-    @Body() body: { playerId: string },
+    @Body(new ZodPipe(SurrenderBodyValidator)) body: { playerId: string },
     @Res() res,
   ) {
     const request: SurrenderRequest = {
