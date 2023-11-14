@@ -267,6 +267,107 @@ describe('AppController (e2e)', () => {
     });
   });
 
+  it('should return 400 when request body is empty', async () => {
+    const body = {};
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/arata')
+      .send(body)
+      .expect(400);
+  });
+
+  it('should return 400 when "playerId" field is missing', async () => {
+    const body = {
+      goma: { name: 'HEI', side: 'BLACK' },
+      to: { x: 1, y: 2, z: 3 },
+    };
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/arata')
+      .send(body)
+      .expect(400);
+  });
+
+  it('should return 400 when "goma" field is missing', async () => {
+    const body = {
+      playerId: 'somePlayerId',
+      to: { x: 1, y: 2, z: 3 },
+    };
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/arata')
+      .send(body)
+      .expect(400);
+  });
+
+  it('should return 400 when "goma.name" is not a valid GOMA value', async () => {
+    const body = {
+      playerId: 'somePlayerId',
+      goma: { name: 'INVALID_GOMA', side: 'BLACK' },
+      to: { x: 1, y: 2, z: 3 },
+    };
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/arata')
+      .send(body)
+      .expect(400);
+  });
+
+  it('should return 400 when "goma.side" is not a valid SIDE value', async () => {
+    const body = {
+      playerId: 'somePlayerId',
+      goma: { name: 'HEI', side: 'INVALID_SIDE' },
+      to: { x: 1, y: 2, z: 3 },
+    };
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/arata')
+      .send(body)
+      .expect(400);
+  });
+
+  it('should return 400 when "to" field is missing', async () => {
+    const body = {
+      playerId: 'somePlayerId',
+      goma: { name: 'HEI', side: 'BLACK' },
+    };
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/arata')
+      .send(body)
+      .expect(400);
+  });
+
+  it('should return 400 when "to" field is missing "x" property', async () => {
+    const body = {
+      playerId: 'somePlayerId',
+      goma: { name: 'HEI', side: 'BLACK' },
+      to: { y: 2, z: 3 },
+    };
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/arata')
+      .send(body)
+      .expect(400);
+  });
+
+  it('should return 400 when "to" field is missing "y" property', async () => {
+    const body = {
+      playerId: 'somePlayerId',
+      goma: { name: 'HEI', side: 'BLACK' },
+      to: { x: 1, z: 3 },
+    };
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/arata')
+      .send(body)
+      .expect(400);
+  });
+
+  it('should return 400 when "to" field is missing "z" property', async () => {
+    const body = {
+      playerId: 'somePlayerId',
+      goma: { name: 'HEI', side: 'BLACK' },
+      to: { x: 1, y: 2 },
+    };
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/arata')
+      .send(body)
+      .expect(400);
+  });
+
   it('/(POST) gungi/:gungiId/furigoma', async () => {
     // Given
     const gungiId = randomUUID();

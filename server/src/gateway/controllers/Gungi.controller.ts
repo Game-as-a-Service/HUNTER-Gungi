@@ -27,6 +27,7 @@ import { ZodPipe } from '../../frameworks/pipe/ZodPipe';
 import CreateGungiValidator from '../validation/create-body-validation';
 import FurigomaBodyValidator from '../validation/furigoma-body-validation';
 import SurrenderBodyValidator from '../validation/surrender-body-validation';
+import ArataBodyValidator from '../validation/arata-body-validation';
 
 @Controller()
 export default class GungiController {
@@ -89,7 +90,7 @@ export default class GungiController {
   @Post('/gungi/:id/arata')
   async arata(
     @Param('id') id: string,
-    @Body()
+    @Body(new ZodPipe(ArataBodyValidator))
     body: {
       playerId: string;
       goma: {
