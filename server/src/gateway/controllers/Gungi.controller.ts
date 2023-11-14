@@ -25,6 +25,7 @@ import ConfigurationPresenter from '../presenter/ConfigurationPresenter';
 import CreatePresenter from '../presenter/CreatePresenter';
 import { ZodPipe } from '../../frameworks/pipe/ZodPipe';
 import CreateGungiValidator from '../validation/create-body-validation';
+import FurigomaBodyValidator from '../validation/furigoma-body-validation';
 
 @Controller()
 export default class GungiController {
@@ -54,7 +55,8 @@ export default class GungiController {
   @Post('/gungi/:gungiId/furigoma')
   async furigoma(
     @Param('gungiId') gungiId: string,
-    @Body() body: { gungiId: string; playerId: string },
+    @Body(new ZodPipe(FurigomaBodyValidator))
+    body: { gungiId: string; playerId: string },
     @Res() res,
   ) {
     const presenter = new FurigomaPresenter();

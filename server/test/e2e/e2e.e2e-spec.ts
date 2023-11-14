@@ -289,4 +289,28 @@ describe('AppController (e2e)', () => {
     expect(response.body.data).toHaveProperty('result');
     expect(response.body.data.result.length).toBe(5);
   });
+
+  it.only('should return 400 when request body is empty', async () => {
+    const body = {};
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/furigoma')
+      .send(body)
+      .expect(400);
+  });
+
+  it.only('should return 400 when "playerId" field is missing', async () => {
+    const body = { someOtherField: 'value' };
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/furigoma')
+      .send(body)
+      .expect(400);
+  });
+
+  it.only('should return 400 when "playerId" field is an empty string', async () => {
+    const body = { playerId: '' };
+    await request(app.getHttpServer())
+      .post('/gungi/someGungiId/furigoma')
+      .send(body)
+      .expect(400);
+  });
 });
