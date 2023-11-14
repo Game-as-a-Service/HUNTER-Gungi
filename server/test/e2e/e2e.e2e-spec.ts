@@ -15,6 +15,8 @@ import * as dotenv from 'dotenv';
 import GOMA from '../../src/domain/constant/GOMA';
 
 import Gungi from '../../src/domain/Gungi';
+import { ZodFilter } from '../../src/frameworks/filter/ZodFilter';
+import { APP_FILTER } from '@nestjs/core';
 
 dotenv.config();
 
@@ -28,7 +30,13 @@ describe('AppController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule, DataServicesModule],
-      providers: [GungiDataModel],
+      providers: [
+        GungiDataModel,
+        {
+          provide: APP_FILTER,
+          useClass: ZodFilter,
+        },
+      ],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -44,6 +52,75 @@ describe('AppController (e2e)', () => {
     await db.collection('Gungi').deleteMany({});
     await client.close(true);
     await app.close();
+  });
+
+  it('/(POST) gungi/create', async () => {
+    const body = {
+      players: [
+        {
+          id: '6497f6f226b40d440b9a90cc',
+          nickname: '金城武',
+        },
+        {
+          id: '6498112b26b40d440b9a90ce',
+          nickname: '重智',
+        },
+      ],
+    };
+
+    const response = await request(app.getHttpServer())
+      .post(`/gungi/create`)
+      .send(body)
+      .expect(200);
+
+    const responseData = response.body;
+    const url = responseData.url;
+    const regex = /\/gungi\/(?<gungiId>[^/]+)/;
+    const {
+      groups: { gungiId },
+    } = url.match(regex) || {};
+
+    expect(gungiId).toBeDefined();
+  });
+
+  it('/(POST) gungi/create no body', async () => {
+    const body = {};
+    await request(app.getHttpServer())
+      .post(`/gungi/create`)
+      .send(body)
+      .expect(400);
+  });
+
+  it('/(POST) gungi/create should return 400 when "players" field is missing', async () => {
+    const body = { someOtherField: 'value' };
+    await request(app.getHttpServer())
+      .post('/gungi/create')
+      .send(body)
+      .expect(400);
+  });
+
+  it('/(POST) gungi/create should return 400 when "players" field is an empty array', async () => {
+    const body = { players: [] };
+    await request(app.getHttpServer())
+      .post('/gungi/create')
+      .send(body)
+      .expect(400);
+  });
+
+  it('/(POST) gungi/create should return 400 when "id" field in "players" is missing', async () => {
+    const body = { players: [{ nickname: 'Player1' }] };
+    await request(app.getHttpServer())
+      .post('/gungi/create')
+      .send(body)
+      .expect(400);
+  });
+
+  it('/(POST) gungi/create should return 400 when "nickname" field in "players" is missing', async () => {
+    const body = { players: [{ id: '1' }] };
+    await request(app.getHttpServer())
+      .post('/gungi/create')
+      .send(body)
+      .expect(400);
   });
 
   it('/(POST) gungi/:gungiId/surrender', async () => {

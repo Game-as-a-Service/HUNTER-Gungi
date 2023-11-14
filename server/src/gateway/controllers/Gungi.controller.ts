@@ -1,4 +1,7 @@
 import { Body, Controller, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import CreateUsecase, {
+  CreateGungiRequest,
+} from '../../usecases/service-class/CreateUsecase';
 import FurigomaUsecase, {
   FurigomaRequest,
 } from '../../usecases/service-class/FurigomaUsecase';
@@ -19,15 +22,34 @@ import ConfigurationUsecase, {
   ConfigurationRequest,
 } from '../../usecases/service-class/ConfigurationUsecase';
 import ConfigurationPresenter from '../presenter/ConfigurationPresenter';
+import CreatePresenter from '../presenter/CreatePresenter';
+import { ZodPipe } from '../../frameworks/pipe/ZodPipe';
+import CreateGungiValidator from '../validation/create-body-validation';
 
 @Controller()
 export default class GungiController {
   constructor(
+    private _createUsecase: CreateUsecase,
     private _furigomaUsecase: FurigomaUsecase,
     private _surrenderUsecase: SurrenderUsecase,
     private _arataUsecase: ArataUsecase,
     private _configurationUsecase: ConfigurationUsecase,
   ) {}
+
+  @Post('/gungi/create')
+  async create(
+    @Body(new ZodPipe(CreateGungiValidator))
+    body: { players: { id: string; nickname: string }[] },
+    @Res() res,
+  ) {
+    const input: CreateGungiRequest = {
+      ...body,
+    };
+    const presenter = new CreatePresenter();
+
+    const response = await this._createUsecase.present(input, presenter);
+    return res.status(HttpStatus.OK).send(response);
+  }
 
   @Post('/gungi/:gungiId/furigoma')
   async furigoma(
