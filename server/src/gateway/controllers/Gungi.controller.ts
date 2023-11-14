@@ -23,6 +23,8 @@ import ConfigurationUsecase, {
 } from '../../usecases/service-class/ConfigurationUsecase';
 import ConfigurationPresenter from '../presenter/ConfigurationPresenter';
 import CreatePresenter from '../presenter/CreatePresenter';
+import { ZodPipe } from '../../frameworks/pipe/ZodPipe';
+import CreateGungiValidator from '../validation/create-body-validation';
 
 @Controller()
 export default class GungiController {
@@ -36,7 +38,8 @@ export default class GungiController {
 
   @Post('/gungi/create')
   async create(
-    @Body() body: { players: { id: string; nickname: string }[] },
+    @Body(new ZodPipe(CreateGungiValidator))
+    body: { players: { id: string; nickname: string }[] },
     @Res() res,
   ) {
     const input: CreateGungiRequest = {
