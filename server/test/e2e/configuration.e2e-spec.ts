@@ -21,10 +21,12 @@ import {
   OKI_CONFIG,
   WHITE_HAN_CONFIG,
 } from '../../src/domain/constant/GUNGI_HAN';
+import { APP_FILTER } from '@nestjs/core';
+import { ZodFilter } from '../../src/frameworks/filter/ZodFilter';
 
 dotenv.config();
 
-describe('棋盤配置 (e2e)', () => {
+describe('board configuration (e2e)', () => {
   let app: INestApplication;
   let gungiRepository: GungiRepository;
   let db: Db;
@@ -33,7 +35,13 @@ describe('棋盤配置 (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule, DataServicesModule],
-      providers: [GungiDataModel],
+      providers: [
+        GungiDataModel,
+        {
+          provide: APP_FILTER,
+          useClass: ZodFilter,
+        },
+      ],
     }).compile();
 
     app = moduleFixture.createNestApplication();
@@ -165,6 +173,29 @@ describe('棋盤配置 (e2e)', () => {
       expectGomaCountInOki(view);
     });
 
+    it('should return 400 when request body is empty', async () => {
+      const body = {};
+      await request(app.getHttpServer())
+        .post('/gungi/someGungiId/configuration')
+        .send(body)
+        .expect(400);
+    });
+
+    it('should return 400 when "playerId" field is missing', async () => {
+      const body = { someOtherField: 'value' };
+      await request(app.getHttpServer())
+        .post('/gungi/someGungiId/configuration')
+        .send(body)
+        .expect(400);
+    });
+
+    it('should return 400 when "playerId" field is an empty string', async () => {
+      const body = { playerId: '' };
+      await request(app.getHttpServer())
+        .post('/gungi/someGungiId/configuration')
+        .send(body)
+        .expect(400);
+    });
     it('重覆執行 (在不對的 GameState 呼叫)', async () => {
       // Given
       const gungiId = await given_gungi_and_furigoma_done();

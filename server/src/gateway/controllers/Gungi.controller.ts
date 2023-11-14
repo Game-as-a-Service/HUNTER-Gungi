@@ -28,6 +28,7 @@ import CreateGungiValidator from '../validation/create-body-validation';
 import FurigomaBodyValidator from '../validation/furigoma-body-validation';
 import SurrenderBodyValidator from '../validation/surrender-body-validation';
 import ArataBodyValidator from '../validation/arata-body-validation';
+import ConfigurationBodyValidator from '../validation/configuration-body-validation';
 
 @Controller()
 export default class GungiController {
@@ -122,7 +123,7 @@ export default class GungiController {
   @Post('/gungi/:id/configuration')
   async configuration(
     @Param('id') id: string,
-    @Body() body: { playerId: string },
+    @Body(new ZodPipe(ConfigurationBodyValidator)) body: { playerId: string },
     @Res() res,
   ) {
     const request: ConfigurationRequest = {
