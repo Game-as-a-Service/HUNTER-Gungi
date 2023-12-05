@@ -1,7 +1,12 @@
-import { Body, Controller, HttpStatus, Param, Post, Res } from '@nestjs/common';
-import CreateUsecase, {
-  CreateGungiRequest,
-} from '../../usecases/service-class/CreateUsecase';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import FurigomaUsecase, {
   FurigomaRequest,
 } from '../../usecases/service-class/FurigomaUsecase';
@@ -22,13 +27,20 @@ import ConfigurationUsecase, {
   ConfigurationRequest,
 } from '../../usecases/service-class/ConfigurationUsecase';
 import ConfigurationPresenter from '../presenter/ConfigurationPresenter';
-import CreatePresenter from '../presenter/CreatePresenter';
+import GetGungiUsecase, {
+  GetGungiRequest,
+} from '../../usecases/service-class/GetGungiUsecase';
+import GetGungiPresenter from '../presenter/GetGungiPresenter';
 import { ZodPipe } from '../../frameworks/pipe/ZodPipe';
-import CreateGungiValidator from '../validation/create-body-validation';
 import FurigomaBodyValidator from '../validation/furigoma-body-validation';
 import SurrenderBodyValidator from '../validation/surrender-body-validation';
 import ArataBodyValidator from '../validation/arata-body-validation';
 import ConfigurationBodyValidator from '../validation/configuration-body-validation';
+import CreateUsecase, {
+  CreateGungiRequest,
+} from '../../usecases/service-class/CreateUsecase';
+import CreateGungiValidator from '../validation/create-body-validation';
+import CreatePresenter from '../presenter/CreatePresenter';
 
 @Controller()
 export default class GungiController {
@@ -38,22 +50,8 @@ export default class GungiController {
     private _surrenderUsecase: SurrenderUsecase,
     private _arataUsecase: ArataUsecase,
     private _configurationUsecase: ConfigurationUsecase,
+    private _getGungiUsecase: GetGungiUsecase,
   ) {}
-
-  @Post('/gungi/create')
-  async create(
-    @Body(new ZodPipe(CreateGungiValidator))
-    body: { players: { id: string; nickname: string }[] },
-    @Res() res,
-  ) {
-    const input: CreateGungiRequest = {
-      ...body,
-    };
-    const presenter = new CreatePresenter();
-
-    const response = await this._createUsecase.present(input, presenter);
-    return res.status(HttpStatus.OK).send(response);
-  }
 
   @Post('/gungi/:gungiId/furigoma')
   async furigoma(
@@ -137,6 +135,29 @@ export default class GungiController {
       presenter,
     );
 
+    return res.status(HttpStatus.OK).send(response);
+  }
+
+  @Get('/gungi/:gungiId')
+  async getGungi(@Param('gungiId') gungiId: string, @Res() res) {
+    const request: GetGungiRequest = { gungiId };
+    const presenter = new GetGungiPresenter();
+    const response = await this._getGungiUsecase.present(request, presenter);
+    return res.status(HttpStatus.OK).send(response);
+  }
+
+  @Post('/gungi/create')
+  async create(
+    @Body(new ZodPipe(CreateGungiValidator))
+    body: { players: { id: string; nickname: string }[] },
+    @Res() res,
+  ) {
+    const input: CreateGungiRequest = {
+      ...body,
+    };
+    const presenter = new CreatePresenter();
+
+    const response = await this._createUsecase.present(input, presenter);
     return res.status(HttpStatus.OK).send(response);
   }
 }
