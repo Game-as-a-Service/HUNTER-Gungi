@@ -15,6 +15,7 @@ import * as dotenv from 'dotenv';
 import Gungi from '../../src/domain/Gungi';
 import { ZodFilter } from '../../src/frameworks/filter/ZodFilter';
 import { APP_FILTER } from '@nestjs/core';
+import GOMA from '../../src/domain/constant/GOMA';
 
 dotenv.config();
 
@@ -254,6 +255,7 @@ describe('furigoma (e2e)', () => {
     const response = await request(app.getHttpServer())
       .post(`/gungi/${gungiId}/furigoma`)
       .send(body);
+
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('name');
     expect(response.body).toHaveProperty('data');
