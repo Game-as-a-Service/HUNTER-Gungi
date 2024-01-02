@@ -12,6 +12,7 @@ import GungiHan from '../../domain/GungiHan';
 import SIDE from '../../domain/constant/SIDE';
 import DeadArea from '../../domain/DeadArea';
 import GomaOki from '../../domain/GomaOki';
+import EVENT_NAME from '../../domain/constant/EVENT_NAME';
 
 export type CreateGungiRequest = {
   players: { id: string; nickname: string }[];
@@ -47,7 +48,7 @@ export default class CreateUsecase implements Usecase<CreateGungiRequest> {
     await this._gungiRepository.save(gungi);
 
     const event: CreateEvent = {
-      name: 'CreateEvent',
+      name: EVENT_NAME.CREATE_GUNGI,
       data: {
         gungiId: gungi.id,
       },

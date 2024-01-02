@@ -7,6 +7,7 @@ import GOMA from '../../domain/constant/GOMA';
 import Gungi from '../../domain/Gungi';
 import GetGungiEvent from '../../domain/events/GetGungiEvent';
 import { ERROR_MESSAGE } from '../../domain/constant/ERROR_MESSAGE';
+import EVENT_NAME from '../../domain/constant/EVENT_NAME';
 
 type GomaData = {
   side: SIDE;
@@ -41,7 +42,10 @@ interface GetGungiView {
 
 export default class GetGungiPresenter implements Presenter<GetGungiView> {
   present(events: Event[]): GetGungiView {
-    const event = findByEventName(events, 'GetGungi') as GetGungiEvent;
+    const event = findByEventName(
+      events,
+      EVENT_NAME.GET_GUNGI,
+    ) as GetGungiEvent;
     const { gungi } = event.data;
     const gungiDataModel = new GungiDataModel();
     const gungiData = gungiDataModel.toData(gungi);

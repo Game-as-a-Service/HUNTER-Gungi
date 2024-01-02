@@ -1,5 +1,6 @@
 import Presenter from '../../usecases/Presenter';
 import { Event, findByEventName } from '../../domain/events/Event';
+import EVENT_NAME from '../../domain/constant/EVENT_NAME';
 
 interface ArataView {
   goma: {
@@ -15,7 +16,7 @@ interface ArataView {
 
 export default class ArataPresenter implements Presenter<ArataView> {
   present(events: Event[]): ArataView {
-    const event = findByEventName(events, 'Arata');
+    const event = findByEventName(events, EVENT_NAME.ARATA);
     const { goma, to } = event.data;
 
     return {

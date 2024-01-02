@@ -1,5 +1,7 @@
+import EVENT_NAME from '../constant/EVENT_NAME';
+
 interface Event {
-  name: string;
+  name: EVENT_NAME;
   data: any;
 }
 

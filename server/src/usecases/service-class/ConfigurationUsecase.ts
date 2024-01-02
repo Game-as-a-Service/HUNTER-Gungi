@@ -31,7 +31,7 @@ export default class ConfigurationUsecase
 
     const events = gungi.setConfiguration();
     await this._gungiRepository.save(gungi);
-    this._eventBus.broadcast(events);
+    this._eventBus.broadcast(request.gungiId, events);
 
     return presenter.present(events);
   }
