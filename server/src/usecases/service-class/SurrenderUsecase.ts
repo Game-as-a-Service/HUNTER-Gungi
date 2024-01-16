@@ -24,7 +24,7 @@ export default class SurrenderUsecase implements Usecase<SurrenderRequest> {
     const player = gungi.getPlayer(request.playerId);
     const events = gungi.surrender(player);
     await this._gungiRepository.save(gungi);
-    this._eventBus.broadcast(events);
+    this._eventBus.broadcast(request.gungiId, events);
 
     return presenter.present(events);
   }

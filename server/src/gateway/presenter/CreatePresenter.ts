@@ -1,5 +1,6 @@
 import Presenter from '../../usecases/Presenter';
 import { Event, findByEventName } from '../../domain/events/Event';
+import EVENT_NAME from '../../domain/constant/EVENT_NAME';
 
 interface CreateGungiView {
   url: string;
@@ -7,7 +8,7 @@ interface CreateGungiView {
 
 export default class CreatePresenter implements Presenter<CreateGungiView> {
   present(events: Event[]): CreateGungiView {
-    const event = findByEventName(events, 'CreateEvent');
+    const event = findByEventName(events, EVENT_NAME.CREATE_GUNGI);
     const data = event.data;
     const gungiId = data.gungiId;
     return {

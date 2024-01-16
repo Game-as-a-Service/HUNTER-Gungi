@@ -1,7 +1,7 @@
-import Presenter from '../../usecases/Presenter';
-import { Event } from '../../domain/events/Event';
-import { ConfigurationEvent } from '../../domain/events/ConfigurationEvent';
-import EVENT_NAME from '../../domain/constant/EVENT_NAME';
+import { ConfigurationEvent } from '../../../../domain/events/ConfigurationEvent';
+import { Event } from '../../../../domain/events/Event';
+import EventHandler from '../EventHandler';
+import EVENT_NAME from '../../../../domain/constant/EVENT_NAME';
 
 export interface Goma {
   name: string; // 棋子的名稱
@@ -19,14 +19,8 @@ export interface ConfigurationView {
   goteGomaOki: Goma[];
 }
 
-export default class ConfigurationPresenter
-  implements Presenter<ConfigurationView>
-{
-  present(events: Event[]): ConfigurationView {
-    const event = events.filter(
-      (e) => e.name === EVENT_NAME.CONFIGURATION,
-    )[0] as ConfigurationEvent;
-
+export default class ConfigurationEventHandler extends EventHandler {
+  doHandle(event: ConfigurationEvent): any {
     const view: ConfigurationView = {
       han: [],
       senteGomOki: [],
@@ -59,5 +53,9 @@ export default class ConfigurationPresenter
     });
 
     return view;
+  }
+
+  match(event: Event): boolean {
+    return event.name === EVENT_NAME.CONFIGURATION;
   }
 }

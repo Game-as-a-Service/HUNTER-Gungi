@@ -21,16 +21,16 @@ export default class FurigomaUsecase implements Usecase<FurigomaRequest> {
   ) {}
 
   async present<R>(
-    input: FurigomaRequest,
+    request: FurigomaRequest,
     presenter: Presenter<R>,
   ): Promise<R> {
-    const gungi = await this._gungiRepository.findById(input.gungiId);
-    const player = gungi.getPlayer(input.playerId);
+    const gungi = await this._gungiRepository.findById(request.gungiId);
+    const player = gungi.getPlayer(request.playerId);
     const opponent = gungi.getOpponent(player);
     // furigoma - roll five hei to determine who goes first
     const event: Event[] = await gungi.furigoma(player, opponent);
     await this._gungiRepository.save(gungi);
-    this._eventBus.broadcast(event);
+    this._eventBus.broadcast(request.gungiId, event);
     return presenter.present(event);
   }
 }

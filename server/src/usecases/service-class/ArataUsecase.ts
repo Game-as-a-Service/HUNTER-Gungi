@@ -40,7 +40,7 @@ export default class ArataUsecase implements Usecase<ArataRequest> {
 
     const events = gungi.arata(player, targetGoma, to);
     await this._gungiRepository.save(gungi);
-    this._eventBus.broadcast(events);
+    this._eventBus.broadcast(request.gungiId, events);
 
     return presenter.present(events);
   }

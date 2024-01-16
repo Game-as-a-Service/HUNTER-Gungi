@@ -22,6 +22,7 @@ import {
 import SurrenderEvent from './events/SurrenderEvent';
 import FurigomaEvent from './events/FurigomaEvent';
 import ArataEvent from './events/ArataEvent';
+import EVENT_NAME from './constant/EVENT_NAME';
 
 export default class Gungi {
   constructor(
@@ -142,7 +143,7 @@ export default class Gungi {
     this.addGomaToOki(SIDE.BLACK, OKI_CONFIG);
 
     const event: ConfigurationEvent = {
-      name: 'Configuration',
+      name: EVENT_NAME.CONFIGURATION,
       data: {
         gungiHan: this.gungiHan,
         senteGomaOki: this.sente.gomaOki,
@@ -163,7 +164,7 @@ export default class Gungi {
       this.setCurrentTurn(SIDE.BLACK);
       this.setSenteGote();
       const event: FurigomaEvent = {
-        name: 'Furigoma',
+        name: EVENT_NAME.FURIGOMA,
         data: {
           turn,
           result: tossResult,
@@ -189,7 +190,7 @@ export default class Gungi {
     player.surrender();
 
     const event: SurrenderEvent = {
-      name: 'Surrender',
+      name: EVENT_NAME.SURRENDER,
       data: {
         winner: this.getOpponent(player),
       },
@@ -215,7 +216,7 @@ export default class Gungi {
     this._currentTurn = this.getOpponent(player);
 
     const event: ArataEvent = {
-      name: 'Arata',
+      name: EVENT_NAME.ARATA,
       data: {
         goma: targetGoma,
         to: targetCoordinate,
