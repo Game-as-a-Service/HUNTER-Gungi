@@ -50,7 +50,7 @@ describe('surrender (e2e)', () => {
     await app.close();
   });
 
-  it.only('/(POST) gungi/:gungiId/surrender', async () => {
+  it('/(POST) gungi/:gungiId/surrender', async () => {
     const gungiId = randomUUID();
     const gungiData: GungiData = {
       currentTurn: SIDE.WHITE,
